@@ -2,33 +2,67 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Ficha com Variantes - RPG</title>
+    <title>Painel de Monstros - RPG</title>
     <style>
         body {
             background-color: #121212;
             color: #e0e0e0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            color: #ff5252;
+            text-align: center;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #b71c1c;
+            padding-bottom: 10px;
+            width: 100%;
+            max-width: 800px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            max-width: 900px;
         }
         .monster-card {
             background-color: #1e1e1e;
             border: 2px solid #b71c1c;
             border-radius: 8px;
-            width: 380px;
+            width: 350px;
             padding: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-        h2 { color: #ff5252; margin-top: 0; border-bottom: 1px solid #b71c1c; padding-bottom: 8px; }
-        select {
-            width: 100%;
-            padding: 8px;
-            background: #2c2c2c;
-            color: white;
-            border: 1px solid #b71c1c;
-            border-radius: 4px;
-            margin-bottom: 15px;
+        /* Estilo personalizado para diferenciar a segunda ficha (Orc) */
+        .monster-card.orc {
+            border-color: #2e7d32;
+        }
+        .monster-card.orc h2 {
+            color: #66bb6a;
+            border-bottom-color: #2e7d32;
+        }
+        .monster-card.orc button {
+            background-color: #2e7d32;
+        }
+        .monster-card.orc button:hover {
+            background-color: #388e3c;
+        }
+        .monster-card.orc .result {
+            color: #a5d6a7;
+        }
+
+        h2 { 
+            color: #ff5252; 
+            margin-top: 0; 
+            border-bottom: 1px solid #b71c1c; 
+            padding-bottom: 8px; 
         }
         .stats {
             display: grid;
@@ -53,78 +87,76 @@
             width: 100%;
             font-weight: bold;
         }
-        button:hover { background-color: #d32f2f; }
+        button:hover { 
+            background-color: #d32f2f; 
+        }
         .result {
             margin-top: 8px;
+            margin-bottom: 15px;
             font-style: italic;
             color: #ff8a80;
             text-align: center;
-            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
 
-    <div class="monster-card">
-        <h2>Goblin (Variantes)</h2>
-        
-        <!-- Seletor de Variantes -->
-        <label for="variante">Escolha o Tamanho/Variante:</label>
-        <select id="variante" onchange="atualizarEstatisticas()">
-            <option value="pequeno">Pequeno (Comum)</option>
-            <option value="medio">Médio (Líder)</option>
-            <option value="grande">Grande (Brutamontes)</option>
-        </select>
-        
-        <div class="stats">
-            <div class="stat-box"><strong>HP:</strong> <span id="hp-val">15</span></div>
-            <div class="stat-box"><strong>CA:</strong> <span id="ac-val">15</span></div>
+    <h1>Batalha de Monstros</h1>
+
+    <div class="container">
+        <!-- Ficha 1: Goblin -->
+        <div class="monster-card">
+            <h2>Goblin Guerreiro</h2>
+            <p><strong>Tipo:</strong> Humanoide | <strong>ND:</strong> 1/4</p>
+            
+            <div class="stats">
+                <div class="stat-box"><strong>HP:</strong> 15</div>
+                <div class="stat-box"><strong>CA:</strong> 15</div>
+            </div>
+
+            <h3>Ações</h3>
+            <p><strong>Cimitarra:</strong> +4 para acertar (1d6 + 2)</p>
+            
+            <button onclick="rolarDados('goblin', 20, 4, 'ataque')">Rolar Ataque (1d20 + 4)</button>
+            <div id="resultado-goblin-ataque" class="result"></div>
+
+            <button onclick="rolarDados('goblin', 6, 2, 'dano')">Rolar Dano (1d6 + 2)</button>
+            <div id="resultado-goblin-dano" class="result"></div>
         </div>
 
-        <h3>Ações</h3>
-        <p><strong>Ataque:</strong> <span id="info-ataque">Alcance 1,5m</span></p>
-        
-        <button onclick="rolarAtaque()">Rolar Ataque</button>
-        <div id="resultado-ataque" class="result"></div>
+        <!-- Ficha 2: Orc -->
+        <div class="monster-card orc">
+            <h2>Orc Brutamontes</h2>
+            <p><strong>Tipo:</strong> Humanoide | <strong>ND:</strong> 1</p>
+            
+            <div class="stats">
+                <div class="stat-box"><strong>HP:</strong> 30</div>
+                <div class="stat-box"><strong>CA:</strong> 13</div>
+            </div>
 
-        <button onclick="rolarDano()">Rolar Dano</button>
-        <div id="resultado-dano" class="result"></div>
+            <h3>Ações</h3>
+            <p><strong>Machado Grande:</strong> +5 para acertar (1d12 + 3)</p>
+            
+            <button onclick="rolarDados('orc', 20, 5, 'ataque')">Rolar Ataque (1d20 + 5)</button>
+            <div id="resultado-orc-ataque" class="result"></div>
+
+            <button onclick="rolarDados('orc', 12, 3, 'dano')">Rolar Dano (1d12 + 3)</button>
+            <div id="resultado-orc-dano" class="result"></div>
+        </div>
     </div>
 
     <script>
-        // Objeto que guarda as regras de cada variante
-        const variantesDados = {
-            pequeno: { hp: 15, ca: 15, bonusAtaque: 4, alcance: "1,5m", dadosDano: 6, modDano: 2, descDano: "1d6 + 2" },
-            medio:   { hp: 30, ca: 16, bonusAtaque: 5, alcance: "1,5m", dadosDano: 8, modDano: 3, descDano: "1d8 + 3" },
-            grande:  { hp: 60, ca: 18, bonusAtaque: 7, alcance: "3m",   dadosDano: 12, modDano: 4, descDano: "1d12 + 4" }
-        };
+        // Função inteligente única que serve para qualquer monstro e qualquer dado!
+        function rolarDados(monstro, facesDado, modificador, tipo) {
+            let dado = Math.floor(Math.random() * facesDado) + 1;
+            let total = dado + modificador;
+            
+            let elementoId = `resultado-${monstro}-${tipo}`;
+            let texto = tipo === 'ataque' 
+                ? `Resultado: ${total} (Dado: ${dado} + ${modificador})`
+                : `Resultado: ${total} de dano (Dado: 1d${facesDado} + ${modificador})`;
 
-        function atualizarEstatisticas() {
-            let escolha = document.getElementById('variante').value;
-            let v = variantesDados[escolha];
-
-            // Atualiza o texto na tela com base na variante escolhida
-            document.getElementById('hp-val').innerText = v.hp;
-            document.getElementById('ac-val').innerText = v.ca;
-            document.getElementById('info-ataque').innerText = `Alcance ${v.alcance} | Dano: ${v.descDano}`;
-        }
-
-        function rolarAtaque() {
-            let escolha = document.getElementById('variante').value;
-            let v = variantesDados[escolha];
-
-            let dado = Math.floor(Math.random() * 20) + 1;
-            let total = dado + v.bonusAtaque;
-            document.getElementById('resultado-ataque').innerText = `Resultado: ${total} (Dado: ${dado} + ${v.bonusAtaque})`;
-        }
-
-        function rolarDano() {
-            let escolha = document.getElementById('variante').value;
-            let v = variantesDados[escolha];
-
-            let dado = Math.floor(Math.random() * v.dadosDano) + 1;
-            let total = dado + v.modDano;
-            document.getElementById('resultado-dano').innerText = `Resultado: ${total} de dano (Dado: 1d${v.dadosDano} + ${v.modDano})`;
+            document.getElementById(elementoId).innerText = texto;
         }
     </script>
 
