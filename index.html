@@ -1,9 +1,8 @@
-                    
-                </div><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Batalha - 4 Monstros</title>
+    <title>Painel de Batalha - Percepção e Variantes</title>
     <style>
         body {
             background-color: #121212;
@@ -88,7 +87,7 @@
             text-align: center;
             border-radius: 4px;
         }
-        p { font-size: 0.9rem; margin: 8px 0; }
+        p { font-size: 0.85rem; margin: 6px 0; }
         button {
             background-color: #b71c1c;
             color: white;
@@ -103,7 +102,167 @@
         }
         button:hover { background-color: #d32f2f; }
         .result {
-            margin-top: 5px;
+            margin-top: 3px;
+            margin-bottom: 8px;
+            font-style: italic;
+            color: #ff8a80;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Painel de Batalha</h1>
+
+    <div class="container">
+        <!-- 1. Goblin -->
+        <div class="monster-card">
+            <h2>Goblin</h2>
+            <select id="var-goblin" onchange="atualizar('goblin')">
+                <option value="v1">Pequeno (Comum)</option>
+                <option value="v2">Médio (Líder)</option>
+                <option value="v3">Grande (Brutamontes)</option>
+            </select>
+            <div class="stats">
+                <div class="stat-box">HP: <span id="hp-goblin">15</span></div>
+                <div class="stat-box">CA: <span id="ca-goblin">15</span></div>
+            </div>
+            <p><strong>Ataque:</strong> <span id="info-goblin">Cimitarra (1d6+2)</span></p>
+            <p><strong>Sentidos:</strong> <span id="visao-goblin">Visão Padrão</span></p>
+            
+            <button onclick="rolar('goblin', 'ataque')">Rolar Ataque</button>
+            <div id="res-goblin-ataque" class="result"></div>
+            <button onclick="rolar('goblin', 'dano')">Rolar Dano</button>
+            <div id="res-goblin-dano" class="result"></div>
+            <button onclick="rolar('goblin', 'percepcao')">Rolar Percepção</button>
+            <div id="res-goblin-percepcao" class="result"></div>
+        </div>
+
+        <!-- 2. Orc -->
+        <div class="monster-card orc">
+            <h2>Orc</h2>
+            <select id="var-orc" onchange="atualizar('orc')">
+                <option value="v1">Guerreiro</option>
+                <option value="v2">Caçador</option>
+                <option value="v3">Chefe de Guerra</option>
+            </select>
+            <div class="stats">
+                <div class="stat-box">HP: <span id="hp-orc">30</span></div>
+                <div class="stat-box">CA: <span id="ca-orc">13</span></div>
+            </div>
+            <p><strong>Ataque:</strong> <span id="info-orc">Machado Grande (1d12+3)</span></p>
+            <p><strong>Sentidos:</strong> <span id="visao-orc">Visão Padrão</span></p>
+            
+            <button onclick="rolar('orc', 'ataque')">Rolar Ataque</button>
+            <div id="res-orc-ataque" class="result"></div>
+            <button onclick="rolar('orc', 'dano')">Rolar Dano</button>
+            <div id="res-orc-dano" class="result"></div>
+            <button onclick="rolar('orc', 'percepcao')">Rolar Percepção</button>
+            <div id="res-orc-percepcao" class="result"></div>
+        </div>
+
+        <!-- 3. Esqueleto -->
+        <div class="monster-card esqueleto">
+            <h2>Esqueleto</h2>
+            <select id="var-esqueleto" onchange="atualizar('esqueleto')">
+                <option value="v1">Espadachim</option>
+                <option value="v2">Arqueiro</option>
+                <option value="v3">Guardião de Ferro</option>
+            </select>
+            <div class="stats">
+                <div class="stat-box">HP: <span id="hp-esqueleto">13</span></div>
+                <div class="stat-box">CA: <span id="ca-esqueleto">12</span></div>
+            </div>
+            <p><strong>Ataque:</strong> <span id="info-esqueleto">Espada Curta (1d6+2)</span></p>
+            <p><strong>Sentidos:</strong> <span id="visao-esqueleto">Visão Padrão</span></p>
+            
+            <button onclick="rolar('esqueleto', 'ataque')">Rolar Ataque</button>
+            <div id="res-esqueleto-ataque" class="result"></div>
+            <button onclick="rolar('esqueleto', 'dano')">Rolar Dano</button>
+            <div id="res-esqueleto-dano" class="result"></div>
+            <button onclick="rolar('esqueleto', 'percepcao')">Rolar Percepção</button>
+            <div id="res-esqueleto-percepcao" class="result"></div>
+        </div>
+
+        <!-- 4. Lobo -->
+        <div class="monster-card lobo">
+            <h2>Lobo</h2>
+            <select id="var-lobo" onchange="atualizar('lobo')">
+                <option value="v1">Filhote / Comum</option>
+                <option value="v2">Lobo Dire</option>
+                <option value="v3">Lobo Alfa Sombrio</option>
+            </select>
+            <div class="stats">
+                <div class="stat-box">HP: <span id="hp-lobo">11</span></div>
+                <div class="stat-box">CA: <span id="ca-lobo">13</span></div>
+            </div>
+            <p><strong>Ataque:</strong> <span id="info-lobo">Mordida (2d4+2)</span></p>
+            <p><strong>Sentidos:</strong> <span id="visao-lobo">Visão Padrão</span></p>
+            
+            <button onclick="rolar('lobo', 'ataque')">Rolar Ataque</button>
+            <div id="res-lobo-ataque" class="result"></div>
+            <button onclick="rolar('lobo', 'dano')">Rolar Dano</button>
+            <div id="res-lobo-dano" class="result"></div>
+            <button onclick="rolar('lobo', 'percepcao')">Rolar Percepção</button>
+            <div id="res-lobo-percepcao" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const baseDados = {
+            goblin: {
+                v1: { hp: 15, ca: 15, bonusAtk: 4, desc: "Cimitarra (1d6+2)", facesDano: 6, modDano: 2, modPercepcao: 2, textoVisao: "Visão Fraca (-1 no teste)" },
+                v2: { hp: 30, ca: 16, bonusAtk: 5, desc: "Lança (1d8+3)", facesDano: 8, modDano: 3, modPercepcao: 4, textoVisao: "Visão Média (+2 no teste)" },
+                v3: { hp: 60, ca: 18, bonusAtk: 7, desc: "Clava Pesada (1d12+4)", facesDano: 12, modDano: 4, modPercepcao: 6, textoVisao: "Visão Aguda (+4 no teste)" }
+            },
+            orc: {
+                v1: { hp: 30, ca: 13, bonusAtk: 5, desc: "Machado Grande (1d12+3)", facesDano: 12, modDano: 3, modPercepcao: 2, textoVisao: "Visão Padrão (+2 no teste)" },
+                v2: { hp: 22, ca: 14, bonusAtk: 4, desc: "Arco Curto (1d8+2)", facesDano: 8, modDano: 2, modPercepcao: 5, textoVisao: "Visão Excelente (+5 no teste)" },
+                v3: { hp: 75, ca: 16, bonusAtk: 7, desc: "Espada Dupla (2d10+5)", facesDano: 10, modDano: 5, modPercepcao: 3, textoVisao: "Visão Focada (+3 no teste)" }
+            },
+            esqueleto: {
+                v1: { hp: 13, ca: 12, bonusAtk: 4, desc: "Espada Curta (1d6+2)", facesDano: 6, modDano: 2, modPercepcao: 0, textoVisao: "Visão Cega/Mágica (+0)" },
+                v2: { hp: 10, ca: 13, bonusAtk: 4, desc: "Arco Longo (1d8+2)", facesDano: 8, modDano: 2, modPercepcao: 3, textoVisao: "Visão de Longo Alcance (+3)" },
+                v3: { hp: 45, ca: 17, bonusAtk: 6, desc: "Alabarda (1d10+3)", facesDano: 10, modDano: 3, modPercepcao: 1, textoVisao: "Visão Limitada (+1)" }
+            },
+            lobo: {
+                v1: { hp: 11, ca: 13, bonusAtk: 4, desc: "Mordida (2d4+2)", facesDano: 4, modDano: 2, modPercepcao: 4, textoVisao: "Olfato/Visão Apurada (+4)" },
+                v2: { hp: 37, ca: 14, bonusAtk: 5, desc: "Mordida Feroz (2d6+3)", facesDano: 6, modDano: 3, modPercepcao: 6, textoVisao: "Sentidos Superior (+6)" },
+                v3: { hp: 65, ca: 15, bonusAtk: 7, desc: "Mordida Sombria (2d8+4)", facesDano: 8, modDano: 4, modPercepcao: 8, textoVisao: "Sentidos Lendários (+8)" }
+            }
+        };
+
+        function atualizar(monstro) {
+            let escolha = document.getElementById('var-' + monstro).value;
+            let d = baseDados[monstro][escolha];
+            document.getElementById('hp-' + monstro).innerText = d.hp;
+            document.getElementById('ca-' + monstro).innerText = d.ca;
+            document.getElementById('info-' + monstro).innerText = d.desc;
+            document.getElementById('visao-' + monstro).innerText = d.textoVisao;
+        }
+
+        function rolar(monstro, tipo) {
+            let escolha = document.getElementById('var-' + monstro).value;
+            let d = baseDados[monstro][escolha];
+
+            if (tipo === 'ataque') {
+                let dado = Math.floor(Math.random() * 20) + 1;
+                let total = dado + d.bonusAtk;
+                document.getElementById(`res-${monstro}-ataque`).innerText = `Total: ${total} (1d20: ${dado} + ${d.bonusAtk})`;
+            } else if (tipo === 'dano') {
+                let dado = Math.floor(Math.random() * d.facesDano) + 1;
+                let total = dado + d.modDano;
+                document.getElementById(`res-${monstro}-dano`).innerText = `Total: ${total} de dano (Dado: ${dado} + ${d.modDano})`;
+            } else if (tipo === 'percepcao') {
+                let dado = Math.floor(Math.random() * 20) + 1;
+                let total = dado + d.modPercepcao;
+                document.getElementById(`res-${monstro}-percepcao`).innerText = `Percepção: ${total} (1d20: ${dado} + ${d.modPercepcao})`;
+            }
+        }
+    </script>
+</body>
+</html>
             margin-bottom: 10px;
             font-style: italic;
             color: #ff8a80;
