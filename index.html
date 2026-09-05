@@ -1,8 +1,9 @@
+                    
         <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Monstros com Variantes</title>
+    <title>Painel de Batalha - Variantes</title>
     <style>
         body {
             background-color: #121212;
@@ -46,6 +47,9 @@
         .monster-card.orc h2 {
             color: #66bb6a;
             border-bottom-color: #2e7d32;
+        }
+        .monster-card.orc select {
+            border-color: #2e7d32;
         }
         .monster-card.orc button {
             background-color: #2e7d32;
@@ -109,7 +113,7 @@
     <h1>Painel de Batalha</h1>
 
     <div class="container">
-        <!-- Ficha 1: Goblin com Variantes de Tamanho -->
+        <!-- Ficha 1: Goblin com Variantes -->
         <div class="monster-card">
             <h2>Goblin (Variantes)</h2>
             
@@ -135,29 +139,35 @@
             <div id="resultado-goblin-dano" class="result"></div>
         </div>
 
-        <!-- Ficha 2: Orc Fixo -->
+        <!-- Ficha 2: Orc com Variantes -->
         <div class="monster-card orc">
-            <h2>Orc Brutamontes</h2>
-            <p><strong>Tipo:</strong> Humanoide | <strong>ND:</strong> 1</p>
+            <h2>Orc (Variantes)</h2>
+            
+            <label for="variante-orc">Variante:</label>
+            <select id="variante-orc" onchange="atualizarOrc()">
+                <option value="guerreiro">Orc Guerreiro</option>
+                <option value="cacador">Orc Caçador</option>
+                <option value="chefe">Orc Chefe de Guerra</option>
+            </select>
             
             <div class="stats">
-                <div class="stat-box"><strong>HP:</strong> 30</div>
-                <div class="stat-box"><strong>CA:</strong> 13</div>
+                <div class="stat-box"><strong>HP:</strong> <span id="hp-orc">30</span></div>
+                <div class="stat-box"><strong>CA:</strong> <span id="ca-orc">13</span></div>
             </div>
 
             <h3>Ações</h3>
-            <p><strong>Machado:</strong> +5 para acertar (1d12 + 3)</p>
+            <p><strong>Ataque:</strong> <span id="info-ataque-orc">Machado Grande</span></p>
             
-            <button onclick="rolarOrc('ataque')">Rolar Ataque (1d20 + 5)</button>
+            <button onclick="rolarOrc('ataque')">Rolar Ataque</button>
             <div id="resultado-orc-ataque" class="result"></div>
 
-            <button onclick="rolarOrc('dano')">Rolar Dano (1d12 + 3)</button>
+            <button onclick="rolarOrc('dano')">Rolar Dano</button>
             <div id="resultado-orc-dano" class="result"></div>
         </div>
     </div>
 
     <script>
-        // Dados das variantes do Goblin
+        // Variantes do Goblin
         const variantesGoblin = {
             pequeno: { hp: 15, ca: 15, bonusAtaque: 4, alcance: "1,5m", facesDano: 6, modDano: 2, descDano: "1d6 + 2" },
             medio:   { hp: 30, ca: 16, bonusAtaque: 5, alcance: "1,5m", facesDano: 8, modDano: 3, descDano: "1d8 + 3" },
@@ -167,7 +177,6 @@
         function atualizarGoblin() {
             let escolha = document.getElementById('variante-goblin').value;
             let v = variantesGoblin[escolha];
-
             document.getElementById('hp-goblin').innerText = v.hp;
             document.getElementById('ca-goblin').innerText = v.ca;
             document.getElementById('info-ataque-goblin').innerText = `Alcance ${v.alcance} | Dano: ${v.descDano}`;
@@ -176,7 +185,6 @@
         function rolarGoblin(tipo) {
             let escolha = document.getElementById('variante-goblin').value;
             let v = variantesGoblin[escolha];
-
             if (tipo === 'ataque') {
                 let dado = Math.floor(Math.random() * 20) + 1;
                 let total = dado + v.bonusAtaque;
@@ -188,15 +196,33 @@
             }
         }
 
+        // Variantes do Orc
+        const variantesOrc = {
+            guerreiro: { hp: 30, ca: 13, bonusAtaque: 5, arma: "Machado Grande", facesDano: 12, modDano: 3, descDano: "1d12 + 3" },
+            cacador:   { hp: 22, ca: 14, bonusAtaque: 4, arma: "Lança",        facesDano: 8,  modDano: 2, descDano: "1d8 + 2" },
+            chefe:     { hp: 75, ca: 16, bonusAtaque: 7, arma: "Espada Dupla",  facesDano: 10, modDano: 5, descDano: "2d10 + 5" }
+        };
+
+        function atualizarOrc() {
+            let escolha = document.getElementById('variante-orc').value;
+            let v = variantesOrc[escolha];
+            document.getElementById('hp-orc').innerText = v.hp;
+            document.getElementById('ca-orc').innerText = v.ca;
+            document.getElementById('info-ataque-orc').innerText = `${v.arma} | Dano: ${v.descDano}`;
+        }
+
         function rolarOrc(tipo) {
+            let escolha = document.getElementById('variante-orc').value;
+            let v = variantesOrc[escolha];
             if (tipo === 'ataque') {
                 let dado = Math.floor(Math.random() * 20) + 1;
-                let total = dado + 5;
-                document.getElementById('resultado-orc-ataque').innerText = `Resultado: ${total} (Dado: ${dado} + 5)`;
+                let total = dado + v.bonusAtaque;
+                document.getElementById('resultado-orc-ataque').innerText = `Resultado: ${total} (Dado: ${dado} + ${v.bonusAtaque})`;
             } else {
-                let dado = Math.floor(Math.random() * 12) + 1;
-                let total = dado + 3;
-                document.getElementById('resultado-orc-dano').innerText = `Resultado: ${total} de dano (Dado: 1d12 + 3)`;
+                // Simula 1 dado ou 2 dados dependendo do dano
+                let dado = Math.floor(Math.random() * v.facesDano) + 1;
+                let total = dado + v.modDano;
+                document.getElementById('resultado-orc-dano').innerText = `Resultado: ${total} de dano (${v.arma}: ${dado} + ${v.modDano})`;
             }
         }
     </script>
