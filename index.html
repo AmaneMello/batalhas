@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Gerador de Monstros - RPG</title>
+    <title>Ficha com Variantes - RPG</title>
     <style>
         body {
             background-color: #121212;
@@ -16,11 +16,20 @@
             background-color: #1e1e1e;
             border: 2px solid #b71c1c;
             border-radius: 8px;
-            width: 350px;
+            width: 380px;
             padding: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
         h2 { color: #ff5252; margin-top: 0; border-bottom: 1px solid #b71c1c; padding-bottom: 8px; }
+        select {
+            width: 100%;
+            padding: 8px;
+            background: #2c2c2c;
+            color: white;
+            border: 1px solid #b71c1c;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
         .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -44,54 +53,80 @@
             width: 100%;
             font-weight: bold;
         }
-        button:hover {
-            background-color: #d32f2f;
-        }
+        button:hover { background-color: #d32f2f; }
         .result {
             margin-top: 8px;
             font-style: italic;
             color: #ff8a80;
             text-align: center;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
 
     <div class="monster-card">
-        <h2>Goblin Guerreiro</h2>
-        <p><strong>ND:</strong> 1/4 | <strong>Tipo:</strong> Humanoide</p>
+        <h2>Goblin (Variantes)</h2>
+        
+        <!-- Seletor de Variantes -->
+        <label for="variante">Escolha o Tamanho/Variante:</label>
+        <select id="variante" onchange="atualizarEstatisticas()">
+            <option value="pequeno">Pequeno (Comum)</option>
+            <option value="medio">Médio (Líder)</option>
+            <option value="grande">Grande (Brutamontes)</option>
+        </select>
         
         <div class="stats">
-            <div class="stat-box"><strong>HP:</strong> 15</div>
-            <div class="stat-box"><strong>CA:</strong> 15</div>
+            <div class="stat-box"><strong>HP:</strong> <span id="hp-val">15</span></div>
+            <div class="stat-box"><strong>CA:</strong> <span id="ac-val">15</span></div>
         </div>
 
         <h3>Ações</h3>
-        <p><strong>Cimitarra:</strong> Alcance 1,5m.</p>
+        <p><strong>Ataque:</strong> <span id="info-ataque">Alcance 1,5m</span></p>
         
-        <button onclick="rolarAtaque()">Rolar Ataque (1d20 + 4)</button>
+        <button onclick="rolarAtaque()">Rolar Ataque</button>
         <div id="resultado-ataque" class="result"></div>
 
-        <button onclick="rolarDano()">Rolar Dano (1d6 + 2)</button>
+        <button onclick="rolarDano()">Rolar Dano</button>
         <div id="resultado-dano" class="result"></div>
     </div>
 
     <script>
+        // Objeto que guarda as regras de cada variante
+        const variantesDados = {
+            pequeno: { hp: 15, ca: 15, bonusAtaque: 4, alcance: "1,5m", dadosDano: 6, modDano: 2, descDano: "1d6 + 2" },
+            medio:   { hp: 30, ca: 16, bonusAtaque: 5, alcance: "1,5m", dadosDano: 8, modDano: 3, descDano: "1d8 + 3" },
+            grande:  { hp: 60, ca: 18, bonusAtaque: 7, alcance: "3m",   dadosDano: 12, modDano: 4, descDano: "1d12 + 4" }
+        };
+
+        function atualizarEstatisticas() {
+            let escolha = document.getElementById('variante').value;
+            let v = variantesDados[escolha];
+
+            // Atualiza o texto na tela com base na variante escolhida
+            document.getElementById('hp-val').innerText = v.hp;
+            document.getElementById('ac-val').innerText = v.ca;
+            document.getElementById('info-ataque').innerText = `Alcance ${v.alcance} | Dano: ${v.descDano}`;
+        }
+
         function rolarAtaque() {
-            // Sorteia um número de 1 a 20 e soma 4
+            let escolha = document.getElementById('variante').value;
+            let v = variantesDados[escolha];
+
             let dado = Math.floor(Math.random() * 20) + 1;
-            let total = dado + 4;
-            document.getElementById('resultado-ataque').innerText = `Resultado: ${total} (Dado: ${dado} + 4)`;
+            let total = dado + v.bonusAtaque;
+            document.getElementById('resultado-ataque').innerText = `Resultado: ${total} (Dado: ${dado} + ${v.bonusAtaque})`;
         }
 
         function rolarDano() {
-            // Sorteia um número de 1 a 6 e soma 2
-            let dado = Math.floor(Math.random() * 6) + 1;
-            let total = dado + 2;
-            document.getElementById('resultado-dano').innerText = `Resultado: ${total} de dano (Dado: ${dado} + 2)`;
+            let escolha = document.getElementById('variante').value;
+            let v = variantesDados[escolha];
+
+            let dado = Math.floor(Math.random() * v.dadosDano) + 1;
+            let total = dado + v.modDano;
+            document.getElementById('resultado-dano').innerText = `Resultado: ${total} de dano (Dado: 1d${v.dadosDano} + ${v.modDano})`;
         }
     </script>
 
 </body>
 </html>
-
