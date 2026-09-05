@@ -33,22 +33,64 @@
             text-align: center;
             border-radius: 4px;
         }
+        button {
+            background-color: #b71c1c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+            width: 100%;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #d32f2f;
+        }
+        .result {
+            margin-top: 8px;
+            font-style: italic;
+            color: #ff8a80;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
     <div class="monster-card">
-        <h2 id="monster-name">Goblin Guerreiro</h2>
-        <p><strong>ND:</strong> <span id="monster-cr">1/4</span> | <strong>Tipo:</strong> Humanoide</p>
+        <h2>Goblin Guerreiro</h2>
+        <p><strong>ND:</strong> 1/4 | <strong>Tipo:</strong> Humanoide</p>
         
         <div class="stats">
-            <div class="stat-box"><strong>HP:</strong> <span id="monster-hp">15</span></div>
-            <div class="stat-box"><strong>CA:</strong> <span id="monster-ac">15</span></div>
+            <div class="stat-box"><strong>HP:</strong> 15</div>
+            <div class="stat-box"><strong>CA:</strong> 15</div>
         </div>
 
-        <h3>Ataques</h3>
-        <p><strong>Cimitarra:</strong> +4 para acertar, alcance 1,5m. <em>Acerto:</em> 5 (1d6 + 2) dano cortante.</p>
+        <h3>Ações</h3>
+        <p><strong>Cimitarra:</strong> Alcance 1,5m.</p>
+        
+        <button onclick="rolarAtaque()">Rolar Ataque (1d20 + 4)</button>
+        <div id="resultado-ataque" class="result"></div>
+
+        <button onclick="rolarDano()">Rolar Dano (1d6 + 2)</button>
+        <div id="resultado-dano" class="result"></div>
     </div>
+
+    <script>
+        function rolarAtaque() {
+            // Sorteia um número de 1 a 20 e soma 4
+            let dado = Math.floor(Math.random() * 20) + 1;
+            let total = dado + 4;
+            document.getElementById('resultado-ataque').innerText = `Resultado: ${total} (Dado: ${dado} + 4)`;
+        }
+
+        function rolarDano() {
+            // Sorteia um número de 1 a 6 e soma 2
+            let dado = Math.floor(Math.random() * 6) + 1;
+            let total = dado + 2;
+            document.getElementById('resultado-dano').innerText = `Resultado: ${total} de dano (Dado: ${dado} + 2)`;
+        }
+    </script>
 
 </body>
 </html>
