@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Batalha - Lista Completa de Monstros</title>
+    <title>Painel de Batalha - Monstros Coloridos</title>
     <style>
         body {
             background-color: #121212;
@@ -40,19 +40,91 @@
             padding: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
+
+        /* Cores exclusivas para cada monstro */
+        .card-lizard { border-color: #4caf50; }
+        .card-lizard h2 { color: #81c784; border-bottom-color: #4caf50; }
+        .card-lizard select, .card-lizard button { background-color: #388e3c; }
+        .card-lizard button:hover { background-color: #4caf50; }
+        .card-lizard .result { color: #c8e6c9; }
+
+        .card-bovine { border-color: #795548; }
+        .card-bovine h2 { color: #a1887f; border-bottom-color: #795548; }
+        .card-bovine select, .card-bovine button { background-color: #5d4037; }
+        .card-bovine button:hover { background-color: #795548; }
+        .card-bovine .result { color: #d7ccc8; }
+
+        .card-spider { border-color: #9c27b0; }
+        .card-spider h2 { color: #ba68c8; border-bottom-color: #9c27b0; }
+        .card-spider select, .card-spider button { background-color: #7b1fa2; }
+        .card-spider button:hover { background-color: #9c27b0; }
+        .card-spider .result { color: #e1bee7; }
+
+        .card-wyvern { border-color: #ff9800; }
+        .card-wyvern h2 { color: #ffb74d; border-bottom-color: #ff9800; }
+        .card-wyvern select, .card-wyvern button { background-color: #f57c00; }
+        .card-wyvern button:hover { background-color: #ff9800; }
+        .card-wyvern .result { color: #ffe0b2; }
+
+        .card-ant { border-color: #607d8b; }
+        .card-ant h2 { color: #90a4ae; border-bottom-color: #607d8b; }
+        .card-ant select, .card-ant button { background-color: #455a64; }
+        .card-ant button:hover { background-color: #607d8b; }
+        .card-ant .result { color: #cfd8dc; }
+
+        .card-armored { border-color: #00bcd4; }
+        .card-armored h2 { color: #4dd0e1; border-bottom-color: #00bcd4; }
+        .card-armored select, .card-armored button { background-color: #0097a7; }
+        .card-armored button:hover { background-color: #00bcd4; }
+        .card-armored .result { color: #b2ebf2; }
+
+        .card-fungal { border-color: #8bc34a; }
+        .card-fungal h2 { color: #aed581; border-bottom-color: #8bc34a; }
+        .card-fungal select, .card-fungal button { background-color: #689f38; }
+        .card-fungal button:hover { background-color: #8bc34a; }
+        .card-fungal .result { color: #dcedc8; }
+
+        .card-wolf { border-color: #e91e63; }
+        .card-wolf h2 { color: #f06292; border-bottom-color: #e91e63; }
+        .card-wolf select, .card-wolf button { background-color: #c2185b; }
+        .card-wolf button:hover { background-color: #e91e63; }
+        .card-wolf .result { color: #f8bbd0; }
+
+        .card-mole { border-color: #795548; }
+        .card-mole h2 { color: #d7ccc8; border-bottom-color: #795548; }
+        .card-mole select, .card-mole button { background-color: #4e342e; }
+        .card-mole button:hover { background-color: #6d4c41; }
+        .card-mole .result { color: #efebe9; }
+
+        .card-plant { border-color: #2e7d32; }
+        .card-plant h2 { color: #81c784; border-bottom-color: #2e7d32; }
+        .card-plant select, .card-plant button { background-color: #1b5e20; }
+        .card-plant button:hover { background-color: #2e7d32; }
+        .card-plant .result { color: #c8e6c9; }
+
+        .card-paraves { border-color: #009688; }
+        .card-paraves h2 { color: #4db6ac; border-bottom-color: #009688; }
+        .card-paraves select, .card-paraves button { background-color: #00796b; }
+        .card-paraves button:hover { background-color: #009688; }
+        .card-paraves .result { color: #b2dfdb; }
+
+        .card-caudata { border-color: #673ab7; }
+        .card-caudata h2 { color: #9575cd; border-bottom-color: #673ab7; }
+        .card-caudata select, .card-caudata button { background-color: #512da8; }
+        .card-caudata button:hover { background-color: #673ab7; }
+        .card-caudata .result { color: #d1c4e9; }
+
         h2 { 
-            color: #ff5252; 
             margin-top: 0; 
-            border-bottom: 1px solid #b71c1c; 
+            border-bottom: 1px solid; 
             padding-bottom: 8px; 
             font-size: 1.1rem;
         }
         select {
             width: 100%;
             padding: 6px;
-            background: #2c2c2c;
             color: white;
-            border: 1px solid #b71c1c;
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 4px;
             margin-bottom: 8px;
             font-size: 0.85rem;
@@ -72,7 +144,6 @@
         }
         p { font-size: 0.8rem; margin: 5px 0; }
         button {
-            background-color: #b71c1c;
             color: white;
             border: none;
             padding: 6px 10px;
@@ -83,12 +154,10 @@
             font-weight: bold;
             font-size: 0.8rem;
         }
-        button:hover { background-color: #d32f2f; }
         .result {
             margin-top: 2px;
             margin-bottom: 6px;
             font-style: italic;
-            color: #ff8a80;
             text-align: center;
             font-size: 0.75rem;
         }
@@ -96,14 +165,11 @@
 </head>
 <body>
 
-    <h1>Painel de Batalha - Monstros</h1>
+    <h1>Painel de Batalha - Monstros Coloridos</h1>
 
-    <div class="container" id="painel-monstros">
-        <!-- Os cards serão gerados dinamicamente via script para garantir todas as especificações -->
-    </div>
+    <div class="container" id="painel-monstros"></div>
 
     <script>
-        // Definição dos dados base para cada monstro (Tipo A e B, com variantes Yoju e Honju)
         const monstrosLista = [
             { id: "lizard", nome: "Lizard", hp: 30, caVal: 6, visaoVal: 12, dif: "A para B: +5hp / 2d12 visão" },
             { id: "bovine", nome: "Bovine", hp: 22, caVal: 12, visaoVal: 20, dif: "A para B: -3hp / -2 ca" },
@@ -124,18 +190,16 @@
             let html = '';
 
             monstrosLista.forEach(m => {
-                // Tipo A
-                html += criarCardHtml(m.id + "_a", `${m.nome} (Tipo A)`, m);
-                // Tipo B (se houver alteração ou se for gerado)
-                html += criarCardHtml(m.id + "_b", `${m.nome} (Tipo B)`, m);
+                html += criarCardHtml(m.id + "_a", `${m.nome} (Tipo A)`, m.id, m);
+                html += criarCardHtml(m.id + "_b", `${m.nome} (Tipo B)`, m.id, m);
             });
 
             container.innerHTML = html;
         }
 
-        function criarCardHtml(chave, titulo, dadosBase) {
+        function criarCardHtml(chave, titulo, baseId, dadosBase) {
             return `
-                <div class="monster-card" id="card-${chave}">
+                <div class="monster-card card-${baseId}" id="card-${chave}">
                     <h2>${titulo}</h2>
                     <select id="var-${chave}" onchange="atualizarCard('${chave}')">
                         <option value="yoju">Yoju (Pequeno)</option>
@@ -161,7 +225,6 @@
             `;
         }
 
-        // Calcula stats base para cada instância
         function obterStats(chave) {
             let [baseName, tipo] = chave.split('_');
             let m = monstrosLista.find(item => item.id === baseName);
@@ -172,18 +235,18 @@
             let ca = m.caVal;
             let visaoFaces = m.visaoVal;
 
-            // Ajuste Tipo B
             if (tipo === 'b') {
-                if (baseName === 'lizard') { hp += 5; }
+                if (baseName === 'lizard') { hp += 5; visaoFaces = "2d12"; }
                 else if (baseName === 'bovine') { hp -= 3; ca -= 2; }
                 else if (baseName === 'spider') { hp -= 5; ca += 3; }
                 else if (baseName === 'wyvern') { hp -= 2; ca += 2; }
-                else if (baseName === 'ant') { hp -= 1; }
-                else if (baseName === 'fungal') { hp += 2; }
+                else if (baseName === 'ant') { hp -= 1; visaoFaces = "2d6"; }
+                else if (baseName === 'fungal') { hp += 2; visaoFaces = "3d10"; }
                 else if (baseName === 'caudata') { hp -= 3; ca += 5; }
             }
 
-            // Ajuste de Variante (Yoju pequeno vs Honju grande)
+            let descVisaoStr = typeof visaoFaces === 'number' ? `1d${visaoFaces}` : visaoFaces;
+
             if (variante === 'honju') {
                 hp = Math.floor(hp * 1.8);
                 ca += 2;
@@ -192,8 +255,8 @@
             return {
                 hp: hp,
                 ca: ca,
-                visaoFaces: visaoFaces,
-                tipoVisaoDesc: `1d${visaoFaces}`
+                visaoFacesRaw: visaoFaces,
+                tipoVisaoDesc: descVisaoStr
             };
         }
 
@@ -216,12 +279,33 @@
                 let total = dado + 2;
                 document.getElementById(`res-${chave}-dano`).innerText = `Total: ${total} de dano (1d6: ${dado} + 2)`;
             } else if (tipoAcao === 'visao') {
-                let dado = Math.floor(Math.random() * s.visaoFaces) + 1;
-                document.getElementById(`res-${chave}-visao`).innerText = `Teste Visão: ${dado} (1d${s.visaoFaces})`;
+                let resultadoVisao = 0;
+                let descRolagem = "";
+                
+                if (typeof s.visaoFacesRaw === 'number') {
+                    let dado = Math.floor(Math.random() * s.visaoFacesRaw) + 1;
+                    resultadoVisao = dado;
+                    descRolagem = `1d${s.visaoFacesRaw}: ${dado}`;
+                } else {
+                    // Trata dados múltiplos (ex: "2d12", "3d10", "2d6")
+                    let partes = s.visaoFacesRaw.split('d');
+                    let qtd = parseInt(partes[0]);
+                    let faces = parseInt(partes[1]);
+                    let soma = 0;
+                    let lancamentos = [];
+                    for(let i=0; i<qtd; i++) {
+                        let d = Math.floor(Math.random() * faces) + 1;
+                        soma += d;
+                        lancamentos.push(d);
+                    }
+                    resultadoVisao = soma;
+                    descRolagem = `${s.visaoFacesRaw}: [${lancamentos.join(', ')}]`;
+                }
+
+                document.getElementById(`res-${chave}-visao`).innerText = `Visão: ${resultadoVisao} (${descRolagem})`;
             }
         }
 
-        // Inicializa todos os cards após carregar a página
         window.onload = function() {
             gerarCards();
             monstrosLista.forEach(m => {
