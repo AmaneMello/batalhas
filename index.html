@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerador de Monstros - RPG</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .monster-card {
+            background-color: #1e1e1e;
+            border: 2px solid #b71c1c;
+            border-radius: 8px;
+            width: 350px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        h2 { color: #ff5252; margin-top: 0; border-bottom: 1px solid #b71c1c; padding-bottom: 8px; }
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .stat-box {
+            background: #2c2c2c;
+            padding: 8px;
+            text-align: center;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="monster-card">
+        <h2 id="monster-name">Goblin Guerreiro</h2>
+        <p><strong>ND:</strong> <span id="monster-cr">1/4</span> | <strong>Tipo:</strong> Humanoide</p>
+        
+        <div class="stats">
+            <div class="stat-box"><strong>HP:</strong> <span id="monster-hp">15</span></div>
+            <div class="stat-box"><strong>CA:</strong> <span id="monster-ac">15</span></div>
+        </div>
+
+        <h3>Ataques</h3>
+        <p><strong>Cimitarra:</strong> +4 para acertar, alcance 1,5m. <em>Acerto:</em> 5 (1d6 + 2) dano cortante.</p>
+    </div>
+
+</body>
+</html>
+
