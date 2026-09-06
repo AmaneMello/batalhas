@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Painel de Batalha e Criador de Fichas Avançado</title>
-    <!-- Importa a biblioteca para gerar a imagem da ficha -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
@@ -414,7 +413,7 @@
             
             <div class="form-group">
                 <label>Nome do Player:</label>
-                <input type="text" id="sheet-player" placeholder="Ex: Amane delícia" oninput="salvarProgressoLocalmente()">
+                <input type="text" id="sheet-player" placeholder="Ex: Amane" oninput="salvarProgressoLocalmente()">
             </div>
 
             <div class="header-profile">
@@ -428,7 +427,7 @@
                 <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
                     <div class="form-group" style="margin-bottom: 0;">
                         <label>Nome do Personagem:</label>
-                        <input type="text" id="sheet-nome" placeholder="Ex: Hoshina gostoso" oninput="salvarProgressoLocalmente()">
+                        <input type="text" id="sheet-nome" placeholder="Ex: Hoshina" oninput="salvarProgressoLocalmente()">
                     </div>
                     <div class="form-row">
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
@@ -440,9 +439,8 @@
                             </select>
                         </div>
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
-                            <label>Trilha / Especialização:</label>
+                            <label>Trilha:</label>
                             <select id="sheet-trilha" onchange="salvarProgressoLocalmente()">
-                                <!-- Preenchido dinamicamente via JS -->
                             </select>
                         </div>
                     </div>
@@ -450,7 +448,7 @@
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
                             <label>Origem:</label>
                             <select id="sheet-origem" onchange="verificarOrigemAmnesico(); salvarProgressoLocalmente();">
-                                <option value="nenhuma">Selecione uma Origem...</option>
+                                <option value="nenhuma">Selecione...</option>
                                 <option value="amnesico">Amnésico</option>
                                 <option value="academico">Acadêmico</option>
                                 <option value="agente_saude">Agente de Saúde</option>
@@ -483,8 +481,8 @@
                             <label>Rolagem:</label>
                             <select id="sheet-modo-rolagem" onchange="salvarProgressoLocalmente()">
                                 <option value="normal">Normal (1d20)</option>
-                                <option value="vantagem">Vantagem (2d20 Maior)</option>
-                                <option value="desvantagem">Desvantagem (2d20 Menor)</option>
+                                <option value="vantagem">Vantagem</option>
+                                <option value="desvantagem">Desvantagem</option>
                             </select>
                         </div>
                     </div>
@@ -492,18 +490,17 @@
             </div>
 
             <div class="form-group">
-                <label>Descrição do Personagem / Aparência / Histórico:</label>
-                <div id="sheet-descricao" class="descricao-div" contenteditable="true" data-placeholder="Escreva a história ou descrição do seu agente..." oninput="salvarProgressoLocalmente()"></div>
+                <label>Descrição / Histórico:</label>
+                <div id="sheet-descricao" class="descricao-div" contenteditable="true" data-placeholder="Escreva a história..." oninput="salvarProgressoLocalmente()"></div>
             </div>
 
-            <!-- Condições Globais -->
             <div class="conditions-box">
-                <label style="margin: 0; font-size: 0.8rem; color: #ff5252;">Condições Ativas (Afetam Testes):</label>
+                <label style="margin: 0; font-size: 0.8rem; color: #ff5252;">Condições Ativas:</label>
                 <div class="conditions-grid">
-                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="exausto" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Exausto (-2 em Testes)</label>
-                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="machucado" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Machucado (-2 em Físicos)</label>
-                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="atordoado" data-penalidade="5" onchange="salvarProgressoLocalmente()"> Atordoado (-5 em Testes)</label>
-                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="amedrontado" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Amedrontado (-2 em Testes)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="exausto" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Exausto (-2)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="machucado" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Machucado (-2 Fís)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="atordoado" data-penalidade="5" onchange="salvarProgressoLocalmente()"> Atordoado (-5)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="amedrontado" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Amedrontado (-2)</label>
                 </div>
             </div>
 
@@ -516,35 +513,35 @@
                     <label>AGI</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-agi" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
-                        <button type="button" class="roll-btn" title="Rolar AGI" onclick="rolarAtributo('AGI', 'attr-agi', ['fisico', 'agi'])">🎲</button>
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('AGI', 'attr-agi', ['fisico', 'agi'])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>FOR</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-for" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
-                        <button type="button" class="roll-btn" title="Rolar FOR" onclick="rolarAtributo('FOR', 'attr-for', ['fisico', 'for'])">🎲</button>
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('FOR', 'attr-for', ['fisico', 'for'])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>INT</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-int" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
-                        <button type="button" class="roll-btn" title="Rolar INT" onclick="rolarAtributo('INT', 'attr-int', [])">🎲</button>
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('INT', 'attr-int', [])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>PRE</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-pre" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
-                        <button type="button" class="roll-btn" title="Rolar PRE" onclick="rolarAtributo('PRE', 'attr-pre', [])">🎲</button>
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('PRE', 'attr-pre', [])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>VIG</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-vig" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
-                        <button type="button" class="roll-btn" title="Rolar VIG" onclick="rolarAtributo('VIG', 'attr-vig', ['fisico'])">🎲</button>
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('VIG', 'attr-vig', ['fisico'])">🎲</button>
                     </div>
                 </div>
             </div>
@@ -552,15 +549,15 @@
             <div class="section-title">Estatísticas Calculadas</div>
             <div class="form-row">
                 <div class="form-group" style="flex: 1;">
-                    <label>PV (Vida):</label>
+                    <label>PV:</label>
                     <div class="calculated-box" id="calc-pv">20</div>
                 </div>
                 <div class="form-group" style="flex: 1;">
-                    <label>SAN (Sanidade):</label>
+                    <label>SAN:</label>
                     <div class="calculated-box" id="calc-san">12</div>
                 </div>
                 <div class="form-group" style="flex: 1;">
-                    <label>PE (Esforço):</label>
+                    <label>PE:</label>
                     <div class="calculated-box" id="calc-pe">2</div>
                 </div>
             </div>
@@ -576,8 +573,8 @@
             </div>
 
             <div class="section-title">
-                Inventário / Espaços 
-                <span class="counter-badge">Peso Atual: <span id="peso-atual">0</span> / <span id="inv-capacidade">5</span></span>
+                Inventário 
+                <span class="counter-badge">Peso: <span id="peso-atual">0</span> / <span id="inv-capacidade">5</span></span>
             </div>
             <div class="inventory-container" id="inventory-slots-box">
             </div>
@@ -590,8 +587,9 @@
             </div>
             <div id="res-pericia-global" class="result" style="color: #ff8a80; margin-top: 5px;"></div>
 
-            <button class="action-btn link-btn" onclick="copiarLinkFicha()">Copiar Link da Ficha para Retornar</button>
-            <button class="save-btn" onclick="baixarFichaImagem()">Baixar Ficha como Imagem</button>
+            <button class="action-btn link-btn" onclick="copiarLinkFicha()">Copiar Link da Ficha</button>
+            <button class="action-btn" style="background-color: #d32f2f;" onclick="reiniciarFicha()">Criar Novo Personagem (Zerar)</button>
+            <button class="save-btn" onclick="baixarFichaImagem()">Baixar Imagem</button>
         </div>
 
     </div>
@@ -647,25 +645,21 @@
             
             atualizarTrilhas();
             inicializarPericias();
+            atualizarDerivados();
             
-            // Tenta carregar dados da URL (link compartilhado) ou do localStorage
             if (!carregarDadosDaUrl()) {
                 carregarProgressoLocalmente();
             }
-            
-            atualizarDerivados();
         }
 
         function atualizarTrilhas() {
             let classe = document.getElementById('sheet-classe').value;
             let selectTrilha = document.getElementById('sheet-trilha');
-            
             let trilhasMap = {
                 combatente: ['Aniquilador', 'Assassino', 'Comando', 'Guerreiro', 'Tropa de Choque'],
                 especialista: ['Atirador de Elite', 'Infiltrador', 'Médico de Campo', 'Negociador', 'Technomancer'],
                 ocultista: ['Conduíte', 'Flagelador', 'Graduado', 'Lâmina Paranormal', 'Intuitivo']
             };
-
             let lista = trilhasMap[classe] || [];
             let html = '';
             lista.forEach(t => {
@@ -699,7 +693,7 @@
                         <span>${nome}</span>
                         <div class="skill-controls">
                             <input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias(); salvarProgressoLocalmente();">
-                            <button type="button" class="roll-btn" title="Rolar Perícia" onclick="rolarPericia(this, '${nome}')">🎲</button>
+                            <button type="button" class="roll-btn" onclick="rolarPericia(this, '${nome}')">🎲</button>
                         </div>
                     </div>
                 `;
@@ -722,14 +716,11 @@
                     <p><strong>Ataque:</strong> <span id="info-ataque-${m.id}">1d20 + 3</span></p>
                     <p><strong>Visão:</strong> <span id="info-visao-${m.id}">--</span></p>
                     <p style="font-size:0.75rem; color:#888;">${m.dif}</p>
-                    
                     <button class="action-btn" onclick="rolar('${m.id}', 'ataque')">Rolar Ataque</button>
                     <div id="res-${m.id}-ataque" class="result"></div>
-                    
                     <button class="action-btn" onclick="rolar('${m.id}', 'dano')">Rolar Dano</button>
                     <div id="res-${m.id}-dano" class="result"></div>
-
-                    <button class="action-btn" onclick="rolar('${m.id}', 'visao')">Rolar Percepção/Visão</button>
+                    <button class="action-btn" onclick="rolar('${m.id}', 'visao')">Rolar Visão</button>
                     <div id="res-${m.id}-visao" class="result"></div>
                 </div>
             `;
@@ -739,14 +730,11 @@
             let escolhido = document.getElementById('seletor-global').value;
             let elements = document.querySelectorAll('.monster-card, .custom-sheet');
             elements.forEach(el => el.style.display = 'none');
-
             if (escolhido) {
                 let alvo = document.getElementById(`card-${escolhido}`);
                 if (alvo) {
                     alvo.style.display = 'block';
-                    if (escolhido !== 'criar_ficha') {
-                        atualizarCard(escolhido);
-                    }
+                    if (escolhido !== 'criar_ficha') atualizarCard(escolhido);
                 }
             }
         }
@@ -755,12 +743,10 @@
             let inputs = document.querySelectorAll('.attr-input');
             let soma = 0;
             inputs.forEach(inp => soma += parseInt(inp.value) || 0);
-
             let restantes = 10 - soma;
             document.getElementById('atrib-restantes').innerText = restantes;
-
             if (restantes < 0) {
-                alert("Você passou do limite de 10 pontos nos atributos!");
+                alert("Passou do limite de 10 pontos!");
                 event.target.value = parseInt(event.target.value) + restantes;
                 verificarAtributos();
                 return;
@@ -770,11 +756,9 @@
 
         function verificarOrigemAmnesico() {
             let origem = document.getElementById('sheet-origem').value;
-            
             if (origem === 'amnesico') {
                 let atributosIds = ['attr-agi', 'attr-for', 'attr-int', 'attr-pre', 'attr-vig'];
                 atributosIds.forEach(id => document.getElementById(id).value = 1);
-                
                 let pontosRestantes = 5; 
                 while (pontosRestantes > 0) {
                     let sorteio = atributosIds[Math.floor(Math.random() * atributosIds.length)];
@@ -786,19 +770,8 @@
                     }
                 }
                 verificarAtributos();
-
-                const codinomes = ["Desconhecido #404", "Sujeito 09", "João Ninguém", "A Sombra", "Apelido Perdido"];
-                document.getElementById('sheet-nome').value = codinomes[Math.floor(Math.random() * codinomes.length)];
-
-                const historicosAmnesico = [
-                    "Você acordou em um beco escuro com as mãos ensanguentadas e sem lembrança alguma das últimas 48 horas. A única pista é uma chave enferrujada no seu bolso.",
-                    "Sua mente é um completo vazio antes de hoje de manhã. Você lembra apenas de um símbolo estranho gravado no seu braço e de uma sensação constante de estar sendo caçado.",
-                    "Você recuperou a consciência em uma sala de hospital abandonada, cheia de papéis queimados. Não sabe quem é, mas percebeu que consegue instintivamente manusear armas como se fizesse isso há anos."
-                ];
-                let historiaEscolhida = historicosAmnesico[Math.floor(Math.random() * historicosAmnesico.length)];
-                document.getElementById('sheet-descricao').innerText = historiaEscolhida;
-
-                alert("Ficha gerada automaticamente pelo modo Amnésico! Seus atributos e histórico foram preenchidos de forma misteriosa.");
+                document.getElementById('sheet-nome').value = "Desconhecido #404";
+                document.getElementById('sheet-descricao').innerText = "Você acordou sem lembranças...";
                 salvarProgressoLocalmente();
             }
         }
@@ -806,70 +779,47 @@
         function calcularModificadores(tags = []) {
             let checkboxes = document.querySelectorAll('.cond-check:checked');
             let penalidadeTotal = 0;
-
             checkboxes.forEach(cb => {
                 let valor = parseInt(cb.getAttribute('data-penalidade')) || 0;
-                let condName = cb.value;
-                if (condName === 'machucado' && !tags.includes('fisico')) {
-                    return; 
-                }
+                if (cb.value === 'machucado' && !tags.includes('fisico')) return;
                 penalidadeTotal += valor;
             });
-
             let pesoAtual = parseFloat(document.getElementById('peso-atual').innerText) || 0;
             let forcaVal = parseInt(document.getElementById('attr-for').value) || 0;
             let capacidadeMax = 5 + (forcaVal * 3);
             let sobrecarregado = pesoAtual >= capacidadeMax;
-
             let modoRolagem = document.getElementById('sheet-modo-rolagem').value;
 
             if (sobrecarregado && (tags.includes('agi') || tags.includes('for'))) {
-                if (modoRolagem === 'normal') {
-                    modoRolagem = 'desvantagem';
-                }
+                if (modoRolagem === 'normal') modoRolagem = 'desvantagem';
             }
-
             let d1 = Math.floor(Math.random() * 20) + 1;
             let d2 = Math.floor(Math.random() * 20) + 1;
             let dadoFinal = d1;
             let detalhesRolagem = `1d20: ${d1}`;
-
             if (modoRolagem === 'vantagem') {
                 dadoFinal = Math.max(d1, d2);
-                detalhesRolagem = `Vantagem 2d20 [${d1}, ${d2}] -> ${dadoFinal}`;
+                detalhesRolagem = `Vantagem [${d1}, ${d2}] -> ${dadoFinal}`;
             } else if (modoRolagem === 'desvantagem') {
                 dadoFinal = Math.min(d1, d2);
-                let motivoSobrepeso = (sobrecarregado && (tags.includes('agi') || tags.includes('for'))) ? ' (Sobrepeso)' : '';
-                detalhesRolagem = `Desvantagem 2d20${motivoSobrepeso} [${d1}, ${d2}] -> ${dadoFinal}`;
+                detalhesRolagem = `Desvantagem [${d1}, ${d2}] -> ${dadoFinal}`;
             }
-
-            return {
-                dadoFinal: dadoFinal,
-                detalhesRolagem: detalhesRolagem,
-                penalidadeTotal: penalidadeTotal
-            };
+            return { dadoFinal, detalhesRolagem, penalidadeTotal };
         }
 
         function rolarAtributo(nomeAtributo, idInput, tags = []) {
             let qtdDados = parseInt(document.getElementById(idInput).value) || 0;
             let displayRes = document.getElementById('res-pericia-global');
-
             if (qtdDados <= 0) {
-                displayRes.innerText = `${nomeAtributo}: 0 dados para rolar (Atributo 0)`;
+                displayRes.innerText = `${nomeAtributo}: 0 dados.`;
                 return;
             }
-
             let mod = calcularModificadores(tags);
             let resultados = [];
-            for (let i = 0; i < qtdDados; i++) {
-                resultados.push(Math.floor(Math.random() * 20) + 1);
-            }
-
+            for (let i = 0; i < qtdDados; i++) resultados.push(Math.floor(Math.random() * 20) + 1);
             let maiorResultado = Math.max(...resultados);
             let totalFinal = maiorResultado - mod.penalidadeTotal;
-
-            let textoPenalidade = mod.penalidadeTotal > 0 ? ` - ${mod.penalidadeTotal} (Condições)` : '';
-            displayRes.innerText = `${nomeAtributo}: Total ${totalFinal} (Maior ${maiorResultado}${textoPenalidade} | ${mod.detalhesRolagem})`;
+            displayRes.innerText = `${nomeAtributo}: Total ${totalFinal} (Maior ${maiorResultado} | ${mod.detalhesRolagem})`;
         }
 
         function atualizarDerivados() {
@@ -880,35 +830,15 @@
             let vig = parseInt(document.getElementById('attr-vig').value) || 0;
             let classe = document.getElementById('sheet-classe').value;
 
-            let basePv = 12, incPv = 3;
-            let baseSan = 12, incSan = 3;
-            let basePe = 2, incPe = 2;
+            let basePv = 20, incPv = 4, baseSan = 12, incSan = 3, basePe = 2, incPe = 2;
+            if (classe === 'especialista') { basePv = 16; incPv = 3; baseSan = 16; incSan = 4; basePe = 3; incPe = 3; }
+            else if (classe === 'ocultista') { basePv = 12; incPv = 2; baseSan = 20; incSan = 5; basePe = 4; incPe = 4; }
 
-            if (classe === 'combatente') {
-                basePv = 20; incPv = 4;
-                baseSan = 12; incSan = 3;
-                basePe = 2; incPe = 2;
-            } else if (classe === 'especialista') {
-                basePv = 16; incPv = 3;
-                baseSan = 16; incSan = 4;
-                basePe = 3; incPe = 3;
-            } else if (classe === 'ocultista') {
-                basePv = 12; incPv = 2;
-                baseSan = 20; incSan = 5;
-                basePe = 4; incPe = 4;
-            }
-
-            let pvTotal = basePv + (vig * incPv);
-            let sanTotal = baseSan + (pre * incSan);
-            let peTotal = basePe + (pre * incPe);
-            let defesaTotal = 10 + agi;
-            let esquivaTotal = 10 + agi;
-
-            document.getElementById('calc-pv').innerText = pvTotal;
-            document.getElementById('calc-san').innerText = sanTotal;
-            document.getElementById('calc-pe').innerText = peTotal;
-            document.getElementById('calc-def').innerText = defesaTotal;
-            document.getElementById('calc-esq').innerText = esquivaTotal;
+            document.getElementById('calc-pv').innerText = basePv + (vig * incPv);
+            document.getElementById('calc-san').innerText = baseSan + (pre * incSan);
+            document.getElementById('calc-pe').innerText = basePe + (pre * incPe);
+            document.getElementById('calc-def').innerText = 10 + agi;
+            document.getElementById('calc-esq').innerText = 10 + agi;
 
             atualizarInventario(forca);
         }
@@ -916,15 +846,20 @@
         function atualizarInventario(forca) {
             let totalSlots = 5 + (forca * 3);
             document.getElementById('inv-capacidade').innerText = totalSlots;
-
             let box = document.getElementById('inventory-slots-box');
-            let htmlAtual = "";
+            
+            // Salva valores antigos se existirem
+            let antigosNomes = Array.from(document.querySelectorAll('.inv-nome-input')).map(i => i.value);
+            let antigosPesos = Array.from(document.querySelectorAll('.inv-peso-input')).map(i => i.value);
 
+            let htmlAtual = "";
             for (let i = 1; i <= totalSlots; i++) {
+                let nVal = antigosNomes[i-1] || "";
+                let pVal = antigosPesos[i-1] || "";
                 htmlAtual += `
                     <div class="inventory-slot">
-                        <input type="text" class="inv-nome-input" placeholder="Item ${i}..." oninput="calcularPesoTotal(); salvarProgressoLocalmente();" />
-                        <input type="number" class="inv-peso-input" placeholder="Peso" min="0" max="5" oninput="calcularPesoTotal(); salvarProgressoLocalmente();" />
+                        <input type="text" class="inv-nome-input" value="${nVal}" placeholder="Item ${i}..." oninput="calcularPesoTotal(); salvarProgressoLocalmente();" />
+                        <input type="number" class="inv-peso-input" value="${pVal}" placeholder="Peso" min="0" max="5" oninput="calcularPesoTotal(); salvarProgressoLocalmente();" />
                     </div>
                 `;
             }
@@ -933,70 +868,47 @@
         }
 
         function calcularPesoTotal() {
-            let inputsPeso = document.querySelectorAll('.inv-peso-input');
             let pesoTotal = 0;
-            inputsPeso.forEach(inp => {
+            document.querySelectorAll('.inv-peso-input').forEach(inp => {
                 pesoTotal += parseFloat(inp.value) || 0;
             });
             document.getElementById('peso-atual').innerText = pesoTotal;
         }
 
         function verificarPericias() {
-            let inputs = document.querySelectorAll('.skill-input');
             let soma = 0;
-            inputs.forEach(inp => soma += parseInt(inp.value) || 0);
-
+            document.querySelectorAll('.skill-input').forEach(inp => soma += parseInt(inp.value) || 0);
             let restantes = 20 - soma;
             document.getElementById('pericia-restantes').innerText = restantes;
-
             if (restantes < 0) {
-                alert("Você passou do limite de 20 pontos nas perícias!");
+                alert("Passou do limite de 20 pontos nas perícias!");
                 event.target.value = parseInt(event.target.value) + restantes;
                 verificarPericias();
                 return;
             }
-
             ordenarPericias();
         }
 
         function ordenarPericias() {
             let grid = document.getElementById('skills-container');
             let itens = Array.from(grid.querySelectorAll('.skill-item'));
-
             itens.sort((a, b) => {
-                let valorA = parseInt(a.querySelector('.skill-input').value) || 0;
-                let valorB = parseInt(b.querySelector('.skill-input').value) || 0;
-
-                if (valorA !== valorB) {
-                    return valorB - valorA;
-                }
-                let nomeA = a.getAttribute('data-skill');
-                let nomeB = b.getAttribute('data-skill');
-                return nomeA.localeCompare(nomeB);
+                let vA = parseInt(a.querySelector('.skill-input').value) || 0;
+                let vB = parseInt(b.querySelector('.skill-input').value) || 0;
+                if (vA !== vB) return vB - vA;
+                return a.getAttribute('data-skill').localeCompare(b.getAttribute('data-skill'));
             });
-
             itens.forEach(item => grid.appendChild(item));
         }
 
         function rolarPericia(botaoElemento, nomePericia) {
             let skillItem = botaoElemento.closest('.skill-item');
-            let inputTreino = skillItem.querySelector('.skill-input');
-            let pontosTreino = parseInt(inputTreino.value) || 0;
-
-            let periciasFisicas = ["Acrobacia", "Atletismo", "Fortitude", "Furtividade", "Iniciativa", "Luta", "Pontaria", "Reflexos", "Sobrevivência"];
-            let periciasAgi = ["Acrobacia", "Furtividade", "Iniciativa", "Pilotagem", "Pontaria", "Reflexos"];
-            let periciasFor = ["Atletismo", "Luta"];
-
-            let tags = periciasFisicas.includes(nomePericia) ? ['fisico'] : [];
-            if (periciasAgi.includes(nomePericia)) tags.push('agi');
-            if (periciasFor.includes(nomePericia)) tags.push('for');
-
+            let pontosTreino = parseInt(skillItem.querySelector('.skill-input').value) || 0;
+            let pFisicas = ["Acrobacia", "Atletismo", "Fortitude", "Furtividade", "Iniciativa", "Luta", "Pontaria", "Reflexos", "Sobrevivência"];
+            let tags = pFisicas.includes(nomePericia) ? ['fisico'] : [];
             let mod = calcularModificadores(tags);
             let total = mod.dadoFinal + pontosTreino - mod.penalidadeTotal;
-
-            let displayRes = document.getElementById('res-pericia-global');
-            let textoPenalidade = mod.penalidadeTotal > 0 ? ` - ${mod.penalidadeTotal} (Condições)` : '';
-            displayRes.innerText = `${nomePericia}: Total ${total} (${mod.dadoFinal} + ${pontosTreino} treino${textoPenalidade} | ${mod.detalhesRolagem})`;
+            document.getElementById('res-pericia-global').innerText = `${nomePericia}: Total ${total} (${mod.dadoFinal} + ${pontosTreino} treino | ${mod.detalhesRolagem})`;
         }
 
         function extrairDadosFicha() {
@@ -1004,23 +916,14 @@
             let nomesSlots = document.querySelectorAll('.inv-nome-input');
             let pesosSlots = document.querySelectorAll('.inv-peso-input');
             for(let i=0; i<nomesSlots.length; i++) {
-                inventarioSlots.push({
-                    nome: nomesSlots[i].value,
-                    peso: pesosSlots[i].value
-                });
+                inventarioSlots.push({ nome: nomesSlots[i].value, peso: pesosSlots[i].value });
             }
-
             let periciasObj = {};
             document.querySelectorAll('.skill-item').forEach(item => {
-                let nome = item.getAttribute('data-skill');
-                let val = item.querySelector('.skill-input').value;
-                periciasObj[nome] = val;
+                periciasObj[item.getAttribute('data-skill')] = item.querySelector('.skill-input').value;
             });
-
             let conds = [];
-            document.querySelectorAll('.cond-check').forEach(cb => {
-                if (cb.checked) conds.push(cb.value);
-            });
+            document.querySelectorAll('.cond-check').forEach(cb => { if (cb.checked) conds.push(cb.value); });
 
             return {
                 player: document.getElementById('sheet-player').value,
@@ -1030,7 +933,6 @@
                 origem: document.getElementById('sheet-origem').value,
                 modoRolagem: document.getElementById('sheet-modo-rolagem').value,
                 descricao: document.getElementById('sheet-descricao').innerText,
-                foto: document.getElementById('avatar-preview').src,
                 condicoes: conds,
                 atributos: {
                     agi: document.getElementById('attr-agi').value,
@@ -1057,14 +959,6 @@
             if (dados.modoRolagem !== undefined) document.getElementById('sheet-modo-rolagem').value = dados.modoRolagem;
             if (dados.descricao !== undefined) document.getElementById('sheet-descricao').innerText = dados.descricao;
             
-            if (dados.foto && dados.foto.startsWith('data:image')) {
-                let img = document.getElementById('avatar-preview');
-                let txt = document.getElementById('avatar-text');
-                img.src = dados.foto;
-                img.style.display = 'block';
-                txt.style.display = 'none';
-            }
-
             if (dados.condicoes) {
                 document.querySelectorAll('.cond-check').forEach(cb => {
                     cb.checked = dados.condicoes.includes(cb.value);
@@ -1110,10 +1004,7 @@
         function carregarProgressoLocalmente() {
             let salvo = localStorage.getItem('ficha_rpg_salva');
             if (salvo) {
-                try {
-                    let dados = JSON.parse(salvo);
-                    preencherFichaComDados(dados);
-                } catch(e) {}
+                try { preencherFichaComDados(JSON.parse(salvo)); } catch(e) {}
             }
         }
 
@@ -1121,14 +1012,21 @@
             let dados = extrairDadosFicha();
             let jsonString = JSON.stringify(dados);
             let base64Dados = btoa(encodeURIComponent(jsonString));
-            
             let urlCompleta = window.location.origin + window.location.pathname + '#' + base64Dados;
             
             navigator.clipboard.writeText(urlCompleta).then(() => {
-                alert("Link da ficha copiado para a área de transferência! Você pode colá-lo no navegador mais tarde para retornar exatamente onde parou.");
+                alert("Link copiado! (Itens e dados salvos com sucesso).");
             }).catch(err => {
-                prompt("Copie o link abaixo para retornar à sua ficha mais tarde:", urlCompleta);
+                prompt("Copie o link:", urlCompleta);
             });
+        }
+
+        function reiniciarFicha() {
+            if (confirm("Tem certeza que deseja zerar a ficha para criar um novo personagem?")) {
+                localStorage.removeItem('ficha_rpg_salva');
+                window.location.hash = '';
+                window.location.reload();
+            }
         }
 
         function carregarDadosDaUrl() {
@@ -1139,12 +1037,11 @@
                     let jsonString = decodeURIComponent(atob(base64Dados));
                     let dados = JSON.parse(jsonString);
                     preencherFichaComDados(dados);
-                    // Abre automaticamente a ficha ao carregar o link
                     document.getElementById('seletor-global').value = 'criar_ficha';
                     mostrarSelecao();
                     return true;
                 } catch(e) {
-                    console.error("Erro ao carregar dados da URL:", e);
+                    console.error("Erro ao carregar dados da URL", e);
                 }
             }
             return false;
@@ -1152,26 +1049,10 @@
 
         function obterStats(chave) {
             let m = monstrosLista.find(item => item.id === chave);
-            let elementoVar = document.getElementById('var-' + chave);
-            let variante = elementoVar ? elementoVar.value : 'yoju';
-
-            let hp = m.hp;
-            let ca = m.caVal;
-            let visaoFaces = m.visaoVal;
-
-            let descVisaoStr = typeof visaoFaces === 'number' ? `1d${visaoFaces}` : visaoFaces;
-
-            if (variante === 'honju') {
-                hp = Math.floor(hp * 1.8);
-                ca += 2;
-            }
-
-            return {
-                hp: hp,
-                ca: ca,
-                visaoFacesRaw: visaoFaces,
-                tipoVisaoDesc: descVisaoStr
-            };
+            let variante = document.getElementById('var-' + chave)?.value || 'yoju';
+            let hp = m.hp, ca = m.caVal;
+            if (variante === 'honju') { hp = Math.floor(hp * 1.8); ca += 2; }
+            return { hp, ca, tipoVisaoDesc: typeof m.visaoVal === 'number' ? `1d${m.visaoVal}` : m.visaoVal };
         }
 
         function atualizarCard(chave) {
@@ -1182,77 +1063,29 @@
         }
 
         function rolar(chave, tipoAcao) {
-            let s = obterStats(chave);
-
             if (tipoAcao === 'ataque') {
-                let dado = Math.floor(Math.random() * 20) + 1;
-                let total = dado + 4;
-                document.getElementById(`res-${chave}-ataque`).innerText = `Total: ${total} (1d20: ${dado} + 4)`;
+                let d = Math.floor(Math.random() * 20) + 1;
+                document.getElementById(`res-${chave}-ataque`).innerText = `Total: ${d + 4} (1d20: ${d} + 4)`;
             } else if (tipoAcao === 'dano') {
-                let dado = Math.floor(Math.random() * 6) + 1;
-                let total = dado + 2;
-                document.getElementById(`res-${chave}-dano`).innerText = `Total: ${total} de dano (1d6: ${dado} + 2)`;
-            } else if (tipoAcao === 'visao') {
-                let resultadoVisao = 0;
-                let descRolagem = "";
-                
-                if (typeof s.visaoFacesRaw === 'number') {
-                    let dado = Math.floor(Math.random() * s.visaoFacesRaw) + 1;
-                    resultadoVisao = dado;
-                    descRolagem = `1d${s.visaoFacesRaw}: ${dado}`;
-                } else {
-                    let partes = s.visaoFacesRaw.split('d');
-                    let qtd = parseInt(partes[0]);
-                    let faces = parseInt(partes[1]);
-                    let soma = 0;
-                    let lancamentos = [];
-                    for(let i=0; i<qtd; i++) {
-                        let d = Math.floor(Math.random() * faces) + 1;
-                        soma += d;
-                        lancamentos.push(d);
-                    }
-                    resultadoVisao = soma;
-                    descRolagem = `${s.visaoFacesRaw}: [${lancamentos.join(', ')}]`;
-                }
-
-                document.getElementById(`res-${chave}-visao`).innerText = `Visão: ${resultadoVisao} (${descRolagem})`;
+                let d = Math.floor(Math.random() * 6) + 1;
+                document.getElementById(`res-${chave}-dano`).innerText = `Total: ${d + 2} (1d6: ${d} + 2)`;
             }
         }
 
         function baixarFichaImagem() {
             let cardFicha = document.getElementById('card-criar_ficha');
             let botoes = cardFicha.querySelectorAll('button');
-            
             botoes.forEach(b => b.style.display = 'none');
-
             html2canvas(cardFicha, { backgroundColor: '#1e1e1e', scale: 2 }).then(canvas => {
                 let link = document.createElement('a');
-                link.download = 'ficha-personagem.png';
+                link.download = 'ficha.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 botoes.forEach(b => b.style.display = 'block');
-            }).catch(err => {
-                botoes.forEach(b => b.style.display = 'block');
-            });
+            }).catch(() => botoes.forEach(b => b.style.display = 'block'));
         }
 
-        window.onload = function() {
-            montarPagina();
-        };
-
-        function reiniciarFicha() {
-    if (confirm("Tem certeza que deseja criar um novo personagem? Certifique-se de que já copiou o link do personagem atual para não perdê-lo!")) {
-        // Remove os dados salvos do navegador
-        localStorage.removeItem('ficha_rpg_salva');
-        
-        // Limpa a URL removendo o hash/parâmetros
-        window.location.hash = '';
-        
-        // Recarrega a página para limpar todos os campos do formulário
-        window.location.reload();
-    }
-}
-
+        window.onload = function() { montarPagina(); };
     </script>
 </body>
 </html>
