@@ -1239,6 +1239,20 @@
         window.onload = function() {
             montarPagina();
         };
+
+        function reiniciarFicha() {
+    if (confirm("Tem certeza que deseja criar um novo personagem? Certifique-se de que já copiou o link do personagem atual para não perdê-lo!")) {
+        // Remove os dados salvos do navegador
+        localStorage.removeItem('ficha_rpg_salva');
+        
+        // Limpa a URL removendo o hash/parâmetros
+        window.location.hash = '';
+        
+        // Recarrega a página para limpar todos os campos do formulário
+        window.location.reload();
+    }
+}
+
     </script>
 </body>
 </html>
