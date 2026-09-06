@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Batalha - Monstros Ajustados</title>
+    <title>Painel de Batalha - Seleção de Monstro</title>
     <style>
         body {
             background-color: #121212;
@@ -17,28 +17,54 @@
         h1 {
             color: #ff5252;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
             border-bottom: 2px solid #b71c1c;
             padding-bottom: 10px;
             width: 100%;
-            max-width: 1200px;
+            max-width: 600px;
+        }
+        .selector-box {
+            background-color: #1e1e1e;
+            border: 2px solid #b71c1c;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            background: #2c2c2c;
+            color: white;
+            border: 1px solid #b71c1c;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
         }
         .container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
             justify-content: center;
-            max-width: 1200px;
+            width: 100%;
         }
         .monster-card {
             background-color: #1e1e1e;
             border: 2px solid #b71c1c;
             border-radius: 8px;
-            width: 280px;
+            width: 320px;
             padding: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            display: none; /* Oculto por padrão até ser escolhido */
         }
 
         /* Cores exclusivas para cada monstro */
@@ -120,7 +146,7 @@
             padding-bottom: 8px; 
             font-size: 1.1rem;
         }
-        select {
+        .card-select {
             width: 100%;
             padding: 6px;
             color: white;
@@ -143,7 +169,7 @@
             border-radius: 4px;
         }
         p { font-size: 0.8rem; margin: 5px 0; }
-        button {
+        button.action-btn {
             color: white;
             border: none;
             padding: 6px 10px;
@@ -165,89 +191,114 @@
 </head>
 <body>
 
-    <h1>Painel de Batalha - Monstros</h1>
+    <h1>Painel de Batalha</h1>
 
+    <!-- Menu de Seleção Inicial -->
+    <div class="selector-box">
+        <label for="seletor-global">Escolha um monstro para exibir:</label>
+        <select id="seletor-global" onchange="mostrarMonstroSelecionado()">
+            <option value="">-- Selecione na lista --</option>
+        </select>
+    </div>
+
+    <!-- Container onde a ficha escolhida vai aparecer -->
     <div class="container" id="painel-monstros"></div>
 
     <script>
         const monstrosLista = [
-            { id: "lizard", nome: "Lizard", hp: 30, caVal: 6, visaoVal: 12, dif: "A para B: +5hp / 2d12 visão", temB: true },
-            { id: "bovine", nome: "Bovine", hp: 22, caVal: 12, visaoVal: 20, dif: "A para B: -3hp / -2 ca", temB: true },
-            { id: "spider", nome: "Spider", hp: 35, caVal: 10, visaoVal: 6, dif: "A para B: -5hp / +3 ca", temB: true },
-            { id: "wyvern", nome: "Wyvern", hp: 15, caVal: 12, visaoVal: 20, dif: "A para B: -2hp / +2 ca", temB: true },
-            { id: "ant", nome: "Ant", hp: 22, caVal: 6, visaoVal: 6, dif: "A para B: -1hp / 2d6 visão", temB: true },
-            { id: "armored", nome: "Armored", hp: 40, caVal: 10, visaoVal: 20, dif: "n tem B", temB: false },
-            { id: "fungal", nome: "Fungal", hp: 30, caVal: 6, visaoVal: 10, dif: "A para B: +2hp / 3d10 visão", temB: true },
-            { id: "wolf", nome: "Wolf", hp: 25, caVal: 6, visaoVal: 6, dif: "n tem B", temB: false },
-            { id: "mole", nome: "Mole", hp: 22, caVal: 12, visaoVal: 20, dif: "n tem B", temB: false },
-            { id: "plant", nome: "Plant", hp: 15, caVal: 10, visaoVal: 10, dif: "n tem B", temB: false },
-            { id: "paraves", nome: "Paraves", hp: 18, caVal: 12, visaoVal: 12, dif: "n tem B", temB: false },
-            { id: "caudata", nome: "Caudata", hp: 40, caVal: 10, visaoVal: 6, dif: "A para B: -3hp / +5 ca", temB: true }
+            { id: "lizard_a", nome: "Lizard (Tipo A)", base: "lizard", hp: 30, caVal: 6, visaoVal: 12, dif: "A para B: +5hp / 2d12 visão" },
+            { id: "lizard_b", nome: "Lizard (Tipo B)", base: "lizard", hp: 35, caVal: 6, visaoVal: "2d12", dif: "A para B: +5hp / 2d12 visão" },
+            { id: "bovine_a", nome: "Bovine (Tipo A)", base: "bovine", hp: 22, caVal: 12, visaoVal: 20, dif: "A para B: -3hp / -2 ca" },
+            { id: "bovine_b", nome: "Bovine (Tipo B)", base: "bovine", hp: 19, caVal: 10, visaoVal: 20, dif: "A para B: -3hp / -2 ca" },
+            { id: "spider_a", nome: "Spider (Tipo A)", base: "spider", hp: 35, caVal: 10, visaoVal: 6, dif: "A para B: -5hp / +3 ca" },
+            { id: "spider_b", nome: "Spider (Tipo B)", base: "spider", hp: 30, caVal: 13, visaoVal: 6, dif: "A para B: -5hp / +3 ca" },
+            { id: "wyvern_a", nome: "Wyvern (Tipo A)", base: "wyvern", hp: 15, caVal: 12, visaoVal: 20, dif: "A para B: -2hp / +2 ca" },
+            { id: "wyvern_b", nome: "Wyvern (Tipo B)", base: "wyvern", hp: 13, caVal: 14, visaoVal: 20, dif: "A para B: -2hp / +2 ca" },
+            { id: "ant_a", nome: "Ant (Tipo A)", base: "ant", hp: 22, caVal: 6, visaoVal: 6, dif: "A para B: -1hp / 2d6 visão" },
+            { id: "ant_b", nome: "Ant (Tipo B)", base: "ant", hp: 21, caVal: 6, visaoVal: "2d6", dif: "A para B: -1hp / 2d6 visão" },
+            { id: "armored_a", nome: "Armored (Tipo A)", base: "armored", hp: 40, caVal: 10, visaoVal: 20, dif: "n tem B" },
+            { id: "fungal_a", nome: "Fungal (Tipo A)", base: "fungal", hp: 30, caVal: 6, visaoVal: 10, dif: "A para B: +2hp / 3d10 visão" },
+            { id: "fungal_b", nome: "Fungal (Tipo B)", base: "fungal", hp: 32, caVal: 6, visaoVal: "3d10", dif: "A para B: +2hp / 3d10 visão" },
+            { id: "wolf_a", nome: "Wolf (Tipo A)", base: "wolf", hp: 25, caVal: 6, visaoVal: 6, dif: "n tem B" },
+            { id: "mole_a", nome: "Mole (Tipo A)", base: "mole", hp: 22, caVal: 12, visaoVal: 20, dif: "n tem B" },
+            { id: "plant_a", nome: "Plant (Tipo A)", base: "plant", hp: 15, caVal: 10, visaoVal: 10, dif: "n tem B" },
+            { id: "paraves_a", nome: "Paraves (Tipo A)", base: "paraves", hp: 18, caVal: 12, visaoVal: 12, dif: "n tem B" },
+            { id: "caudata_a", nome: "Caudata (Tipo A)", base: "caudata", hp: 40, caVal: 10, visaoVal: 6, dif: "A para B: -3hp / +5 ca" },
+            { id: "caudata_b", nome: "Caudata (Tipo B)", base: "caudata", hp: 37, caVal: 15, visaoVal: 6, dif: "A para B: -3hp / +5 ca" }
         ];
 
-        function gerarCards() {
+        function montarPagina() {
+            let seletorGlobal = document.getElementById('seletor-global');
             let container = document.getElementById('painel-monstros');
-            let html = '';
+            let optionsHtml = '<option value="">-- Selecione na lista --</option>';
+            let cardsHtml = '';
 
             monstrosLista.forEach(m => {
-                // Sempre cria o Tipo A
-                html += criarCardHtml(m.id + "_a", `${m.nome} (Tipo A)`, m.id, m);
-                // Cria o Tipo B apenas se a criatura possuir
-                if (m.temB) {
-                    html += criarCardHtml(m.id + "_b", `${m.nome} (Tipo B)`, m.id, m);
-                }
+                optionsHtml += `<option value="${m.id}">${m.nome}</option>`;
+                cardsHtml += criarCardHtml(m);
             });
 
-            container.innerHTML = html;
+            seletorGlobal.innerHTML = optionsHtml;
+            container.innerHTML = cardsHtml;
         }
 
-        function criarCardHtml(chave, titulo, baseId, dadosBase) {
+        function criarCardHtml(m) {
             return `
-                <div class="monster-card card-${baseId}" id="card-${chave}">
-                    <h2>${titulo}</h2>
-                    <select id="var-${chave}" onchange="atualizarCard('${chave}')">
+                <div class="monster-card card-${m.base}" id="card-${m.id}">
+                    <h2>${m.nome}</h2>
+                    <select class="card-select" id="var-${m.id}" onchange="atualizarCard('${m.id}')">
                         <option value="yoju">Yoju (Pequeno)</option>
                         <option value="honju">Honju (Grande)</option>
                     </select>
                     <div class="stats">
-                        <div class="stat-box">HP: <span id="hp-${chave}">--</span></div>
-                        <div class="stat-box">CA: <span id="ca-${chave}">--</span></div>
+                        <div class="stat-box">HP: <span id="hp-${m.id}">--</span></div>
+                        <div class="stat-box">CA: <span id="ca-${m.id}">--</span></div>
                     </div>
-                    <p><strong>Ataque:</strong> <span id="info-ataque-${chave}">1d20 + 3</span></p>
-                    <p><strong>Visão:</strong> <span id="info-visao-${chave}">--</span></p>
-                    <p style="font-size:0.75rem; color:#888;">${dadosBase.dif}</p>
+                    <p><strong>Ataque:</strong> <span id="info-ataque-${m.id}">1d20 + 3</span></p>
+                    <p><strong>Visão:</strong> <span id="info-visao-${m.id}">--</span></p>
+                    <p style="font-size:0.75rem; color:#888;">${m.dif}</p>
                     
-                    <button onclick="rolar('${chave}', 'ataque')">Rolar Ataque</button>
-                    <div id="res-${chave}-ataque" class="result"></div>
+                    <button class="action-btn" onclick="rolar('${m.id}', 'ataque')">Rolar Ataque</button>
+                    <div id="res-${m.id}-ataque" class="result"></div>
                     
-                    <button onclick="rolar('${chave}', 'dano')">Rolar Dano</button>
-                    <div id="res-${chave}-dano" class="result"></div>
+                    <button class="action-btn" onclick="rolar('${m.id}', 'dano')">Rolar Dano</button>
+                    <div id="res-${m.id}-dano" class="result"></div>
 
-                    <button onclick="rolar('${chave}', 'visao')">Rolar Percepção/Visão</button>
-                    <div id="res-${chave}-visao" class="result"></div>
+                    <button class="action-btn" onclick="rolar('${m.id}', 'visao')">Rolar Percepção/Visão</button>
+                    <div id="res-${m.id}-visao" class="result"></div>
                 </div>
             `;
         }
 
+        function mostrarMonstroSelecionado() {
+            let escolhido = document.getElementById('seletor-global').value;
+            
+            // Oculta todos os cards
+            monstrosLista.forEach(m => {
+                let cardEl = document.getElementById(`card-${m.id}`);
+                if (cardEl) {
+                    cardEl.style.display = 'none';
+                }
+            });
+
+            // Mostra apenas o escolhido e atualiza seus dados
+            if (escolhido) {
+                let cardAlvo = document.getElementById(`card-${escolhido}`);
+                if (cardAlvo) {
+                    cardAlvo.style.display = 'block';
+                    atualizarCard(escolhido);
+                }
+            }
+        }
+
         function obterStats(chave) {
-            let [baseName, tipo] = chave.split('_');
-            let m = monstrosLista.find(item => item.id === baseName);
+            let m = monstrosLista.find(item => item.id === chave);
             let elementoVar = document.getElementById('var-' + chave);
             let variante = elementoVar ? elementoVar.value : 'yoju';
 
             let hp = m.hp;
             let ca = m.caVal;
             let visaoFaces = m.visaoVal;
-
-            if (tipo === 'b') {
-                if (baseName === 'lizard') { hp += 5; visaoFaces = "2d12"; }
-                else if (baseName === 'bovine') { hp -= 3; ca -= 2; }
-                else if (baseName === 'spider') { hp -= 5; ca += 3; }
-                else if (baseName === 'wyvern') { hp -= 2; ca += 2; }
-                else if (baseName === 'ant') { hp -= 1; visaoFaces = "2d6"; }
-                else if (baseName === 'fungal') { hp += 2; visaoFaces = "3d10"; }
-                else if (baseName === 'caudata') { hp -= 3; ca += 5; }
-            }
 
             let descVisaoStr = typeof visaoFaces === 'number' ? `1d${visaoFaces}` : visaoFaces;
 
@@ -310,13 +361,7 @@
         }
 
         window.onload = function() {
-            gerarCards();
-            monstrosLista.forEach(m => {
-                atualizarCard(m.id + "_a");
-                if (m.temB) {
-                    atualizarCard(m.id + "_b");
-                }
-            });
+            montarPagina();
         };
     </script>
 </body>
