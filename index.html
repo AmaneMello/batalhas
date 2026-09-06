@@ -375,7 +375,7 @@
             
             <div class="form-group">
                 <label>Nome do Player:</label>
-                <input type="text" id="sheet-player" placeholder="Ex:Hoshina gostoso" >
+                <input type="text" id="sheet-player" placeholder="Nome do Jogador" value="Hoshina gostoso">
             </div>
 
             <div class="header-profile">
@@ -856,3 +856,40 @@
     </script>
 </body>
 </html>
+        function baixarFichaImagem() {
+            let cardFicha = document.getElementById('card-criar_ficha');
+            let botao = cardFicha.querySelector('.save-btn');
+            let textareaDesc = document.getElementById('sheet-descricao');
+            
+            // Oculta o botão de salvar para não sair na imagem
+            botao.style.display = 'none';
+
+            // Salva os estilos originais para restaurar depois
+            let alturaOriginal = cardFicha.style.height;
+            let overflowOriginal = textareaDesc.style.overflow;
+            let alturaTextareaOriginal = textareaDesc.style.height;
+
+            // Expande o container e a caixa de texto para caber todo o conteúdo sem barras de rolagem
+            cardFicha.style.height = 'auto';
+            textareaDesc.style.height = textareaDesc.scrollHeight + 'px';
+            textareaDesc.style.overflow = 'visible';
+
+            html2canvas(cardFicha, { backgroundColor: '#1e1e1e', scale: 2 }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'ficha-personagem.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                // Restaura os estilos originais da ficha
+                botao.style.display = 'block';
+                cardFicha.style.height = alturaOriginal;
+                textareaDesc.style.height = alturaTextareaOriginal;
+                textareaDesc.style.overflow = overflowOriginal;
+            }).catch(err => {
+                // Garante que a ficha volte ao normal mesmo se houver erro
+                botao.style.display = 'block';
+                cardFicha.style.height = alturaOriginal;
+                textareaDesc.style.height = alturaTextareaOriginal;
+                textareaDesc.style.overflow = overflowOriginal;
+            });
+        }
