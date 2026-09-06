@@ -70,7 +70,7 @@
         }
         .custom-sheet {
             border-color: #d32f2f;
-            width: 420px;
+            width: 440px;
         }
         .custom-sheet h2 {
             color: #ff5252;
@@ -120,7 +120,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 5px;
-            max-height: 150px;
+            max-height: 130px;
             overflow-y: auto;
             background: #151515;
             padding: 6px;
@@ -147,6 +147,30 @@
             border: 1px solid #444;
             font-weight: bold;
             color: #81c784;
+            font-size: 0.85rem;
+        }
+        
+        /* Estilos do Inventário Dinâmico */
+        .inventory-container {
+            background: #151515;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #333;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .inventory-slot {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+            align-items: center;
+        }
+        .inventory-slot input[type="text"] {
+            flex: 3;
+        }
+        .inventory-slot input[type="number"] {
+            flex: 1;
+            text-align: center;
         }
 
         /* Cores dos monstros */
@@ -325,8 +349,17 @@
                 </div>
             </div>
 
-            <!-- PERÍCIAS C.R.I.S. (20 pontos limite) -->
+            <!-- INVENTÁRIO DINÂMICO BASEADO EM FORÇA -->
             <div class="section-title">
+                Inventário / Espaços 
+                <span class="counter-badge">Capacidade: <span id="inv-capacidade">5</span> Slots</span>
+            </div>
+            <div class="inventory-container" id="inventory-slots-box">
+                <!-- Os slots serão gerados dinamicamente via JavaScript com base na Força -->
+            </div>
+
+            <!-- PERÍCIAS C.R.I.S. (20 pontos limite) -->
+            <div class="section-title" style="margin-top: 10px;">
                 Perícias 
                 <span class="counter-badge">Restantes: <span id="pericia-restantes">20</span>/20</span>
             </div>
@@ -358,11 +391,6 @@
                 <div class="skill-item"><span>Sobrevivência</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
                 <div class="skill-item"><span>Tática</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
                 <div class="skill-item"><span>Vontade</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-            </div>
-
-            <div class="form-group" style="margin-top: 8px;">
-                <label>Ataques e Habilidades:</label>
-                <textarea id="sheet-hab" rows="2" placeholder="Inventário ou ataques..."></textarea>
             </div>
 
             <button class="save-btn" onclick="baixarFichaImagem()">Baixar Ficha como Imagem</button>
@@ -514,6 +542,27 @@
             document.getElementById('calc-pe').innerText = peTotal;
             document.getElementById('calc-def').innerText = defesaTotal;
             document.getElementById('calc-esq').innerText = esquivaTotal;
+
+            // Atualiza os espaços do inventário com base na Força (Ex: Base de 5 slots + 3 slots por ponto de Força)
+            atualizarInventario(forca);
+        }
+
+        function atualizarInventario(forca) {
+            let totalSlots = 5 + (forca * 3);
+            document.getElementById('inv-capacidade').innerText = totalSlots;
+
+            let box = document.getElementById('inventory-slots-box');
+            let htmlAtual = "";
+
+            for (let i = 1; i <= totalSlots; i++) {
+                htmlAtual += `
+                    <div class="inventory-slot">
+                        <input type="text" placeholder="Item ${i}..." />
+                        <input type="number" placeholder="Peso" min="0" max="5" />
+                    </div>
+                `;
+            }
+            box.innerHTML = htmlAtual;
         }
 
         function verificarPericias() {
