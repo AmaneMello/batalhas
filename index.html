@@ -103,6 +103,44 @@
             display: flex;
             gap: 8px;
         }
+        .header-profile {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .avatar-box {
+            width: 70px;
+            height: 70px;
+            border: 2px dashed #555;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #2c2c2c;
+            cursor: pointer;
+            position: relative;
+        }
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-box span {
+            font-size: 0.65rem;
+            color: #888;
+            text-align: center;
+            padding: 2px;
+        }
+        .avatar-input {
+            display: none;
+        }
         .section-title {
             font-size: 0.9rem;
             color: #ff5252;
@@ -115,6 +153,53 @@
             font-size: 0.75rem;
             color: #ffeb3b;
             float: right;
+        }
+        .attributes-grid {
+            display: flex;
+            gap: 6px;
+            justify-content: space-between;
+        }
+        .attr-card {
+            background: #252525;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 5px;
+            text-align: center;
+            flex: 1;
+        }
+        .attr-card label {
+            font-size: 0.75rem;
+            color: #ff8a80;
+            margin-bottom: 2px;
+        }
+        .attr-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+        .attr-input {
+            width: 32px !important;
+            text-align: center;
+            padding: 2px !important;
+            height: 22px;
+            font-size: 0.75rem !important;
+        }
+        .roll-btn {
+            background: #b71c1c;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            width: 20px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .roll-btn:hover {
+            background: #d32f2f;
         }
         .skills-grid {
             display: grid;
@@ -148,22 +233,6 @@
             height: 22px;
             font-size: 0.75rem;
         }
-        .skill-roll-btn {
-            background: #b71c1c;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            width: 22px;
-            height: 22px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .skill-roll-btn:hover {
-            background: #d32f2f;
-        }
         .calculated-box {
             background: #252525;
             padding: 6px;
@@ -174,14 +243,12 @@
             color: #81c784;
             font-size: 0.85rem;
         }
-        
-        /* Estilos do Inventário Dinâmico */
         .inventory-container {
             background: #151515;
             padding: 8px;
             border-radius: 4px;
             border: 1px solid #333;
-            max-height: 140px;
+            max-height: 120px;
             overflow-y: auto;
         }
         .inventory-slot {
@@ -197,56 +264,42 @@
             flex: 1;
             text-align: center;
         }
-
-        /* Cores dos monstros */
         .card-lizard { border-color: #4caf50; }
         .card-lizard h2 { color: #81c784; border-bottom-color: #4caf50; }
         .card-lizard select, .card-lizard button { background-color: #388e3c; }
-        
         .card-bovine { border-color: #795548; }
         .card-bovine h2 { color: #a1887f; border-bottom-color: #795548; }
         .card-bovine select, .card-bovine button { background-color: #5d4037; }
-
         .card-spider { border-color: #9c27b0; }
         .card-spider h2 { color: #ba68c8; border-bottom-color: #9c27b0; }
         .card-spider select, .card-spider button { background-color: #7b1fa2; }
-
         .card-wyvern { border-color: #ff9800; }
         .card-wyvern h2 { color: #ffb74d; border-bottom-color: #ff9800; }
         .card-wyvern select, .card-wyvern button { background-color: #f57c00; }
-
         .card-ant { border-color: #607d8b; }
         .card-ant h2 { color: #90a4ae; border-bottom-color: #607d8b; }
         .card-ant select, .card-ant button { background-color: #455a64; }
-
         .card-armored { border-color: #00bcd4; }
         .card-armored h2 { color: #4dd0e1; border-bottom-color: #00bcd4; }
         .card-armored select, .card-armored button { background-color: #0097a7; }
-
         .card-fungal { border-color: #8bc34a; }
         .card-fungal h2 { color: #aed581; border-bottom-color: #8bc34a; }
         .card-fungal select, .card-fungal button { background-color: #689f38; }
-
         .card-wolf { border-color: #e91e63; }
         .card-wolf h2 { color: #f06292; border-bottom-color: #e91e63; }
         .card-wolf select, .card-wolf button { background-color: #c2185b; }
-
         .card-mole { border-color: #8d6e63; }
         .card-mole h2 { color: #d7ccc8; border-bottom-color: #8d6e63; }
         .card-mole select, .card-mole button { background-color: #4e342e; }
-
         .card-plant { border-color: #2e7d32; }
         .card-plant h2 { color: #81c784; border-bottom-color: #2e7d32; }
         .card-plant select, .card-plant button { background-color: #1b5e20; }
-
         .card-paraves { border-color: #009688; }
         .card-paraves h2 { color: #4db6ac; border-bottom-color: #009688; }
         .card-paraves select, .card-paraves button { background-color: #00796b; }
-
         .card-caudata { border-color: #673ab7; }
         .card-caudata h2 { color: #9575cd; border-bottom-color: #673ab7; }
         .card-caudata select, .card-caudata button { background-color: #512da8; }
-
         h2 { 
             margin-top: 0; 
             border-bottom: 1px solid; 
@@ -303,7 +356,6 @@
 
     <h1>Painel de Batalha</h1>
 
-    <!-- Menu de Seleção Inicial -->
     <div class="selector-box">
         <label for="seletor-global">Escolha uma opção:</label>
         <select id="seletor-global" onchange="mostrarSelecao()">
@@ -312,42 +364,77 @@
         </select>
     </div>
 
-    <!-- Container onde os cards e a ficha customizada vão aparecer -->
     <div class="container" id="painel-monstros">
         
-        <!-- Ficha Customizada Completa Estilo Ordem -->
         <div class="custom-sheet" id="card-criar_ficha">
             <h2>Ficha de Personagem (Ordem)</h2>
             
-            <div class="form-row">
-                <div class="form-group" style="flex: 2;">
-                    <label>Nome:</label>
-                    <input type="text" id="sheet-nome" placeholder="Nome do Agente">
+            <div class="header-profile">
+                <div class="avatar-container">
+                    <div class="avatar-box" onclick="document.getElementById('sheet-foto-input').click()" title="Clique para enviar foto">
+                        <img id="avatar-preview" src="" style="display:none;" alt="Foto">
+                        <span id="avatar-text">Enviar Foto</span>
+                    </div>
+                    <input type="file" id="sheet-foto-input" class="avatar-input" accept="image/*" onchange="carregarFoto(event)">
                 </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>Classe:</label>
-                    <select id="sheet-classe" onchange="atualizarDerivados()">
-                        <option value="combatente">Combatente</option>
-                        <option value="especialista">Especialista</option>
-                        <option value="ocultista">Ocultista</option>
-                    </select>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Nome:</label>
+                        <input type="text" id="sheet-nome" placeholder="Nome do Agente">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Classe:</label>
+                        <select id="sheet-classe" onchange="atualizarDerivados()">
+                            <option value="combatente">Combatente</option>
+                            <option value="especialista">Especialista</option>
+                            <option value="ocultista">Ocultista</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <!-- ATRIBUTOS (10 pontos limite) -->
             <div class="section-title">
                 Atributos 
                 <span class="counter-badge">Restantes: <span id="atrib-restantes">10</span>/10</span>
             </div>
-            <div class="form-row">
-                <div class="form-group" style="flex: 1;"><label>AGI</label><input type="number" class="attr-input" id="attr-agi" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
-                <div class="form-group" style="flex: 1;"><label>FOR</label><input type="number" class="attr-input" id="attr-for" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
-                <div class="form-group" style="flex: 1;"><label>INT</label><input type="number" class="attr-input" id="attr-int" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
-                <div class="form-group" style="flex: 1;"><label>PRE</label><input type="number" class="attr-input" id="attr-pre" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
-                <div class="form-group" style="flex: 1;"><label>VIG</label><input type="number" class="attr-input" id="attr-vig" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
+            <div class="attributes-grid">
+                <div class="attr-card">
+                    <label>AGI</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-agi" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <button type="button" class="roll-btn" title="Rolar AGI" onclick="rolarAtributo('AGI', 'attr-agi')">🎲</button>
+                    </div>
+                </div>
+                <div class="attr-card">
+                    <label>FOR</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-for" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <button type="button" class="roll-btn" title="Rolar FOR" onclick="rolarAtributo('FOR', 'attr-for')">🎲</button>
+                    </div>
+                </div>
+                <div class="attr-card">
+                    <label>INT</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-int" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <button type="button" class="roll-btn" title="Rolar INT" onclick="rolarAtributo('INT', 'attr-int')">🎲</button>
+                    </div>
+                </div>
+                <div class="attr-card">
+                    <label>PRE</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-pre" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <button type="button" class="roll-btn" title="Rolar PRE" onclick="rolarAtributo('PRE', 'attr-pre')">🎲</button>
+                    </div>
+                </div>
+                <div class="attr-card">
+                    <label>VIG</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-vig" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <button type="button" class="roll-btn" title="Rolar VIG" onclick="rolarAtributo('VIG', 'attr-vig')">🎲</button>
+                    </div>
+                </div>
             </div>
 
-            <!-- ESTATÍSTICAS CALCULADAS AUTOMATICAMENTE -->
             <div class="section-title">Estatísticas Calculadas</div>
             <div class="form-row">
                 <div class="form-group" style="flex: 1;">
@@ -374,24 +461,19 @@
                 </div>
             </div>
 
-            <!-- INVENTÁRIO DINÂMICO BASEADO EM FORÇA -->
             <div class="section-title">
                 Inventário / Espaços 
                 <span class="counter-badge">Capacidade: <span id="inv-capacidade">5</span> Slots</span>
             </div>
             <div class="inventory-container" id="inventory-slots-box">
-                <!-- Slots gerados via JS -->
             </div>
 
-            <!-- PERÍCIAS (Ordenadas automaticamente para o topo se treinadas + Botão de rolar) -->
             <div class="section-title" style="margin-top: 10px;">
                 Perícias 
                 <span class="counter-badge">Restantes: <span id="pericia-restantes">20</span>/20</span>
             </div>
             <div class="skills-grid" id="skills-container">
-                <!-- Preenchido via JavaScript -->
             </div>
-            <!-- Display de Resultado de Perícia -->
             <div id="res-pericia-global" class="result" style="color: #ff8a80; margin-top: 5px;"></div>
 
             <button class="save-btn" onclick="baixarFichaImagem()">Baixar Ficha como Imagem</button>
@@ -452,6 +534,21 @@
             atualizarDerivados();
         }
 
+        function carregarFoto(event) {
+            let arquivo = event.target.files[0];
+            if (arquivo) {
+                let leitor = new FileReader();
+                leitor.onload = function(e) {
+                    let img = document.getElementById('avatar-preview');
+                    let txt = document.getElementById('avatar-text');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    txt.style.display = 'none';
+                }
+                leitor.readAsDataURL(arquivo);
+            }
+        }
+
         function inicializarPericias() {
             let grid = document.getElementById('skills-container');
             let html = "";
@@ -461,7 +558,7 @@
                         <span>${nome}</span>
                         <div class="skill-controls">
                             <input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()">
-                            <button type="button" class="skill-roll-btn" title="Rolar Perícia" onclick="rolarPericia(this, '${nome}')">🎲</button>
+                            <button type="button" class="roll-btn" title="Rolar Perícia" onclick="rolarPericia(this, '${nome}')">🎲</button>
                         </div>
                     </div>
                 `;
@@ -528,6 +625,24 @@
                 return;
             }
             atualizarDerivados();
+        }
+
+        function rolarAtributo(nomeAtributo, idInput) {
+            let qtdDados = parseInt(document.getElementById(idInput).value) || 0;
+            let displayRes = document.getElementById('res-pericia-global');
+
+            if (qtdDados <= 0) {
+                displayRes.innerText = `${nomeAtributo}: 0 dados para rolar (Atributo 0)`;
+                return;
+            }
+
+            let resultados = [];
+            for (let i = 0; i < qtdDados; i++) {
+                resultados.push(Math.floor(Math.random() * 20) + 1);
+            }
+
+            let maiorResultado = Math.max(...resultados);
+            displayRes.innerText = `${nomeAtributo}: Maior ${maiorResultado} (${qtdDados}d20: [${resultados.join(', ')}])`;
         }
 
         function atualizarDerivados() {
