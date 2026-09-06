@@ -99,6 +99,10 @@
             box-sizing: border-box;
             font-size: 0.85rem;
         }
+        textarea {
+            resize: vertical;
+            height: 60px;
+        }
         .form-row {
             display: flex;
             gap: 8px;
@@ -369,6 +373,11 @@
         <div class="custom-sheet" id="card-criar_ficha">
             <h2>Ficha de Personagem (Ordem)</h2>
             
+            <div class="form-group">
+                <label>Nome do Player:</label>
+                <input type="text" id="sheet-player" placeholder="Nome do Jogador" value="Hoshina gostoso">
+            </div>
+
             <div class="header-profile">
                 <div class="avatar-container">
                     <div class="avatar-box" onclick="document.getElementById('sheet-foto-input').click()" title="Clique para enviar foto">
@@ -379,7 +388,7 @@
                 </div>
                 <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label>Nome:</label>
+                        <label>Nome do Personagem:</label>
                         <input type="text" id="sheet-nome" placeholder="Nome do Agente">
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
@@ -391,6 +400,11 @@
                         </select>
                     </div>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label>Descrição do Personagem / Aparência / Histórico:</label>
+                <textarea id="sheet-descricao" placeholder="Escreva a história ou descrição do seu agente..."></textarea>
             </div>
 
             <div class="section-title">
