@@ -1008,19 +1008,34 @@
             }
         }
 
-        function copiarLinkFicha() {
-            let dados = extrairDadosFicha();
-            let jsonString = JSON.stringify(dados);
-            
-            let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
-            let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
-            
-            navigator.clipboard.writeText(urlCompleta).then(() => {
-                alert("Link gerado e copiado com sucesso!");
-            }).catch(err => {
-                prompt("Copie o link:", urlCompleta);
+        async function copiarLinkFicha() {
+    let dados = extrairDadosFicha();
+    let jsonString = JSON.stringify(dados);
+    
+    // Compacta os dados localmente
+    let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
+    let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
+    
+    try {
+        // Usa uma API pública gratuita para encurtar o link gerado
+        let resposta = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(urlCompleta)}`);
+        let linkCurto = await resposta.text();
+        
+        if (linkCurto.startsWith('http')) {
+            navigator.clipboard.writeText(linkCurto).then(() => {
+                alert("Link curto gerado e copiado com sucesso! (" + linkCurto + ")");
             });
+        } else {
+            throw new Error("Erro ao encurtar");
         }
+    } catch (err) {
+        // Fallback caso a API falhe: copia o link compactado normal
+        navigator.clipboard.writeText(urlCompleta).then(() => {
+            alert("Link gerado e copiado (formato longo devido à rede).");
+        });
+    }
+}
+
 
         function reiniciarFicha() {
             if (confirm("Tem certeza que deseja zerar a ficha para criar um novo personagem?")) {
