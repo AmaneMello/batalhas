@@ -2,7 +2,9 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Batalha - Seleção de Monstro</title>
+    <title>Painel de Batalha e Criador de Fichas</title>
+    <!-- Importa a biblioteca para gerar a imagem da ficha -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             background-color: #121212;
@@ -27,7 +29,7 @@
         }
         .selector-box {
             background-color: #1e1e1e;
-            border: 2px solid #b71c1c;
+            border: 2px solid #ff5252;
             border-radius: 8px;
             padding: 20px;
             width: 100%;
@@ -47,9 +49,9 @@
             padding: 8px;
             background: #2c2c2c;
             color: white;
-            border: 1px solid #b71c1c;
+            border: 1px solid #ff5252;
             border-radius: 4px;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             font-size: 0.95rem;
         }
         .container {
@@ -57,88 +59,99 @@
             justify-content: center;
             width: 100%;
         }
-        .monster-card {
+        .monster-card, .custom-sheet {
             background-color: #1e1e1e;
             border: 2px solid #b71c1c;
             border-radius: 8px;
             width: 320px;
             padding: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            display: none; /* Oculto por padrão até ser escolhido */
+            display: none;
+        }
+        /* Estilo específico para a Ficha Customizada estilo Ordem */
+        .custom-sheet {
+            border-color: #d32f2f;
+            width: 350px;
+        }
+        .custom-sheet h2 {
+            color: #ff5252;
+            border-bottom: 1px solid #d32f2f;
+            margin-top: 0;
+            padding-bottom: 5px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+        .form-group label {
+            font-size: 0.8rem;
+            color: #ff8a80;
+            margin-bottom: 2px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 6px;
+            background: #2c2c2c;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-row {
+            display: flex;
+            gap: 8px;
         }
 
-        /* Cores exclusivas para cada monstro */
+        /* Cores dos monstros */
         .card-lizard { border-color: #4caf50; }
         .card-lizard h2 { color: #81c784; border-bottom-color: #4caf50; }
         .card-lizard select, .card-lizard button { background-color: #388e3c; }
-        .card-lizard button:hover { background-color: #4caf50; }
-        .card-lizard .result { color: #c8e6c9; }
-
+        
         .card-bovine { border-color: #795548; }
         .card-bovine h2 { color: #a1887f; border-bottom-color: #795548; }
         .card-bovine select, .card-bovine button { background-color: #5d4037; }
-        .card-bovine button:hover { background-color: #795548; }
-        .card-bovine .result { color: #d7ccc8; }
 
         .card-spider { border-color: #9c27b0; }
         .card-spider h2 { color: #ba68c8; border-bottom-color: #9c27b0; }
         .card-spider select, .card-spider button { background-color: #7b1fa2; }
-        .card-spider button:hover { background-color: #9c27b0; }
-        .card-spider .result { color: #e1bee7; }
 
         .card-wyvern { border-color: #ff9800; }
         .card-wyvern h2 { color: #ffb74d; border-bottom-color: #ff9800; }
         .card-wyvern select, .card-wyvern button { background-color: #f57c00; }
-        .card-wyvern button:hover { background-color: #ff9800; }
-        .card-wyvern .result { color: #ffe0b2; }
 
         .card-ant { border-color: #607d8b; }
         .card-ant h2 { color: #90a4ae; border-bottom-color: #607d8b; }
         .card-ant select, .card-ant button { background-color: #455a64; }
-        .card-ant button:hover { background-color: #607d8b; }
-        .card-ant .result { color: #cfd8dc; }
 
         .card-armored { border-color: #00bcd4; }
         .card-armored h2 { color: #4dd0e1; border-bottom-color: #00bcd4; }
         .card-armored select, .card-armored button { background-color: #0097a7; }
-        .card-armored button:hover { background-color: #00bcd4; }
-        .card-armored .result { color: #b2ebf2; }
 
         .card-fungal { border-color: #8bc34a; }
         .card-fungal h2 { color: #aed581; border-bottom-color: #8bc34a; }
         .card-fungal select, .card-fungal button { background-color: #689f38; }
-        .card-fungal button:hover { background-color: #8bc34a; }
-        .card-fungal .result { color: #dcedc8; }
 
         .card-wolf { border-color: #e91e63; }
         .card-wolf h2 { color: #f06292; border-bottom-color: #e91e63; }
         .card-wolf select, .card-wolf button { background-color: #c2185b; }
-        .card-wolf button:hover { background-color: #e91e63; }
-        .card-wolf .result { color: #f8bbd0; }
 
         .card-mole { border-color: #8d6e63; }
         .card-mole h2 { color: #d7ccc8; border-bottom-color: #8d6e63; }
         .card-mole select, .card-mole button { background-color: #4e342e; }
-        .card-mole button:hover { background-color: #6d4c41; }
-        .card-mole .result { color: #efebe9; }
 
         .card-plant { border-color: #2e7d32; }
         .card-plant h2 { color: #81c784; border-bottom-color: #2e7d32; }
         .card-plant select, .card-plant button { background-color: #1b5e20; }
-        .card-plant button:hover { background-color: #2e7d32; }
-        .card-plant .result { color: #c8e6c9; }
 
         .card-paraves { border-color: #009688; }
         .card-paraves h2 { color: #4db6ac; border-bottom-color: #009688; }
         .card-paraves select, .card-paraves button { background-color: #00796b; }
-        .card-paraves button:hover { background-color: #009688; }
-        .card-paraves .result { color: #b2dfdb; }
 
         .card-caudata { border-color: #673ab7; }
         .card-caudata h2 { color: #9575cd; border-bottom-color: #673ab7; }
         .card-caudata select, .card-caudata button { background-color: #512da8; }
-        .card-caudata button:hover { background-color: #673ab7; }
-        .card-caudata .result { color: #d1c4e9; }
 
         h2 { 
             margin-top: 0; 
@@ -169,17 +182,20 @@
             border-radius: 4px;
         }
         p { font-size: 0.8rem; margin: 5px 0; }
-        button.action-btn {
+        button.action-btn, .save-btn {
             color: white;
             border: none;
-            padding: 6px 10px;
+            padding: 8px 10px;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 4px;
+            margin-top: 6px;
             width: 100%;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            background-color: #b71c1c;
         }
+        .save-btn { background-color: #2e7d32; }
+        .save-btn:hover { background-color: #388e3c; }
         .result {
             margin-top: 2px;
             margin-bottom: 6px;
@@ -193,16 +209,57 @@
 
     <h1>Painel de Batalha</h1>
 
-    <!-- Menu de Seleção Inicial -->
+    <!-- Menu de Seleção Inicial com a opção de criar ficha -->
     <div class="selector-box">
-        <label for="seletor-global">Escolha um monstro para exibir:</label>
-        <select id="seletor-global" onchange="mostrarMonstroSelecionado()">
+        <label for="seletor-global">Escolha uma opção:</label>
+        <select id="seletor-global" onchange="mostrarSelecao()">
             <option value="">-- Selecione na lista --</option>
+            <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
         </select>
     </div>
 
-    <!-- Container onde a ficha escolhida vai aparecer -->
-    <div class="container" id="painel-monstros"></div>
+    <!-- Container onde os cards e a ficha customizada vão aparecer -->
+    <div class="container" id="painel-monstros">
+        
+        <!-- Ficha Customizada Estilo Ordem -->
+        <div class="custom-sheet" id="card-criar_ficha">
+            <h2>Ficha de Personagem</h2>
+            <div class="form-group">
+                <label>Nome do Personagem / Monstro:</label>
+                <input type="text" id="sheet-nome" placeholder="Ex: Agente Silva">
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label>PV (Vida):</label>
+                    <input type="text" id="sheet-pv" placeholder="20/20">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Sanidade:</label>
+                    <input type="text" id="sheet-san" placeholder="15/15">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label>Defesa (CA):</label>
+                    <input type="text" id="sheet-def" placeholder="10">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Esquiva:</label>
+                    <input type="text" id="sheet-esq" placeholder="10">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Atributos (AGI, FOR, INT, PRE, VIG):</label>
+                <input type="text" id="sheet-atrib" placeholder="Ex: 2, 3, 1, 2, 2">
+            </div>
+            <div class="form-group">
+                <label>Habilidades / Ataques:</label>
+                <textarea id="sheet-hab" rows="3" placeholder="Descreva os ataques..."></textarea>
+            </div>
+            <button class="save-btn" onclick="baixarFichaImagem()">Baixar Ficha como Imagem</button>
+        </div>
+
+    </div>
 
     <script>
         const monstrosLista = [
@@ -230,8 +287,11 @@
         function montarPagina() {
             let seletorGlobal = document.getElementById('seletor-global');
             let container = document.getElementById('painel-monstros');
-            let optionsHtml = '<option value="">-- Selecione na lista --</option>';
-            let cardsHtml = '';
+            let optionsHtml = `
+                <option value="">-- Selecione na lista --</option>
+                <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
+            `;
+            let cardsHtml = document.getElementById('card-criar_ficha').outerHTML; // Mantém a ficha customizada
 
             monstrosLista.forEach(m => {
                 optionsHtml += `<option value="${m.id}">${m.nome}</option>`;
@@ -244,7 +304,7 @@
 
         function criarCardHtml(m) {
             return `
-                <div class="monster-card card-${m.base}" id="card-${m.id}">
+                <div class="monster-card card-${m.base}" id="card-${m.id}" style="display:none;">
                     <h2>${m.nome}</h2>
                     <select class="card-select" id="var-${m.id}" onchange="atualizarCard('${m.id}')">
                         <option value="yoju">Yoju (Pequeno)</option>
@@ -270,23 +330,21 @@
             `;
         }
 
-        function mostrarMonstroSelecionado() {
+        function mostrarSelecao() {
             let escolhido = document.getElementById('seletor-global').value;
             
-            // Oculta todos os cards
-            monstrosLista.forEach(m => {
-                let cardEl = document.getElementById(`card-${m.id}`);
-                if (cardEl) {
-                    cardEl.style.display = 'none';
-                }
-            });
+            // Oculta todos os cards e a ficha de criação
+            let elements = document.querySelectorAll('.monster-card, .custom-sheet');
+            elements.forEach(el => el.style.display = 'none');
 
-            // Mostra apenas o escolhido e atualiza seus dados
+            // Mostra apenas o item selecionado
             if (escolhido) {
-                let cardAlvo = document.getElementById(`card-${escolhido}`);
-                if (cardAlvo) {
-                    cardAlvo.style.display = 'block';
-                    atualizarCard(escolhido);
+                let alvo = document.getElementById(`card-${escolhido}`);
+                if (alvo) {
+                    alvo.style.display = 'block';
+                    if (escolhido !== 'criar_ficha') {
+                        atualizarCard(escolhido);
+                    }
                 }
             }
         }
@@ -358,6 +416,25 @@
 
                 document.getElementById(`res-${chave}-visao`).innerText = `Visão: ${resultadoVisao} (${descRolagem})`;
             }
+        }
+
+        // Função para transformar a ficha preenchida em imagem e baixar
+        function baixarFichaImagem() {
+            let cardFicha = document.getElementById('card-criar_ficha');
+            
+            // Oculta temporariamente o botão de download para não sair na imagem
+            let botao = cardFicha.querySelector('.save-btn');
+            botao.style.display = 'none';
+
+            html2canvas(cardFicha, { backgroundColor: '#1e1e1e' }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'ficha-personagem.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // Restaura o botão na tela
+                botao.style.display = 'block';
+            });
         }
 
         window.onload = function() {
