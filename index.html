@@ -514,14 +514,14 @@
                     <label>AGI</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-agi" value="1" min="0" max="5" onchange="verificarAtributos()">
-                        <button type="button" class="roll-btn" title="Rolar AGI" onclick="rolarAtributo('AGI', 'attr-agi', ['fisico'])">🎲</button>
+                        <button type="button" class="roll-btn" title="Rolar AGI" onclick="rolarAtributo('AGI', 'attr-agi', ['fisico', 'agi'])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>FOR</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-for" value="1" min="0" max="5" onchange="verificarAtributos()">
-                        <button type="button" class="roll-btn" title="Rolar FOR" onclick="rolarAtributo('FOR', 'attr-for', ['fisico'])">🎲</button>
+                        <button type="button" class="roll-btn" title="Rolar FOR" onclick="rolarAtributo('FOR', 'attr-for', ['fisico', 'for'])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
@@ -575,7 +575,7 @@
 
             <div class="section-title">
                 Inventário / Espaços 
-                <span class="counter-badge">Capacidade: <span id="inv-capacidade">5</span> Slots</span>
+                <span class="counter-badge">Peso Atual: <span id="peso-atual">0</span> / <span id="inv-capacidade">5</span></span>
             </div>
             <div class="inventory-container" id="inventory-slots-box">
             </div>
@@ -805,7 +805,20 @@
                 penalidadeTotal += valor;
             });
 
+            // Verifica se excedeu o limite de peso para impor desvantagem em agilidade ou força
+            let pesoAtual = parseFloat(document.getElementById('peso-atual').innerText) || 0;
+            let forcaVal = parseInt(document.getElementById('attr-for').value) || 0;
+            let capacidadeMax = 5 + (forcaVal * 3);
+            let sobrecarregado = pesoAtual >= capacidadeMax;
+
             let modoRolagem = document.getElementById('sheet-modo-rolagem').value;
+
+            if (sobrecarregado && (tags.includes('agi') || tags.includes('for'))) {
+                if (modoRolagem === 'normal') {
+                    modoRolagem = 'desvantagem';
+                }
+            }
+
             let d1 = Math.floor(Math.random() * 20) + 1;
             let d2 = Math.floor(Math.random() * 20) + 1;
             let dadoFinal = d1;
@@ -816,7 +829,8 @@
                 detalhesRolagem = `Vantagem 2d20 [${d1}, ${d2}] -> ${dadoFinal}`;
             } else if (modoRolagem === 'desvantagem') {
                 dadoFinal = Math.min(d1, d2);
-                detalhesRolagem = `Desvantagem 2d20 [${d1}, ${d2}] -> ${dadoFinal}`;
+                let motivoSobrepeso = (sobrecarregado && (tags.includes('agi') || tags.includes('for'))) ? ' (Sobrepeso)' : '';
+                detalhesRolagem = `Desvantagem 2d20${motivoSobrepeso} [${d1}, ${d2}] -> ${dadoFinal}`;
             }
 
             return {
@@ -900,11 +914,21 @@
                 htmlAtual += `
                     <div class="inventory-slot">
                         <input type="text" placeholder="Item ${i}..." />
-                        <input type="number" placeholder="Peso" min="0" max="5" />
+                        <input type="number" class="inv-peso-input" placeholder="Peso" min="0" max="5" oninput="calcularPesoTotal()" />
                     </div>
                 `;
             }
             box.innerHTML = htmlAtual;
+            calcularPesoTotal();
+        }
+
+        function calcularPesoTotal() {
+            let inputsPeso = document.querySelectorAll('.inv-peso-input');
+            let pesoTotal = 0;
+            inputsPeso.forEach(inp => {
+                pesoTotal += parseFloat(inp.value) || 0;
+            });
+            document.getElementById('peso-atual').innerText = pesoTotal;
         }
 
         function verificarPericias() {
@@ -950,9 +974,14 @@
             let pontosTreino = parseInt(inputTreino.value) || 0;
 
             let periciasFisicas = ["Acrobacia", "Atletismo", "Fortitude", "Furtividade", "Iniciativa", "Luta", "Pontaria", "Reflexos", "Sobrevivência"];
-            let isFisica = periciasFisicas.includes(nomePericia);
+            let periciasAgi = ["Acrobacia", "Furtividade", "Iniciativa", "Pilotagem", "Pontaria", "Reflexos"];
+            let periciasFor = ["Atletismo", "Luta"];
 
-            let mod = calcularModificadores(isFisica ? ['fisico'] : []);
+            let tags = periciasFisicas.includes(nomePericia) ? ['fisico'] : [];
+            if (periciasAgi.includes(nomePericia)) tags.push('agi');
+            if (periciasFor.includes(nomePericia)) tags.push('for');
+
+            let mod = calcularModificadores(tags);
             let total = mod.dadoFinal + pontosTreino - mod.penalidadeTotal;
 
             let displayRes = document.getElementById('res-pericia-global');
