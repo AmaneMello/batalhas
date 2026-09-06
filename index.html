@@ -412,7 +412,7 @@
             
             <div class="form-group">
                 <label>Nome do Player:</label>
-                <input type="text" id="sheet-player" placeholder="Nome do Jogador" value="Hoshina gostoso">
+                <input type="text" id="sheet-player" placeholder="Nome do Jogador" value="Hoshina">
             </div>
 
             <div class="header-profile">
@@ -445,6 +445,38 @@
                         </div>
                     </div>
                     <div class="form-row" style="margin-top: 4px;">
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <label>Origem:</label>
+                            <select id="sheet-origem" onchange="verificarOrigemAmnesico()">
+                                <option value="nenhuma">Selecione uma Origem...</option>
+                                <option value="amnesico">Amnésico</option>
+                                <option value="academico">Acadêmico</option>
+                                <option value="agente_saude">Agente de Saúde</option>
+                                <option value="artista">Artista</option>
+                                <option value="atleta">Atleta</option>
+                                <option value="chef">Chef</option>
+                                <option value="cientista">Cientista</option>
+                                <option value="criminoso">Criminoso</option>
+                                <option value="cultista_arrependido">Cultista Arrependido</option>
+                                <option value="curioso">Curioso</option>
+                                <option value="desgarrado">Desgarrado</option>
+                                <option value="engenheiro">Engenheiro</option>
+                                <option value="executivo">Executivo</option>
+                                <option value="investigador">Investigador</option>
+                                <option value="lutador">Lutador</option>
+                                <option value="magico">Mágico</option>
+                                <option value="mercenario">Mercenário</option>
+                                <option value="militar">Militar</option>
+                                <option value="operario">Operário</option>
+                                <option value="policial">Policial</option>
+                                <option value="religioso">Religioso</option>
+                                <option value="servidor_publico">Servidor Público</option>
+                                <option value="teorico_conspiracao">Teórico da Conspiração</option>
+                                <option value="ti">TI</option>
+                                <option value="trabalhador_rural">Trabalhador Rural</option>
+                                <option value="vigarista">Vigarista</option>
+                            </select>
+                        </div>
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
                             <label>Rolagem:</label>
                             <select id="sheet-modo-rolagem">
@@ -615,7 +647,6 @@
             atualizarDerivados();
         }
 
-        // Função para atualizar as opções de trilha com TODAS as trilhas oficiais de Ordem Paranormal
         function atualizarTrilhas() {
             let classe = document.getElementById('sheet-classe').value;
             let selectTrilha = document.getElementById('sheet-trilha');
@@ -725,6 +756,40 @@
                 return;
             }
             atualizarDerivados();
+        }
+
+        function verificarOrigemAmnesico() {
+            let origem = document.getElementById('sheet-origem').value;
+            
+            if (origem === 'amnesico') {
+                let atributosIds = ['attr-agi', 'attr-for', 'attr-int', 'attr-pre', 'attr-vig'];
+                atributosIds.forEach(id => document.getElementById(id).value = 1);
+                
+                let pontosRestantes = 5; 
+                while (pontosRestantes > 0) {
+                    let sorteio = atributosIds[Math.floor(Math.random() * atributosIds.length)];
+                    let inputAtual = document.getElementById(sorteio);
+                    let valorAtual = parseInt(inputAtual.value);
+                    if (valorAtual < 5) {
+                        inputAtual.value = valorAtual + 1;
+                        pontosRestantes--;
+                    }
+                }
+                verificarAtributos();
+
+                const codinomes = ["Desconhecido #404", "Sujeito 09", "João Ninguém", "A Sombra", "Apelido Perdido"];
+                document.getElementById('sheet-nome').value = codinomes[Math.floor(Math.random() * codinomes.length)];
+
+                const historicosAmnesico = [
+                    "Você acordou em um beco escuro com as mãos ensanguentadas e sem lembrança alguma das últimas 48 horas. A única pista é uma chave enferrujada no seu bolso.",
+                    "Sua mente é um completo vazio antes de hoje de manhã. Você lembra apenas de um símbolo estranho gravado no seu braço e de uma sensação constante de estar sendo caçado.",
+                    "Você recuperou a consciência em uma sala de hospital abandonada, cheia de papéis queimados. Não sabe quem é, mas percebeu que consegue instintivamente manusear armas como se fizesse isso há anos."
+                ];
+                let historiaEscolhida = historicosAmnesico[Math.floor(Math.random() * historicosAmnesico.length)];
+                document.getElementById('sheet-descricao').innerText = historiaEscolhida;
+
+                alert("Ficha gerada automaticamente pelo modo Amnésico! Seus atributos e histórico foram preenchidos de forma misteriosa.");
+            }
         }
 
         function calcularModificadores(tags = []) {
