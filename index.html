@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Batalha </title>
+    <title>Painel de Batalha - Monstros Ajustados</title>
     <style>
         body {
             background-color: #121212;
@@ -90,8 +90,8 @@
         .card-wolf button:hover { background-color: #e91e63; }
         .card-wolf .result { color: #f8bbd0; }
 
-        .card-mole { border-color: #795548; }
-        .card-mole h2 { color: #d7ccc8; border-bottom-color: #795548; }
+        .card-mole { border-color: #8d6e63; }
+        .card-mole h2 { color: #d7ccc8; border-bottom-color: #8d6e63; }
         .card-mole select, .card-mole button { background-color: #4e342e; }
         .card-mole button:hover { background-color: #6d4c41; }
         .card-mole .result { color: #efebe9; }
@@ -165,24 +165,24 @@
 </head>
 <body>
 
-    <h1>Painel de Batalha </h1>
+    <h1>Painel de Batalha - Monstros</h1>
 
     <div class="container" id="painel-monstros"></div>
 
     <script>
         const monstrosLista = [
-            { id: "lizard", nome: "Lizard", hp: 30, caVal: 6, visaoVal: 12, dif: "A para B: +5hp / 2d12 visão" },
-            { id: "bovine", nome: "Bovine", hp: 22, caVal: 12, visaoVal: 20, dif: "A para B: -3hp / -2 ca" },
-            { id: "spider", nome: "Spider", hp: 35, caVal: 10, visaoVal: 6, dif: "A para B: -5hp / +3 ca" },
-            { id: "wyvern", nome: "Wyvern", hp: 15, caVal: 12, visaoVal: 20, dif: "A para B: -2hp / +2 ca" },
-            { id: "ant", nome: "Ant", hp: 22, caVal: 6, visaoVal: 6, dif: "A para B: -1hp / 2d6 visão" },
-            { id: "armored", nome: "Armored", hp: 40, caVal: 10, visaoVal: 20, dif: "n tem B" },
-            { id: "fungal", nome: "Fungal", hp: 30, caVal: 6, visaoVal: 10, dif: "A para B: +2hp / 3d10 visão" },
-            { id: "wolf", nome: "Wolf", hp: 25, caVal: 6, visaoVal: 6, dif: "n tem B" },
-            { id: "mole", nome: "Mole", hp: 22, caVal: 12, visaoVal: 20, dif: "n tem B" },
-            { id: "plant", nome: "Plant", hp: 15, caVal: 10, visaoVal: 10, dif: "n tem B" },
-            { id: "paraves", nome: "Paraves", hp: 18, caVal: 12, visaoVal: 12, dif: "n tem B" },
-            { id: "caudata", nome: "Caudata", hp: 40, caVal: 10, visaoVal: 6, dif: "A para B: -3hp / +5 ca" }
+            { id: "lizard", nome: "Lizard", hp: 30, caVal: 6, visaoVal: 12, dif: "A para B: +5hp / 2d12 visão", temB: true },
+            { id: "bovine", nome: "Bovine", hp: 22, caVal: 12, visaoVal: 20, dif: "A para B: -3hp / -2 ca", temB: true },
+            { id: "spider", nome: "Spider", hp: 35, caVal: 10, visaoVal: 6, dif: "A para B: -5hp / +3 ca", temB: true },
+            { id: "wyvern", nome: "Wyvern", hp: 15, caVal: 12, visaoVal: 20, dif: "A para B: -2hp / +2 ca", temB: true },
+            { id: "ant", nome: "Ant", hp: 22, caVal: 6, visaoVal: 6, dif: "A para B: -1hp / 2d6 visão", temB: true },
+            { id: "armored", nome: "Armored", hp: 40, caVal: 10, visaoVal: 20, dif: "n tem B", temB: false },
+            { id: "fungal", nome: "Fungal", hp: 30, caVal: 6, visaoVal: 10, dif: "A para B: +2hp / 3d10 visão", temB: true },
+            { id: "wolf", nome: "Wolf", hp: 25, caVal: 6, visaoVal: 6, dif: "n tem B", temB: false },
+            { id: "mole", nome: "Mole", hp: 22, caVal: 12, visaoVal: 20, dif: "n tem B", temB: false },
+            { id: "plant", nome: "Plant", hp: 15, caVal: 10, visaoVal: 10, dif: "n tem B", temB: false },
+            { id: "paraves", nome: "Paraves", hp: 18, caVal: 12, visaoVal: 12, dif: "n tem B", temB: false },
+            { id: "caudata", nome: "Caudata", hp: 40, caVal: 10, visaoVal: 6, dif: "A para B: -3hp / +5 ca", temB: true }
         ];
 
         function gerarCards() {
@@ -190,8 +190,12 @@
             let html = '';
 
             monstrosLista.forEach(m => {
+                // Sempre cria o Tipo A
                 html += criarCardHtml(m.id + "_a", `${m.nome} (Tipo A)`, m.id, m);
-                html += criarCardHtml(m.id + "_b", `${m.nome} (Tipo B)`, m.id, m);
+                // Cria o Tipo B apenas se a criatura possuir
+                if (m.temB) {
+                    html += criarCardHtml(m.id + "_b", `${m.nome} (Tipo B)`, m.id, m);
+                }
             });
 
             container.innerHTML = html;
@@ -287,7 +291,6 @@
                     resultadoVisao = dado;
                     descRolagem = `1d${s.visaoFacesRaw}: ${dado}`;
                 } else {
-                    // Trata dados múltiplos (ex: "2d12", "3d10", "2d6")
                     let partes = s.visaoFacesRaw.split('d');
                     let qtd = parseInt(partes[0]);
                     let faces = parseInt(partes[1]);
@@ -310,7 +313,9 @@
             gerarCards();
             monstrosLista.forEach(m => {
                 atualizarCard(m.id + "_a");
-                atualizarCard(m.id + "_b");
+                if (m.temB) {
+                    atualizarCard(m.id + "_b");
+                }
             });
         };
     </script>
