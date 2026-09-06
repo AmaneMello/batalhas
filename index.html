@@ -384,6 +384,8 @@
         }
         .save-btn { background-color: #2e7d32; }
         .save-btn:hover { background-color: #388e3c; }
+        .link-btn { background-color: #1976d2; }
+        .link-btn:hover { background-color: #115293; }
         .result {
             margin-top: 2px;
             margin-bottom: 6px;
@@ -412,7 +414,7 @@
             
             <div class="form-group">
                 <label>Nome do Player:</label>
-                <input type="text" id="sheet-player" placeholder="Ex: Amane delícia">
+                <input type="text" id="sheet-player" placeholder="Ex: Amane delícia" oninput="salvarProgressoLocalmente()">
             </div>
 
             <div class="header-profile">
@@ -426,12 +428,12 @@
                 <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
                     <div class="form-group" style="margin-bottom: 0;">
                         <label>Nome do Personagem:</label>
-                        <input type="text" id="sheet-nome" placeholder="Ex: Hoshina gostoso">
+                        <input type="text" id="sheet-nome" placeholder="Ex: Hoshina gostoso" oninput="salvarProgressoLocalmente()">
                     </div>
                     <div class="form-row">
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
                             <label>Classe:</label>
-                            <select id="sheet-classe" onchange="atualizarTrilhas(); atualizarDerivados();">
+                            <select id="sheet-classe" onchange="atualizarTrilhas(); atualizarDerivados(); salvarProgressoLocalmente();">
                                 <option value="combatente">Combatente</option>
                                 <option value="especialista">Especialista</option>
                                 <option value="ocultista">Ocultista</option>
@@ -439,15 +441,15 @@
                         </div>
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
                             <label>Trilha / Especialização:</label>
-                            <select id="sheet-trilha">
-                                <!-- Preenchido dinamicamente via JS com todas as trilhas oficiais -->
+                            <select id="sheet-trilha" onchange="salvarProgressoLocalmente()">
+                                <!-- Preenchido dinamicamente via JS -->
                             </select>
                         </div>
                     </div>
                     <div class="form-row" style="margin-top: 4px;">
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
                             <label>Origem:</label>
-                            <select id="sheet-origem" onchange="verificarOrigemAmnesico()">
+                            <select id="sheet-origem" onchange="verificarOrigemAmnesico(); salvarProgressoLocalmente();">
                                 <option value="nenhuma">Selecione uma Origem...</option>
                                 <option value="amnesico">Amnésico</option>
                                 <option value="academico">Acadêmico</option>
@@ -479,7 +481,7 @@
                         </div>
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
                             <label>Rolagem:</label>
-                            <select id="sheet-modo-rolagem">
+                            <select id="sheet-modo-rolagem" onchange="salvarProgressoLocalmente()">
                                 <option value="normal">Normal (1d20)</option>
                                 <option value="vantagem">Vantagem (2d20 Maior)</option>
                                 <option value="desvantagem">Desvantagem (2d20 Menor)</option>
@@ -491,17 +493,17 @@
 
             <div class="form-group">
                 <label>Descrição do Personagem / Aparência / Histórico:</label>
-                <div id="sheet-descricao" class="descricao-div" contenteditable="true" data-placeholder="Escreva a história ou descrição do seu agente..."></div>
+                <div id="sheet-descricao" class="descricao-div" contenteditable="true" data-placeholder="Escreva a história ou descrição do seu agente..." oninput="salvarProgressoLocalmente()"></div>
             </div>
 
             <!-- Condições Globais -->
             <div class="conditions-box">
                 <label style="margin: 0; font-size: 0.8rem; color: #ff5252;">Condições Ativas (Afetam Testes):</label>
                 <div class="conditions-grid">
-                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="exausto" data-penalidade="2"> Exausto (-2 em Testes)</label>
-                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="machucado" data-penalidade="2"> Machucado (-2 em Físicos)</label>
-                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="atordoado" data-penalidade="5"> Atordoado (-5 em Testes)</label>
-                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="amedrontado" data-penalidade="2"> Amedrontado (-2 em Testes)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="exausto" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Exausto (-2 em Testes)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="machucado" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Machucado (-2 em Físicos)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="atordoado" data-penalidade="5" onchange="salvarProgressoLocalmente()"> Atordoado (-5 em Testes)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="amedrontado" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Amedrontado (-2 em Testes)</label>
                 </div>
             </div>
 
@@ -513,35 +515,35 @@
                 <div class="attr-card">
                     <label>AGI</label>
                     <div class="attr-controls">
-                        <input type="number" class="attr-input" id="attr-agi" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <input type="number" class="attr-input" id="attr-agi" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
                         <button type="button" class="roll-btn" title="Rolar AGI" onclick="rolarAtributo('AGI', 'attr-agi', ['fisico', 'agi'])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>FOR</label>
                     <div class="attr-controls">
-                        <input type="number" class="attr-input" id="attr-for" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <input type="number" class="attr-input" id="attr-for" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
                         <button type="button" class="roll-btn" title="Rolar FOR" onclick="rolarAtributo('FOR', 'attr-for', ['fisico', 'for'])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>INT</label>
                     <div class="attr-controls">
-                        <input type="number" class="attr-input" id="attr-int" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <input type="number" class="attr-input" id="attr-int" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
                         <button type="button" class="roll-btn" title="Rolar INT" onclick="rolarAtributo('INT', 'attr-int', [])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>PRE</label>
                     <div class="attr-controls">
-                        <input type="number" class="attr-input" id="attr-pre" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <input type="number" class="attr-input" id="attr-pre" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
                         <button type="button" class="roll-btn" title="Rolar PRE" onclick="rolarAtributo('PRE', 'attr-pre', [])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>VIG</label>
                     <div class="attr-controls">
-                        <input type="number" class="attr-input" id="attr-vig" value="1" min="0" max="5" onchange="verificarAtributos()">
+                        <input type="number" class="attr-input" id="attr-vig" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
                         <button type="button" class="roll-btn" title="Rolar VIG" onclick="rolarAtributo('VIG', 'attr-vig', ['fisico'])">🎲</button>
                     </div>
                 </div>
@@ -588,6 +590,7 @@
             </div>
             <div id="res-pericia-global" class="result" style="color: #ff8a80; margin-top: 5px;"></div>
 
+            <button class="action-btn link-btn" onclick="copiarLinkFicha()">Copiar Link da Ficha para Retornar</button>
             <button class="save-btn" onclick="baixarFichaImagem()">Baixar Ficha como Imagem</button>
         </div>
 
@@ -644,6 +647,12 @@
             
             atualizarTrilhas();
             inicializarPericias();
+            
+            // Tenta carregar dados da URL (link compartilhado) ou do localStorage
+            if (!carregarDadosDaUrl()) {
+                carregarProgressoLocalmente();
+            }
+            
             atualizarDerivados();
         }
 
@@ -675,6 +684,7 @@
                     img.src = e.target.result;
                     img.style.display = 'block';
                     txt.style.display = 'none';
+                    salvarProgressoLocalmente();
                 }
                 leitor.readAsDataURL(arquivo);
             }
@@ -688,7 +698,7 @@
                     <div class="skill-item" data-skill="${nome}">
                         <span>${nome}</span>
                         <div class="skill-controls">
-                            <input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()">
+                            <input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias(); salvarProgressoLocalmente();">
                             <button type="button" class="roll-btn" title="Rolar Perícia" onclick="rolarPericia(this, '${nome}')">🎲</button>
                         </div>
                     </div>
@@ -789,6 +799,7 @@
                 document.getElementById('sheet-descricao').innerText = historiaEscolhida;
 
                 alert("Ficha gerada automaticamente pelo modo Amnésico! Seus atributos e histórico foram preenchidos de forma misteriosa.");
+                salvarProgressoLocalmente();
             }
         }
 
@@ -805,7 +816,6 @@
                 penalidadeTotal += valor;
             });
 
-            // Verifica se excedeu o limite de peso para impor desvantagem em agilidade ou força
             let pesoAtual = parseFloat(document.getElementById('peso-atual').innerText) || 0;
             let forcaVal = parseInt(document.getElementById('attr-for').value) || 0;
             let capacidadeMax = 5 + (forcaVal * 3);
@@ -913,8 +923,8 @@
             for (let i = 1; i <= totalSlots; i++) {
                 htmlAtual += `
                     <div class="inventory-slot">
-                        <input type="text" placeholder="Item ${i}..." />
-                        <input type="number" class="inv-peso-input" placeholder="Peso" min="0" max="5" oninput="calcularPesoTotal()" />
+                        <input type="text" class="inv-nome-input" placeholder="Item ${i}..." oninput="calcularPesoTotal(); salvarProgressoLocalmente();" />
+                        <input type="number" class="inv-peso-input" placeholder="Peso" min="0" max="5" oninput="calcularPesoTotal(); salvarProgressoLocalmente();" />
                     </div>
                 `;
             }
@@ -989,6 +999,157 @@
             displayRes.innerText = `${nomePericia}: Total ${total} (${mod.dadoFinal} + ${pontosTreino} treino${textoPenalidade} | ${mod.detalhesRolagem})`;
         }
 
+        function extrairDadosFicha() {
+            let inventarioSlots = [];
+            let nomesSlots = document.querySelectorAll('.inv-nome-input');
+            let pesosSlots = document.querySelectorAll('.inv-peso-input');
+            for(let i=0; i<nomesSlots.length; i++) {
+                inventarioSlots.push({
+                    nome: nomesSlots[i].value,
+                    peso: pesosSlots[i].value
+                });
+            }
+
+            let periciasObj = {};
+            document.querySelectorAll('.skill-item').forEach(item => {
+                let nome = item.getAttribute('data-skill');
+                let val = item.querySelector('.skill-input').value;
+                periciasObj[nome] = val;
+            });
+
+            let conds = [];
+            document.querySelectorAll('.cond-check').forEach(cb => {
+                if (cb.checked) conds.push(cb.value);
+            });
+
+            return {
+                player: document.getElementById('sheet-player').value,
+                nome: document.getElementById('sheet-nome').value,
+                classe: document.getElementById('sheet-classe').value,
+                trilha: document.getElementById('sheet-trilha').value,
+                origem: document.getElementById('sheet-origem').value,
+                modoRolagem: document.getElementById('sheet-modo-rolagem').value,
+                descricao: document.getElementById('sheet-descricao').innerText,
+                foto: document.getElementById('avatar-preview').src,
+                condicoes: conds,
+                atributos: {
+                    agi: document.getElementById('attr-agi').value,
+                    for: document.getElementById('attr-for').value,
+                    int: document.getElementById('attr-int').value,
+                    pre: document.getElementById('attr-pre').value,
+                    vig: document.getElementById('attr-vig').value
+                },
+                inventario: inventarioSlots,
+                pericias: periciasObj
+            };
+        }
+
+        function preencherFichaComDados(dados) {
+            if (!dados) return;
+            if (dados.player !== undefined) document.getElementById('sheet-player').value = dados.player;
+            if (dados.nome !== undefined) document.getElementById('sheet-nome').value = dados.nome;
+            if (dados.classe !== undefined) {
+                document.getElementById('sheet-classe').value = dados.classe;
+                atualizarTrilhas();
+            }
+            if (dados.trilha !== undefined) document.getElementById('sheet-trilha').value = dados.trilha;
+            if (dados.origem !== undefined) document.getElementById('sheet-origem').value = dados.origem;
+            if (dados.modoRolagem !== undefined) document.getElementById('sheet-modo-rolagem').value = dados.modoRolagem;
+            if (dados.descricao !== undefined) document.getElementById('sheet-descricao').innerText = dados.descricao;
+            
+            if (dados.foto && dados.foto.startsWith('data:image')) {
+                let img = document.getElementById('avatar-preview');
+                let txt = document.getElementById('avatar-text');
+                img.src = dados.foto;
+                img.style.display = 'block';
+                txt.style.display = 'none';
+            }
+
+            if (dados.condicoes) {
+                document.querySelectorAll('.cond-check').forEach(cb => {
+                    cb.checked = dados.condicoes.includes(cb.value);
+                });
+            }
+
+            if (dados.atributos) {
+                if (dados.atributos.agi !== undefined) document.getElementById('attr-agi').value = dados.atributos.agi;
+                if (dados.atributos.for !== undefined) document.getElementById('attr-for').value = dados.atributos.for;
+                if (dados.atributos.int !== undefined) document.getElementById('attr-int').value = dados.atributos.int;
+                if (dados.atributos.pre !== undefined) document.getElementById('attr-pre').value = dados.atributos.pre;
+                if (dados.atributos.vig !== undefined) document.getElementById('attr-vig').value = dados.atributos.vig;
+            }
+
+            atualizarDerivados();
+
+            if (dados.inventario) {
+                let nomesSlots = document.querySelectorAll('.inv-nome-input');
+                let pesosSlots = document.querySelectorAll('.inv-peso-input');
+                for (let i = 0; i < dados.inventario.length && i < nomesSlots.length; i++) {
+                    nomesSlots[i].value = dados.inventario[i].nome || "";
+                    pesosSlots[i].value = dados.inventario[i].peso || "";
+                }
+                calcularPesoTotal();
+            }
+
+            if (dados.pericias) {
+                document.querySelectorAll('.skill-item').forEach(item => {
+                    let nome = item.getAttribute('data-skill');
+                    if (dados.pericias[nome] !== undefined) {
+                        item.querySelector('.skill-input').value = dados.pericias[nome];
+                    }
+                });
+                ordenarPericias();
+            }
+        }
+
+        function salvarProgressoLocalmente() {
+            let dados = extrairDadosFicha();
+            localStorage.setItem('ficha_rpg_salva', JSON.stringify(dados));
+        }
+
+        function carregarProgressoLocalmente() {
+            let salvo = localStorage.getItem('ficha_rpg_salva');
+            if (salvo) {
+                try {
+                    let dados = JSON.parse(salvo);
+                    preencherFichaComDados(dados);
+                } catch(e) {}
+            }
+        }
+
+        function copiarLinkFicha() {
+            let dados = extrairDadosFicha();
+            let jsonString = JSON.stringify(dados);
+            let base64Dados = btoa(encodeURIComponent(jsonString));
+            
+            let urlCompleta = window.location.origin + window.location.pathname + '#' + base64Dados;
+            
+            navigator.clipboard.writeText(urlCompleta).then(() => {
+                alert("Link da ficha copiado para a área de transferência! Você pode colá-lo no navegador mais tarde para retornar exatamente onde parou.");
+            }).catch(err => {
+                prompt("Copie o link abaixo para retornar à sua ficha mais tarde:", urlCompleta);
+            });
+        }
+
+        function carregarDadosDaUrl() {
+            let hash = window.location.hash;
+            if (hash && hash.length > 1) {
+                try {
+                    let base64Dados = hash.substring(1);
+                    let jsonString = decodeURIComponent(atob(base64Dados));
+                    let dados = JSON.parse(jsonString);
+                    preencherFichaComDados(dados);
+                    // Abre automaticamente a ficha ao carregar o link
+                    document.getElementById('seletor-global').value = 'criar_ficha';
+                    mostrarSelecao();
+                    return true;
+                } catch(e) {
+                    console.error("Erro ao carregar dados da URL:", e);
+                }
+            }
+            return false;
+        }
+
         function obterStats(chave) {
             let m = monstrosLista.find(item => item.id === chave);
             let elementoVar = document.getElementById('var-' + chave);
@@ -1060,18 +1221,18 @@
 
         function baixarFichaImagem() {
             let cardFicha = document.getElementById('card-criar_ficha');
-            let botao = cardFicha.querySelector('.save-btn');
+            let botoes = cardFicha.querySelectorAll('button');
             
-            botao.style.display = 'none';
+            botoes.forEach(b => b.style.display = 'none');
 
             html2canvas(cardFicha, { backgroundColor: '#1e1e1e', scale: 2 }).then(canvas => {
                 let link = document.createElement('a');
                 link.download = 'ficha-personagem.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                botao.style.display = 'block';
+                botoes.forEach(b => b.style.display = 'block');
             }).catch(err => {
-                botao.style.display = 'block';
+                botoes.forEach(b => b.style.display = 'block');
             });
         }
 
