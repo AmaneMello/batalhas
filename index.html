@@ -1008,20 +1008,36 @@
             }
         }
 
-        function copiarLinkFicha() {
-            let dados = extrairDadosFicha();
-            let jsonString = JSON.stringify(dados);
+        async function copiarLinkFicha() {
+    let dados = extrairDadosFicha();
+    let jsonString = JSON.stringify(dados);
+    
+    try {
+        // Envia os dados para um serviço gratuito de JSON bin (npoint.io)
+        let resposta = await fetch('https://api.npoint.io', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonString
+        });
+        
+        let resultado = await resposta.json();
+        
+        if (resultado.id) {
+            // Gera um link extremamente curto contendo apenas o ID gerado na nuvem
+            let urlCurtissima = window.location.origin + window.location.pathname + '#' + resultado.id;
             
-            // Usa LZString para comprimir e deixar o link super compacto independente da descrição
-            let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
-            let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
-            
-            navigator.clipboard.writeText(urlCompleta).then(() => {
-                alert("Link compactado copiado com sucesso! Agora os itens não vão sumir.");
-            }).catch(err => {
-                prompt("Copie o link:", urlCompleta);
+            navigator.clipboard.writeText(urlCurtissima).then(() => {
+                alert("Link curto gerado e copiado com sucesso!");
             });
+        } else {
+            throw new Error("Erro ao salvar na nuvem.");
         }
+    } catch (err) {
+        alert("Erro ao encurtar o link. Verifique sua conexão.");
+        console.error(err);
+    }
+}
+
 
         function reiniciarFicha() {
             if (confirm("Tem certeza que deseja zerar a ficha para criar um novo personagem?")) {
@@ -1031,27 +1047,41 @@
             }
         }
 
-        function carregarDadosDaUrl() {
-            let hash = window.location.hash;
-            if (hash && hash.length > 1) {
-                try {
-                    let dadosComprimidos = hash.substring(1);
-                    // Tenta descomprimir usando LZString (suporta também o formato antigo caso já tenha links salvos)
-                    let jsonString = LZString.decompressFromEncodedURIComponent(dadosComprimidos);
-                    if (!jsonString) {
-                        jsonString = decodeURIComponent(atob(dadosComprimidos)); // Fallback para o modo antigo
-                    }
-                    let dados = JSON.parse(jsonString);
-                    preencherFichaComDados(dados);
+        async function carregarDadosDaUrl() {
+    let hash = window.location.hash;
+    if (hash && hash.length > 1) {
+        let idBin = hash.substring(1);
+        
+        // Se o hash for grande ainda (compatibilidade com o método antigo LZ-String)
+        if (idBin.length > 20) {
+            try {
+                let jsonString = LZString.decompressFromEncodedURIComponent(idBin);
+                if (jsonString) {
+                    preencherFichaComDados(JSON.parse(jsonString));
                     document.getElementById('seletor-global').value = 'criar_ficha';
                     mostrarSelecao();
                     return true;
-                } catch(e) {
-                    console.error("Erro ao carregar dados da URL", e);
                 }
-            }
-            return false;
+            } catch(e) {}
         }
+        
+        try {
+            // Busca os dados na nuvem usando o ID curto do link
+            let resposta = await fetch(`https://api.npoint.io/${idBin}`);
+            let dados = await resposta.json();
+            
+            if (dados) {
+                preencherFichaComDados(dados);
+                document.getElementById('seletor-global').value = 'criar_ficha';
+                mostrarSelecao();
+                return true;
+            }
+        } catch(e) {
+            console.error("Erro ao carregar dados da nuvem", e);
+        }
+    }
+    return false;
+}
 
         function obterStats(chave) {
             let m = monstrosLista.find(item => item.id === chave);
