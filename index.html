@@ -120,7 +120,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 5px;
-            max-height: 130px;
+            max-height: 150px;
             overflow-y: auto;
             background: #151515;
             padding: 6px;
@@ -156,7 +156,7 @@
             padding: 8px;
             border-radius: 4px;
             border: 1px solid #333;
-            max-height: 150px;
+            max-height: 140px;
             overflow-y: auto;
         }
         .inventory-slot {
@@ -355,42 +355,16 @@
                 <span class="counter-badge">Capacidade: <span id="inv-capacidade">5</span> Slots</span>
             </div>
             <div class="inventory-container" id="inventory-slots-box">
-                <!-- Os slots serão gerados dinamicamente via JavaScript com base na Força -->
+                <!-- Slots gerados via JS -->
             </div>
 
-            <!-- PERÍCIAS C.R.I.S. (20 pontos limite) -->
+            <!-- PERÍCIAS (Ordenadas automaticamente para o topo se treinadas) -->
             <div class="section-title" style="margin-top: 10px;">
                 Perícias 
                 <span class="counter-badge">Restantes: <span id="pericia-restantes">20</span>/20</span>
             </div>
-            <div class="skills-grid">
-                <div class="skill-item"><span>Acrobacia</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Adestramento</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Artes</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Atletismo</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Atualidades</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Ciências</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Crime</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Diplomacia</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Enganação</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Fortitude</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Furtividade</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Iniciativa</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Intimidação</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Intuição</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Investigação</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Luta</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Medicina</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Ocultismo</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Percepção</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Pilotagem</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Pontaria</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Profissão</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Reflexos</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Religião</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Sobrevivência</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Tática</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
-                <div class="skill-item"><span>Vontade</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+            <div class="skills-grid" id="skills-container">
+                <!-- Preenchido via JavaScript -->
             </div>
 
             <button class="save-btn" onclick="baixarFichaImagem()">Baixar Ficha como Imagem</button>
@@ -399,6 +373,15 @@
     </div>
 
     <script>
+        const listaNomesPericias = [
+            "Acrobacia", "Adestramento", "Artes", "Atletismo", "Atualidades", 
+            "Ciências", "Crime", "Diplomacia", "Enganação", "Fortitude", 
+            "Furtividade", "Iniciativa", "Intimidação", "Intuição", "Investigação", 
+            "Luta", "Medicina", "Ocultismo", "Percepção", "Pilotagem", 
+            "Pontaria", "Profissão", "Reflexos", "Religião", "Sobrevivência", 
+            "Tática", "Vontade"
+        ];
+
         const monstrosLista = [
             { id: "lizard_a", nome: "Lizard (Tipo A)", base: "lizard", hp: 30, caVal: 6, visaoVal: 12, dif: "A para B: +5hp / 2d12 visão" },
             { id: "lizard_b", nome: "Lizard (Tipo B)", base: "lizard", hp: 35, caVal: 6, visaoVal: "2d12", dif: "A para B: +5hp / 2d12 visão" },
@@ -437,7 +420,23 @@
 
             seletorGlobal.innerHTML = optionsHtml;
             container.innerHTML = cardsHtml;
+            
+            inicializarPericias();
             atualizarDerivados();
+        }
+
+        function inicializarPericias() {
+            let grid = document.getElementById('skills-container');
+            let html = "";
+            listaNomesPericias.forEach(nome => {
+                html += `
+                    <div class="skill-item" data-skill="${nome}">
+                        <span>${nome}</span>
+                        <input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()">
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
         }
 
         function criarCardHtml(m) {
@@ -509,7 +508,6 @@
             let vig = parseInt(document.getElementById('attr-vig').value) || 0;
             let classe = document.getElementById('sheet-classe').value;
 
-            // Valores base por classe (Exemplo Ordem Paranormal)
             let basePv = 12, incPv = 3;
             let baseSan = 12, incSan = 3;
             let basePe = 2, incPe = 2;
@@ -528,12 +526,9 @@
                 basePe = 4; incPe = 4;
             }
 
-            // Calculando PV, SAN e PE baseados no Vigor e Presença
             let pvTotal = basePv + (vig * incPv);
             let sanTotal = baseSan + (pre * incSan);
             let peTotal = basePe + (pre * incPe);
-
-            // Defesa e Esquiva básicas baseadas em AGI
             let defesaTotal = 10 + agi;
             let esquivaTotal = 10 + agi;
 
@@ -543,7 +538,6 @@
             document.getElementById('calc-def').innerText = defesaTotal;
             document.getElementById('calc-esq').innerText = esquivaTotal;
 
-            // Atualiza os espaços do inventário com base na Força (Ex: Base de 5 slots + 3 slots por ponto de Força)
             atualizarInventario(forca);
         }
 
@@ -577,7 +571,32 @@
                 alert("Você passou do limite de 20 pontos nas perícias!");
                 event.target.value = parseInt(event.target.value) + restantes;
                 verificarPericias();
+                return;
             }
+
+            ordenarPericias();
+        }
+
+        function ordenarPericias() {
+            let grid = document.getElementById('skills-container');
+            let itens = Array.from(grid.querySelectorAll('.skill-item'));
+
+            itens.sort((a, b) => {
+                let valorA = parseInt(a.querySelector('.skill-input').value) || 0;
+                let valorB = parseInt(b.querySelector('.skill-input').value) || 0;
+
+                // Quem tem mais pontos vai para cima (> 0)
+                if (valorA !== valorB) {
+                    return valorB - valorA;
+                }
+                // Se empatarem (ex: ambos 0), mantém a ordem alfabética original
+                let nomeA = a.getAttribute('data-skill');
+                let nomeB = b.getAttribute('data-skill');
+                return nomeA.localeCompare(nomeB);
+            });
+
+            // Reorganiza no DOM de forma fluida
+            itens.forEach(item => grid.appendChild(item));
         }
 
         function obterStats(chave) {
