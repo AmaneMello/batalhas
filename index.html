@@ -139,6 +139,15 @@
             padding: 2px;
             height: 22px;
         }
+        .calculated-box {
+            background: #252525;
+            padding: 6px;
+            text-align: center;
+            border-radius: 4px;
+            border: 1px solid #444;
+            font-weight: bold;
+            color: #81c784;
+        }
 
         /* Cores dos monstros */
         .card-lizard { border-color: #4caf50; }
@@ -268,33 +277,11 @@
                 </div>
                 <div class="form-group" style="flex: 1;">
                     <label>Classe:</label>
-                    <input type="text" id="sheet-classe" placeholder="Ex: Combatente">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group" style="flex: 1;">
-                    <label>PV Atual/Máx:</label>
-                    <input type="text" id="sheet-pv" placeholder="20/20">
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>SAN Atual/Máx:</label>
-                    <input type="text" id="sheet-san" placeholder="15/15">
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>PE Atual/Máx:</label>
-                    <input type="text" id="sheet-pe" placeholder="2/2">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group" style="flex: 1;">
-                    <label>Defesa (CA):</label>
-                    <input type="text" id="sheet-def" placeholder="10">
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>Esquiva:</label>
-                    <input type="text" id="sheet-esq" placeholder="10">
+                    <select id="sheet-classe" onchange="atualizarDerivados()">
+                        <option value="combatente">Combatente</option>
+                        <option value="especialista">Especialista</option>
+                        <option value="ocultista">Ocultista</option>
+                    </select>
                 </div>
             </div>
 
@@ -304,11 +291,38 @@
                 <span class="counter-badge">Restantes: <span id="atrib-restantes">10</span>/10</span>
             </div>
             <div class="form-row">
-                <div class="form-group" style="flex: 1;"><label>AGI</label><input type="number" class="attr-input" id="attr-agi" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
-                <div class="form-group" style="flex: 1;"><label>FOR</label><input type="number" class="attr-input" id="attr-for" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
-                <div class="form-group" style="flex: 1;"><label>INT</label><input type="number" class="attr-input" id="attr-int" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
-                <div class="form-group" style="flex: 1;"><label>PRE</label><input type="number" class="attr-input" id="attr-pre" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
-                <div class="form-group" style="flex: 1;"><label>VIG</label><input type="number" class="attr-input" id="attr-vig" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
+                <div class="form-group" style="flex: 1;"><label>AGI</label><input type="number" class="attr-input" id="attr-agi" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
+                <div class="form-group" style="flex: 1;"><label>FOR</label><input type="number" class="attr-input" id="attr-for" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
+                <div class="form-group" style="flex: 1;"><label>INT</label><input type="number" class="attr-input" id="attr-int" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
+                <div class="form-group" style="flex: 1;"><label>PRE</label><input type="number" class="attr-input" id="attr-pre" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
+                <div class="form-group" style="flex: 1;"><label>VIG</label><input type="number" class="attr-input" id="attr-vig" value="1" min="0" max="5" onchange="verificarAtributos()"></div>
+            </div>
+
+            <!-- ESTATÍSTICAS CALCULADAS AUTOMATICAMENTE -->
+            <div class="section-title">Estatísticas Calculadas</div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label>PV (Vida):</label>
+                    <div class="calculated-box" id="calc-pv">20</div>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>SAN (Sanidade):</label>
+                    <div class="calculated-box" id="calc-san">12</div>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>PE (Esforço):</label>
+                    <div class="calculated-box" id="calc-pe">2</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label>Defesa (CA):</label>
+                    <div class="calculated-box" id="calc-def">10</div>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Esquiva:</label>
+                    <div class="calculated-box" id="calc-esq">10</div>
+                </div>
             </div>
 
             <!-- PERÍCIAS C.R.I.S. (20 pontos limite) -->
@@ -395,6 +409,7 @@
 
             seletorGlobal.innerHTML = optionsHtml;
             container.innerHTML = cardsHtml;
+            atualizarDerivados();
         }
 
         function criarCardHtml(m) {
@@ -453,7 +468,52 @@
                 alert("Você passou do limite de 10 pontos nos atributos!");
                 event.target.value = parseInt(event.target.value) + restantes;
                 verificarAtributos();
+                return;
             }
+            atualizarDerivados();
+        }
+
+        function atualizarDerivados() {
+            let agi = parseInt(document.getElementById('attr-agi').value) || 0;
+            let forca = parseInt(document.getElementById('attr-for').value) || 0;
+            let int = parseInt(document.getElementById('attr-int').value) || 0;
+            let pre = parseInt(document.getElementById('attr-pre').value) || 0;
+            let vig = parseInt(document.getElementById('attr-vig').value) || 0;
+            let classe = document.getElementById('sheet-classe').value;
+
+            // Valores base por classe (Exemplo Ordem Paranormal)
+            let basePv = 12, incPv = 3;
+            let baseSan = 12, incSan = 3;
+            let basePe = 2, incPe = 2;
+
+            if (classe === 'combatente') {
+                basePv = 20; incPv = 4;
+                baseSan = 12; incSan = 3;
+                basePe = 2; incPe = 2;
+            } else if (classe === 'especialista') {
+                basePv = 16; incPv = 3;
+                baseSan = 16; incSan = 4;
+                basePe = 3; incPe = 3;
+            } else if (classe === 'ocultista') {
+                basePv = 12; incPv = 2;
+                baseSan = 20; incSan = 5;
+                basePe = 4; incPe = 4;
+            }
+
+            // Calculando PV, SAN e PE baseados no Vigor e Presença
+            let pvTotal = basePv + (vig * incPv);
+            let sanTotal = baseSan + (pre * incSan);
+            let peTotal = basePe + (pre * incPe);
+
+            // Defesa e Esquiva básicas baseadas em AGI
+            let defesaTotal = 10 + agi;
+            let esquivaTotal = 10 + agi;
+
+            document.getElementById('calc-pv').innerText = pvTotal;
+            document.getElementById('calc-san').innerText = sanTotal;
+            document.getElementById('calc-pe').innerText = peTotal;
+            document.getElementById('calc-def').innerText = defesaTotal;
+            document.getElementById('calc-esq').innerText = esquivaTotal;
         }
 
         function verificarPericias() {
