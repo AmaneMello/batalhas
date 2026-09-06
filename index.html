@@ -1009,20 +1009,18 @@
         }
 
         function copiarLinkFicha() {
-    let dados = extrairDadosFicha();
-    let jsonString = JSON.stringify(dados);
-    
-    // Compacta perfeitamente qualquer quantidade de texto da descrição e itens
-    let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
-    let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
-    
-    navigator.clipboard.writeText(urlCompleta).then(() => {
-        alert("Link gerado e copiado com sucesso! Os dados foram salvos de forma compactada.");
-    }).catch(err => {
-        prompt("Copie o link abaixo:", urlCompleta);
-    });
-}
-
+            let dados = extrairDadosFicha();
+            let jsonString = JSON.stringify(dados);
+            
+            let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
+            let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
+            
+            navigator.clipboard.writeText(urlCompleta).then(() => {
+                alert("Link gerado e copiado com sucesso!");
+            }).catch(err => {
+                prompt("Copie o link:", urlCompleta);
+            });
+        }
 
         function reiniciarFicha() {
             if (confirm("Tem certeza que deseja zerar a ficha para criar um novo personagem?")) {
@@ -1033,45 +1031,27 @@
         }
 
         function carregarDadosDaUrl() {
-    let hash = window.location.hash;
-    if (hash && hash.length > 1) {
-        try {
-            let dadosComprimidos = hash.substring(1);
-            let jsonString = LZString.decompressFromEncodedURIComponent(dadosComprimidos);
-            
-            if (!jsonString) {
-                jsonString = decodeURIComponent(atob(dadosComprimidos)); // Fallback de compatibilidade
+            let hash = window.location.hash;
+            if (hash && hash.length > 1) {
+                try {
+                    let dadosComprimidos = hash.substring(1);
+                    let jsonString = LZString.decompressFromEncodedURIComponent(dadosComprimidos);
+                    
+                    if (!jsonString) {
+                        jsonString = decodeURIComponent(atob(dadosComprimidos));
+                    }
+                    
+                    let dados = JSON.parse(jsonString);
+                    preencherFichaComDados(dados);
+                    document.getElementById('seletor-global').value = 'criar_ficha';
+                    mostrarSelecao();
+                    return true;
+                } catch(e) {
+                    console.error("Erro ao carregar dados da URL", e);
+                }
             }
-            
-            let dados = JSON.parse(jsonString);
-            preencherFichaComDados(dados);
-            document.getElementById('seletor-global').value = 'criar_ficha';
-            mostrarSelecao();
-            return true;
-        } catch(e) {
-            console.error("Erro ao carregar dados da URL", e);
+            return false;
         }
-    }
-    return false;
-}
-        
-        try {
-            // Busca os dados na nuvem usando o ID curto do link
-            let resposta = await fetch(`https://api.npoint.io/${idBin}`);
-            let dados = await resposta.json();
-            
-            if (dados) {
-                preencherFichaComDados(dados);
-                document.getElementById('seletor-global').value = 'criar_ficha';
-                mostrarSelecao();
-                return true;
-            }
-        } catch(e) {
-            console.error("Erro ao carregar dados da nuvem", e);
-        }
-    }
-    return false;
-}
 
         function obterStats(chave) {
             let m = monstrosLista.find(item => item.id === chave);
