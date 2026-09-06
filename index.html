@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Painel de Batalha e Criador de Fichas Avançado</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
     <style>
         body {
             background-color: #121212;
@@ -848,7 +849,6 @@
             document.getElementById('inv-capacidade').innerText = totalSlots;
             let box = document.getElementById('inventory-slots-box');
             
-            // Salva valores antigos se existirem
             let antigosNomes = Array.from(document.querySelectorAll('.inv-nome-input')).map(i => i.value);
             let antigosPesos = Array.from(document.querySelectorAll('.inv-peso-input')).map(i => i.value);
 
@@ -1011,11 +1011,13 @@
         function copiarLinkFicha() {
             let dados = extrairDadosFicha();
             let jsonString = JSON.stringify(dados);
-            let base64Dados = btoa(encodeURIComponent(jsonString));
-            let urlCompleta = window.location.origin + window.location.pathname + '#' + base64Dados;
+            
+            // Usa LZString para comprimir e deixar o link super compacto independente da descrição
+            let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
+            let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
             
             navigator.clipboard.writeText(urlCompleta).then(() => {
-                alert("Link copiado! (Itens e dados salvos com sucesso).");
+                alert("Link compactado copiado com sucesso! Agora os itens não vão sumir.");
             }).catch(err => {
                 prompt("Copie o link:", urlCompleta);
             });
@@ -1033,8 +1035,12 @@
             let hash = window.location.hash;
             if (hash && hash.length > 1) {
                 try {
-                    let base64Dados = hash.substring(1);
-                    let jsonString = decodeURIComponent(atob(base64Dados));
+                    let dadosComprimidos = hash.substring(1);
+                    // Tenta descomprimir usando LZString (suporta também o formato antigo caso já tenha links salvos)
+                    let jsonString = LZString.decompressFromEncodedURIComponent(dadosComprimidos);
+                    if (!jsonString) {
+                        jsonString = decodeURIComponent(atob(dadosComprimidos)); // Fallback para o modo antigo
+                    }
                     let dados = JSON.parse(jsonString);
                     preencherFichaComDados(dados);
                     document.getElementById('seletor-global').value = 'criar_ficha';
