@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Batalha e Criador de Fichas</title>
+    <title>Painel de Batalha e Criador de Fichas Avançado</title>
     <!-- Importa a biblioteca para gerar a imagem da ficha -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -63,15 +63,14 @@
             background-color: #1e1e1e;
             border: 2px solid #b71c1c;
             border-radius: 8px;
-            width: 320px;
+            width: 380px;
             padding: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             display: none;
         }
-        /* Estilo específico para a Ficha Customizada estilo Ordem */
         .custom-sheet {
             border-color: #d32f2f;
-            width: 350px;
+            width: 420px;
         }
         .custom-sheet h2 {
             color: #ff5252;
@@ -82,7 +81,7 @@
             text-align: center;
         }
         .form-group {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-size: 0.85rem;
         }
         .form-group label {
@@ -90,18 +89,55 @@
             color: #ff8a80;
             margin-bottom: 2px;
         }
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
-            padding: 6px;
+            padding: 5px;
             background: #2c2c2c;
             color: white;
             border: 1px solid #555;
             border-radius: 4px;
             box-sizing: border-box;
+            font-size: 0.85rem;
         }
         .form-row {
             display: flex;
             gap: 8px;
+        }
+        .section-title {
+            font-size: 0.9rem;
+            color: #ff5252;
+            border-bottom: 1px dashed #555;
+            margin: 10px 0 6px 0;
+            padding-bottom: 2px;
+            font-weight: bold;
+        }
+        .counter-badge {
+            font-size: 0.75rem;
+            color: #ffeb3b;
+            float: right;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #151515;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+        .skill-item input {
+            width: 40px;
+            text-align: center;
+            padding: 2px;
+            height: 22px;
         }
 
         /* Cores dos monstros */
@@ -188,7 +224,7 @@
             padding: 8px 10px;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 6px;
+            margin-top: 8px;
             width: 100%;
             font-weight: bold;
             font-size: 0.85rem;
@@ -209,7 +245,7 @@
 
     <h1>Painel de Batalha</h1>
 
-    <!-- Menu de Seleção Inicial com a opção de criar ficha -->
+    <!-- Menu de Seleção Inicial -->
     <div class="selector-box">
         <label for="seletor-global">Escolha uma opção:</label>
         <select id="seletor-global" onchange="mostrarSelecao()">
@@ -221,23 +257,36 @@
     <!-- Container onde os cards e a ficha customizada vão aparecer -->
     <div class="container" id="painel-monstros">
         
-        <!-- Ficha Customizada Estilo Ordem -->
+        <!-- Ficha Customizada Completa Estilo Ordem -->
         <div class="custom-sheet" id="card-criar_ficha">
-            <h2>Ficha de Personagem</h2>
-            <div class="form-group">
-                <label>Nome do Personagem / Monstro:</label>
-                <input type="text" id="sheet-nome" placeholder="Ex: Agente Silva">
+            <h2>Ficha de Personagem (Ordem)</h2>
+            
+            <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                    <label>Nome:</label>
+                    <input type="text" id="sheet-nome" placeholder="Nome do Agente">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Classe:</label>
+                    <input type="text" id="sheet-classe" placeholder="Ex: Combatente">
+                </div>
             </div>
+
             <div class="form-row">
                 <div class="form-group" style="flex: 1;">
-                    <label>PV (Vida):</label>
+                    <label>PV Atual/Máx:</label>
                     <input type="text" id="sheet-pv" placeholder="20/20">
                 </div>
                 <div class="form-group" style="flex: 1;">
-                    <label>Sanidade:</label>
+                    <label>SAN Atual/Máx:</label>
                     <input type="text" id="sheet-san" placeholder="15/15">
                 </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>PE Atual/Máx:</label>
+                    <input type="text" id="sheet-pe" placeholder="2/2">
+                </div>
             </div>
+
             <div class="form-row">
                 <div class="form-group" style="flex: 1;">
                     <label>Defesa (CA):</label>
@@ -248,14 +297,60 @@
                     <input type="text" id="sheet-esq" placeholder="10">
                 </div>
             </div>
-            <div class="form-group">
-                <label>Atributos (AGI, FOR, INT, PRE, VIG):</label>
-                <input type="text" id="sheet-atrib" placeholder="Ex: 2, 3, 1, 2, 2">
+
+            <!-- ATRIBUTOS (10 pontos limite) -->
+            <div class="section-title">
+                Atributos 
+                <span class="counter-badge">Restantes: <span id="atrib-restantes">10</span>/10</span>
             </div>
-            <div class="form-group">
-                <label>Habilidades / Ataques:</label>
-                <textarea id="sheet-hab" rows="3" placeholder="Descreva os ataques..."></textarea>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;"><label>AGI</label><input type="number" class="attr-input" id="attr-agi" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
+                <div class="form-group" style="flex: 1;"><label>FOR</label><input type="number" class="attr-input" id="attr-for" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
+                <div class="form-group" style="flex: 1;"><label>INT</label><input type="number" class="attr-input" id="attr-int" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
+                <div class="form-group" style="flex: 1;"><label>PRE</label><input type="number" class="attr-input" id="attr-pre" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
+                <div class="form-group" style="flex: 1;"><label>VIG</label><input type="number" class="attr-input" id="attr-vig" value="0" min="0" max="5" onchange="verificarAtributos()"></div>
             </div>
+
+            <!-- PERÍCIAS C.R.I.S. (20 pontos limite) -->
+            <div class="section-title">
+                Perícias 
+                <span class="counter-badge">Restantes: <span id="pericia-restantes">20</span>/20</span>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-item"><span>Acrobacia</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Adestramento</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Artes</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Atletismo</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Atualidades</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Ciências</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Crime</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Diplomacia</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Enganação</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Fortitude</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Furtividade</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Iniciativa</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Intimidação</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Intuição</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Investigação</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Luta</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Medicina</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Ocultismo</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Percepção</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Pilotagem</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Pontaria</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Profissão</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Reflexos</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Religião</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Sobrevivência</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Tática</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+                <div class="skill-item"><span>Vontade</span><input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias()"></div>
+            </div>
+
+            <div class="form-group" style="margin-top: 8px;">
+                <label>Ataques e Habilidades:</label>
+                <textarea id="sheet-hab" rows="2" placeholder="Inventário ou ataques..."></textarea>
+            </div>
+
             <button class="save-btn" onclick="baixarFichaImagem()">Baixar Ficha como Imagem</button>
         </div>
 
@@ -291,7 +386,7 @@
                 <option value="">-- Selecione na lista --</option>
                 <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
             `;
-            let cardsHtml = document.getElementById('card-criar_ficha').outerHTML; // Mantém a ficha customizada
+            let cardsHtml = document.getElementById('card-criar_ficha').outerHTML;
 
             monstrosLista.forEach(m => {
                 optionsHtml += `<option value="${m.id}">${m.nome}</option>`;
@@ -332,12 +427,9 @@
 
         function mostrarSelecao() {
             let escolhido = document.getElementById('seletor-global').value;
-            
-            // Oculta todos os cards e a ficha de criação
             let elements = document.querySelectorAll('.monster-card, .custom-sheet');
             elements.forEach(el => el.style.display = 'none');
 
-            // Mostra apenas o item selecionado
             if (escolhido) {
                 let alvo = document.getElementById(`card-${escolhido}`);
                 if (alvo) {
@@ -346,6 +438,36 @@
                         atualizarCard(escolhido);
                     }
                 }
+            }
+        }
+
+        function verificarAtributos() {
+            let inputs = document.querySelectorAll('.attr-input');
+            let soma = 0;
+            inputs.forEach(inp => soma += parseInt(inp.value) || 0);
+
+            let restantes = 10 - soma;
+            document.getElementById('atrib-restantes').innerText = restantes;
+
+            if (restantes < 0) {
+                alert("Você passou do limite de 10 pontos nos atributos!");
+                event.target.value = parseInt(event.target.value) + restantes;
+                verificarAtributos();
+            }
+        }
+
+        function verificarPericias() {
+            let inputs = document.querySelectorAll('.skill-input');
+            let soma = 0;
+            inputs.forEach(inp => soma += parseInt(inp.value) || 0);
+
+            let restantes = 20 - soma;
+            document.getElementById('pericia-restantes').innerText = restantes;
+
+            if (restantes < 0) {
+                alert("Você passou do limite de 20 pontos nas perícias!");
+                event.target.value = parseInt(event.target.value) + restantes;
+                verificarPericias();
             }
         }
 
@@ -418,11 +540,8 @@
             }
         }
 
-        // Função para transformar a ficha preenchida em imagem e baixar
         function baixarFichaImagem() {
             let cardFicha = document.getElementById('card-criar_ficha');
-            
-            // Oculta temporariamente o botão de download para não sair na imagem
             let botao = cardFicha.querySelector('.save-btn');
             botao.style.display = 'none';
 
@@ -431,8 +550,6 @@
                 link.download = 'ficha-personagem.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                
-                // Restaura o botão na tela
                 botao.style.display = 'block';
             });
         }
