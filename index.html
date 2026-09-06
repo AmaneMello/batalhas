@@ -431,12 +431,20 @@
                     <div class="form-row">
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
                             <label>Classe:</label>
-                            <select id="sheet-classe" onchange="atualizarDerivados()">
+                            <select id="sheet-classe" onchange="atualizarTrilhas(); atualizarDerivados();">
                                 <option value="combatente">Combatente</option>
                                 <option value="especialista">Especialista</option>
                                 <option value="ocultista">Ocultista</option>
                             </select>
                         </div>
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <label>Trilha / Especialização:</label>
+                            <select id="sheet-trilha">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 4px;">
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
                             <label>Rolagem:</label>
                             <select id="sheet-modo-rolagem">
@@ -451,7 +459,7 @@
 
             <div class="form-group">
                 <label>Descrição do Personagem / Aparência / Histórico:</label>
-                <div id="sheet-descricao" class="descricao-div" contenteditable="type" data-placeholder="Escreva a história ou descrição do seu agente..."></div>
+                <div id="sheet-descricao" class="descricao-div" contenteditable="true" data-placeholder="Escreva a história ou descrição do seu agente..."></div>
             </div>
 
             <!-- Condições Globais -->
@@ -602,8 +610,27 @@
             seletorGlobal.innerHTML = optionsHtml;
             container.innerHTML = cardsHtml;
             
+            atualizarTrilhas();
             inicializarPericias();
             atualizarDerivados();
+        }
+
+        // Função para atualizar as opções de trilha de acordo com a classe selecionada
+        function atualizarTrilhas() {
+            let classe = document.getElementById('sheet-classe').value;
+            let selectTrilha = document.getElementById('sheet-trilha');
+            let trilhasMap = {
+                combatente: ['Aniquilador', 'Comando', 'Guerreiro', 'Tropa de Choque'],
+                especialista: ['Atirador de Elite', 'Infiltrador', 'Médico de Campo', 'Negociador'],
+                ocultista: ['Conduíte', 'Flagelador', 'Graduado', 'Lâmina Paranormal']
+            };
+
+            let lista = trilhasMap[classe] || [];
+            let html = '';
+            lista.forEach(t => {
+                html += `<option value="${t.toLowerCase()}">${t}</option>`;
+            });
+            selectTrilha.innerHTML = html;
         }
 
         function carregarFoto(event) {
@@ -857,7 +884,6 @@
             let inputTreino = skillItem.querySelector('.skill-input');
             let pontosTreino = parseInt(inputTreino.value) || 0;
 
-            // Perícias físicas consideradas para a condição "Machucado"
             let periciasFisicas = ["Acrobacia", "Atletismo", "Fortitude", "Furtividade", "Iniciativa", "Luta", "Pontaria", "Reflexos", "Sobrevivência"];
             let isFisica = periciasFisicas.includes(nomePericia);
 
@@ -961,3 +987,4 @@
     </script>
 </body>
 </html>
+
