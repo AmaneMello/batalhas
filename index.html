@@ -836,27 +836,7 @@
             }
         }
 
-        function baixarFichaImagem() {
-            let cardFicha = document.getElementById('card-criar_ficha');
-            let botao = cardFicha.querySelector('.save-btn');
-            botao.style.display = 'none';
-
-            html2canvas(cardFicha, { backgroundColor: '#1e1e1e' }).then(canvas => {
-                let link = document.createElement('a');
-                link.download = 'ficha-personagem.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                botao.style.display = 'block';
-            });
-        }
-
-        window.onload = function() {
-            montarPagina();
-        };
-    </script>
-</body>
-</html>
-        function baixarFichaImagem() {
+                function baixarFichaImagem() {
             let cardFicha = document.getElementById('card-criar_ficha');
             let botao = cardFicha.querySelector('.save-btn');
             let textareaDesc = document.getElementById('sheet-descricao');
@@ -893,3 +873,11 @@
                 textareaDesc.style.overflow = overflowOriginal;
             });
         }
+
+
+        window.onload = function() {
+            montarPagina();
+        };
+    </script>
+</body>
+</html>
