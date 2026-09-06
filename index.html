@@ -1008,34 +1008,19 @@
             }
         }
 
-        async function copiarLinkFicha() {
+        function copiarLinkFicha() {
     let dados = extrairDadosFicha();
     let jsonString = JSON.stringify(dados);
     
-    try {
-        // Envia os dados para um serviço gratuito de JSON bin (npoint.io)
-        let resposta = await fetch('https://api.npoint.io', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: jsonString
-        });
-        
-        let resultado = await resposta.json();
-        
-        if (resultado.id) {
-            // Gera um link extremamente curto contendo apenas o ID gerado na nuvem
-            let urlCurtissima = window.location.origin + window.location.pathname + '#' + resultado.id;
-            
-            navigator.clipboard.writeText(urlCurtissima).then(() => {
-                alert("Link curto gerado e copiado com sucesso!");
-            });
-        } else {
-            throw new Error("Erro ao salvar na nuvem.");
-        }
-    } catch (err) {
-        alert("Erro ao encurtar o link. Verifique sua conexão.");
-        console.error(err);
-    }
+    // Compacta perfeitamente qualquer quantidade de texto da descrição e itens
+    let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
+    let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
+    
+    navigator.clipboard.writeText(urlCompleta).then(() => {
+        alert("Link gerado e copiado com sucesso! Os dados foram salvos de forma compactada.");
+    }).catch(err => {
+        prompt("Copie o link abaixo:", urlCompleta);
+    });
 }
 
 
@@ -1047,23 +1032,28 @@
             }
         }
 
-        async function carregarDadosDaUrl() {
+        function carregarDadosDaUrl() {
     let hash = window.location.hash;
     if (hash && hash.length > 1) {
-        let idBin = hash.substring(1);
-        
-        // Se o hash for grande ainda (compatibilidade com o método antigo LZ-String)
-        if (idBin.length > 20) {
-            try {
-                let jsonString = LZString.decompressFromEncodedURIComponent(idBin);
-                if (jsonString) {
-                    preencherFichaComDados(JSON.parse(jsonString));
-                    document.getElementById('seletor-global').value = 'criar_ficha';
-                    mostrarSelecao();
-                    return true;
-                }
-            } catch(e) {}
+        try {
+            let dadosComprimidos = hash.substring(1);
+            let jsonString = LZString.decompressFromEncodedURIComponent(dadosComprimidos);
+            
+            if (!jsonString) {
+                jsonString = decodeURIComponent(atob(dadosComprimidos)); // Fallback de compatibilidade
+            }
+            
+            let dados = JSON.parse(jsonString);
+            preencherFichaComDados(dados);
+            document.getElementById('seletor-global').value = 'criar_ficha';
+            mostrarSelecao();
+            return true;
+        } catch(e) {
+            console.error("Erro ao carregar dados da URL", e);
         }
+    }
+    return false;
+}
         
         try {
             // Busca os dados na nuvem usando o ID curto do link
