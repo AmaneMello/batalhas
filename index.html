@@ -172,6 +172,29 @@
             color: #ffeb3b;
             float: right;
         }
+        .conditions-box {
+            background: #151515;
+            border: 1px solid #444;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .conditions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+        .condition-checkbox {
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            color: #ffab91;
+        }
         .attributes-grid {
             display: flex;
             gap: 6px;
@@ -405,20 +428,41 @@
                         <label>Nome do Personagem:</label>
                         <input type="text" id="sheet-nome" placeholder="Nome do Agente">
                     </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label>Classe:</label>
-                        <select id="sheet-classe" onchange="atualizarDerivados()">
-                            <option value="combatente">Combatente</option>
-                            <option value="especialista">Especialista</option>
-                            <option value="ocultista">Ocultista</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <label>Classe:</label>
+                            <select id="sheet-classe" onchange="atualizarDerivados()">
+                                <option value="combatente">Combatente</option>
+                                <option value="especialista">Especialista</option>
+                                <option value="ocultista">Ocultista</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <label>Rolagem:</label>
+                            <select id="sheet-modo-rolagem">
+                                <option value="normal">Normal (1d20)</option>
+                                <option value="vantagem">Vantagem (2d20 Maior)</option>
+                                <option value="desvantagem">Desvantagem (2d20 Menor)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Descrição do Personagem / Aparência / Histórico:</label>
-                <div id="sheet-descricao" class="descricao-div" contenteditable="true" data-placeholder="Escreva a história ou descrição do seu agente..."></div>
+                <div id="sheet-descricao" class="descricao-div" contenteditable="type" data-placeholder="Escreva a história ou descrição do seu agente..."></div>
+            </div>
+
+            <!-- Condições Globais -->
+            <div class="conditions-box">
+                <label style="margin: 0; font-size: 0.8rem; color: #ff5252;">Condições Ativas (Afetam Testes):</label>
+                <div class="conditions-grid">
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="exausto" data-penalidade="2"> Exausto (-2 em Testes)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="machucado" data-penalidade="2"> Machucado (-2 em Físicos)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="atordoado" data-penalidade="5"> Atordoado (-5 em Testes)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="amedrontado" data-penalidade="2"> Amedrontado (-2 em Testes)</label>
+                </div>
             </div>
 
             <div class="section-title">
@@ -430,35 +474,35 @@
                     <label>AGI</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-agi" value="1" min="0" max="5" onchange="verificarAtributos()">
-                        <button type="button" class="roll-btn" title="Rolar AGI" onclick="rolarAtributo('AGI', 'attr-agi')">🎲</button>
+                        <button type="button" class="roll-btn" title="Rolar AGI" onclick="rolarAtributo('AGI', 'attr-agi', ['fisico'])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>FOR</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-for" value="1" min="0" max="5" onchange="verificarAtributos()">
-                        <button type="button" class="roll-btn" title="Rolar FOR" onclick="rolarAtributo('FOR', 'attr-for')">🎲</button>
+                        <button type="button" class="roll-btn" title="Rolar FOR" onclick="rolarAtributo('FOR', 'attr-for', ['fisico'])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>INT</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-int" value="1" min="0" max="5" onchange="verificarAtributos()">
-                        <button type="button" class="roll-btn" title="Rolar INT" onclick="rolarAtributo('INT', 'attr-int')">🎲</button>
+                        <button type="button" class="roll-btn" title="Rolar INT" onclick="rolarAtributo('INT', 'attr-int', [])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>PRE</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-pre" value="1" min="0" max="5" onchange="verificarAtributos()">
-                        <button type="button" class="roll-btn" title="Rolar PRE" onclick="rolarAtributo('PRE', 'attr-pre')">🎲</button>
+                        <button type="button" class="roll-btn" title="Rolar PRE" onclick="rolarAtributo('PRE', 'attr-pre', [])">🎲</button>
                     </div>
                 </div>
                 <div class="attr-card">
                     <label>VIG</label>
                     <div class="attr-controls">
                         <input type="number" class="attr-input" id="attr-vig" value="1" min="0" max="5" onchange="verificarAtributos()">
-                        <button type="button" class="roll-btn" title="Rolar VIG" onclick="rolarAtributo('VIG', 'attr-vig')">🎲</button>
+                        <button type="button" class="roll-btn" title="Rolar VIG" onclick="rolarAtributo('VIG', 'attr-vig', ['fisico'])">🎲</button>
                     </div>
                 </div>
             </div>
@@ -655,7 +699,42 @@
             atualizarDerivados();
         }
 
-        function rolarAtributo(nomeAtributo, idInput) {
+        // Função auxiliar para calcular penalidades de condições e vantagem/desvantagem
+        function calcularModificadores(tags = []) {
+            let checkboxes = document.querySelectorAll('.cond-check:checked');
+            let penalidadeTotal = 0;
+
+            checkboxes.forEach(cb => {
+                let valor = parseInt(cb.getAttribute('data-penalidade')) || 0;
+                let condName = cb.value;
+                if (condName === 'machucado' && !tags.includes('fisico')) {
+                    return; // Machucado só afeta atributos/perícias físicos
+                }
+                penalidadeTotal += valor;
+            });
+
+            let modoRolagem = document.getElementById('sheet-modo-rolagem').value;
+            let d1 = Math.floor(Math.random() * 20) + 1;
+            let d2 = Math.floor(Math.random() * 20) + 1;
+            let dadoFinal = d1;
+            let detalhesRolagem = `1d20: ${d1}`;
+
+            if (modoRolagem === 'vantagem') {
+                dadoFinal = Math.max(d1, d2);
+                detalhesRolagem = `Vantagem 2d20 [${d1}, ${d2}] -> ${dadoFinal}`;
+            } else if (modoRolagem === 'desvantagem') {
+                dadoFinal = Math.min(d1, d2);
+                detalhesRolagem = `Desvantagem 2d20 [${d1}, ${d2}] -> ${dadoFinal}`;
+            }
+
+            return {
+                dadoFinal: dadoFinal,
+                detalhesRolagem: detalhesRolagem,
+                penalidadeTotal: penalidadeTotal
+            };
+        }
+
+        function rolarAtributo(nomeAtributo, idInput, tags = []) {
             let qtdDados = parseInt(document.getElementById(idInput).value) || 0;
             let displayRes = document.getElementById('res-pericia-global');
 
@@ -664,13 +743,17 @@
                 return;
             }
 
+            let mod = calcularModificadores(tags);
             let resultados = [];
             for (let i = 0; i < qtdDados; i++) {
                 resultados.push(Math.floor(Math.random() * 20) + 1);
             }
 
             let maiorResultado = Math.max(...resultados);
-            displayRes.innerText = `${nomeAtributo}: Maior ${maiorResultado} (${qtdDados}d20: [${resultados.join(', ')}])`;
+            let totalFinal = maiorResultado - mod.penalidadeTotal;
+
+            let textoPenalidade = mod.penalidadeTotal > 0 ? ` - ${mod.penalidadeTotal} (Condições)` : '';
+            displayRes.innerText = `${nomeAtributo}: Total ${totalFinal} (Maior ${maiorResultado}${textoPenalidade} | ${mod.detalhesRolagem})`;
         }
 
         function atualizarDerivados() {
@@ -774,11 +857,16 @@
             let inputTreino = skillItem.querySelector('.skill-input');
             let pontosTreino = parseInt(inputTreino.value) || 0;
 
-            let d20 = Math.floor(Math.random() * 20) + 1;
-            let total = d20 + pontosTreino;
+            // Perícias físicas consideradas para a condição "Machucado"
+            let periciasFisicas = ["Acrobacia", "Atletismo", "Fortitude", "Furtividade", "Iniciativa", "Luta", "Pontaria", "Reflexos", "Sobrevivência"];
+            let isFisica = periciasFisicas.includes(nomePericia);
+
+            let mod = calcularModificadores(isFisica ? ['fisico'] : []);
+            let total = mod.dadoFinal + pontosTreino - mod.penalidadeTotal;
 
             let displayRes = document.getElementById('res-pericia-global');
-            displayRes.innerText = `${nomePericia}: Total ${total} (1d20: ${d20} + ${pontosTreino} treino)`;
+            let textoPenalidade = mod.penalidadeTotal > 0 ? ` - ${mod.penalidadeTotal} (Condições)` : '';
+            displayRes.innerText = `${nomePericia}: Total ${total} (${mod.dadoFinal} + ${pontosTreino} treino${textoPenalidade} | ${mod.detalhesRolagem})`;
         }
 
         function obterStats(chave) {
