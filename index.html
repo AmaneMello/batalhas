@@ -440,7 +440,7 @@
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
                             <label>Trilha / Especialização:</label>
                             <select id="sheet-trilha">
-                                <!-- Preenchido dinamicamente via JS -->
+                                <!-- Preenchido dinamicamente via JS com todas as trilhas oficiais -->
                             </select>
                         </div>
                     </div>
@@ -615,14 +615,15 @@
             atualizarDerivados();
         }
 
-        // Função para atualizar as opções de trilha de acordo com a classe selecionada
+        // Função para atualizar as opções de trilha com TODAS as trilhas oficiais de Ordem Paranormal
         function atualizarTrilhas() {
             let classe = document.getElementById('sheet-classe').value;
             let selectTrilha = document.getElementById('sheet-trilha');
+            
             let trilhasMap = {
-                combatente: ['Aniquilador', 'Comando', 'Guerreiro', 'Tropa de Choque'],
-                especialista: ['Atirador de Elite', 'Infiltrador', 'Médico de Campo', 'Negociador'],
-                ocultista: ['Conduíte', 'Flagelador', 'Graduado', 'Lâmina Paranormal']
+                combatente: ['Aniquilador', 'Assassino', 'Comando', 'Guerreiro', 'Tropa de Choque'],
+                especialista: ['Atirador de Elite', 'Infiltrador', 'Médico de Campo', 'Negociador', 'Technomancer'],
+                ocultista: ['Conduíte', 'Flagelador', 'Graduado', 'Lâmina Paranormal', 'Intuitivo']
             };
 
             let lista = trilhasMap[classe] || [];
@@ -726,7 +727,6 @@
             atualizarDerivados();
         }
 
-        // Função auxiliar para calcular penalidades de condições e vantagem/desvantagem
         function calcularModificadores(tags = []) {
             let checkboxes = document.querySelectorAll('.cond-check:checked');
             let penalidadeTotal = 0;
@@ -735,7 +735,7 @@
                 let valor = parseInt(cb.getAttribute('data-penalidade')) || 0;
                 let condName = cb.value;
                 if (condName === 'machucado' && !tags.includes('fisico')) {
-                    return; // Machucado só afeta atributos/perícias físicos
+                    return; 
                 }
                 penalidadeTotal += valor;
             });
@@ -987,4 +987,3 @@
     </script>
 </body>
 </html>
-
