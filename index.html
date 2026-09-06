@@ -89,7 +89,7 @@
             color: #ff8a80;
             margin-bottom: 2px;
         }
-        .form-group input, .form-group textarea, .form-group select {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 5px;
             background: #2c2c2c;
@@ -99,9 +99,23 @@
             box-sizing: border-box;
             font-size: 0.85rem;
         }
-        textarea {
-            resize: vertical;
-            height: 60px;
+        .descricao-div {
+            width: 100%;
+            min-height: 60px;
+            padding: 6px;
+            background: #2c2c2c;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 0.85rem;
+            outline: none;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+        .descricao-div:empty:before {
+            content: attr(data-placeholder);
+            color: #888;
         }
         .form-row {
             display: flex;
@@ -404,7 +418,7 @@
 
             <div class="form-group">
                 <label>Descrição do Personagem / Aparência / Histórico:</label>
-                <textarea id="sheet-descricao" placeholder="Escreva a história ou descrição do seu agente..."></textarea>
+                <div id="sheet-descricao" class="descricao-div" contenteditable="true" data-placeholder="Escreva a história ou descrição do seu agente..."></div>
             </div>
 
             <div class="section-title">
@@ -836,25 +850,22 @@
             }
         }
 
-                function baixarFichaImagem() {
-    let cardFicha = document.getElementById('card-criar_ficha');
-    let botao = cardFicha.querySelector('.save-btn');
-    
-    // Oculta o botão de salvar para não sair na imagem
-    botao.style.display = 'none';
+        function baixarFichaImagem() {
+            let cardFicha = document.getElementById('card-criar_ficha');
+            let botao = cardFicha.querySelector('.save-btn');
+            
+            botao.style.display = 'none';
 
-    html2canvas(cardFicha, { backgroundColor: '#1e1e1e', scale: 2 }).then(canvas => {
-        let link = document.createElement('a');
-        link.download = 'ficha-personagem.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        botao.style.display = 'block';
-    }).catch(err => {
-        botao.style.display = 'block';
-    });
-}
-
-
+            html2canvas(cardFicha, { backgroundColor: '#1e1e1e', scale: 2 }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'ficha-personagem.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                botao.style.display = 'block';
+            }).catch(err => {
+                botao.style.display = 'block';
+            });
+        }
 
         window.onload = function() {
             montarPagina();
