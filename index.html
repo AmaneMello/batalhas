@@ -40,7 +40,7 @@
         }
         .restrito-box {
             border-color: #4caf50;
-            max-width: 600px;
+            max-width: 700px;
         }
         label {
             display: block;
@@ -401,21 +401,31 @@
         /* Estilos do Mapa Tático na Área Restrita */
         .mapa-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 12px;
             margin-top: 10px;
         }
         .setor-card {
             background: #151515;
             border: 1px solid #4caf50;
-            border-radius: 4px;
-            padding: 8px;
+            border-radius: 6px;
+            padding: 10px;
             text-align: left;
         }
         .setor-card h4 {
             color: #81c784;
-            margin: 0 0 5px 0;
-            font-size: 0.85rem;
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 4px;
+        }
+        .mapa-img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #444;
+            margin-bottom: 8px;
         }
     </style>
 </head>
@@ -443,24 +453,19 @@
     <!-- Conteúdo Secreto com o Mapa Tático de Tóquio (Tachikawa - Ariake) -->
     <div id="conteudo-restrito" class="restrito-box" style="display: none; border-color: #4caf50; text-align: left;">
         <h3 style="color: #81c784; margin-top: 0; font-size: 1rem; text-align: center;">Painel Secreto: Mapa Operacional Tóquio (Tachikawa ➔ Ariake)</h3>
-        <p style="font-size: 0.8rem; color: #bbb;">Zonas estratégicas, postos de elite e rotas de suprimentos mapeadas.</p>
+        <p style="font-size: 0.8rem; color: #bbb; text-align: center;">Zonas estratégicas e bases mapeadas com registros visuais de campo.</p>
         
         <div class="mapa-container">
             <div class="setor-card">
-                <h4>Setor Oeste: Tachikawa</h4>
-                <p style="font-size: 0.75rem; color: #ccc;">Ruas desertas e postos avançados de patrulha. Zona de transição militar e armazéns táticos periféricos.</p>
+                <h4>Base Oeste: Tachikawa (Posto Avançado)</h4>
+                <img src="176720_2.jpg" alt="Base Tachikawa" class="mapa-img">
+                <p style="font-size: 0.75rem; color: #ccc;">Ruas desertas e postos avançados de patrulha. Zona de transição militar e armazéns táticos periféricos com forte presença estrutural.</p>
             </div>
+            
             <div class="setor-card">
-                <h4>Setor Central: Prédios Comerciais</h4>
-                <p style="font-size: 0.75rem; color: #ccc;">Torres corporativas abandonadas. Risco alto de emboscadas, porém rico em suprimentos tecnológicos e médicos.</p>
-            </div>
-            <div class="setor-card">
-                <h4>Setor Residencial da Elite</h4>
-                <p style="font-size: 0.75rem; color: #ccc;">Complexos fortificados de alto padrão com sistemas de segurança automatizados e geradores próprios.</p>
-            </div>
-            <div class="setor-card">
-                <h4>Setor Leste: Ariake / Baía</h4>
-                <p style="font-size: 0.75rem; color: #ccc;">Área portuária e pontes de acesso restrito. Enclave estratégico com armazéns de suprimentos pesados e rotas de fuga.</p>
+                <h4>Base Leste: Ariake / Baía (Enclave Estratégico)</h4>
+                <img src="176728_2.jpg" alt="Base Ariake" class="mapa-img">
+                <p style="font-size: 0.75rem; color: #ccc;">Área portuária e pontes de acesso restrito. Enclave estratégico mapeado com armazéns de suprimentos pesados e rotas de fuga fluviais.</p>
             </div>
         </div>
 
