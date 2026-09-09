@@ -40,6 +40,7 @@
         }
         .restrito-box {
             border-color: #4caf50;
+            max-width: 600px;
         }
         label {
             display: block;
@@ -397,6 +398,25 @@
             text-align: center;
             font-size: 0.75rem;
         }
+        /* Estilos do Mapa Tático na Área Restrita */
+        .mapa-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .setor-card {
+            background: #151515;
+            border: 1px solid #4caf50;
+            border-radius: 4px;
+            padding: 8px;
+            text-align: left;
+        }
+        .setor-card h4 {
+            color: #81c784;
+            margin: 0 0 5px 0;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body>
@@ -412,7 +432,7 @@
         </select>
     </div>
 
-    <!-- Área Restrita do Mestre (Token: 82124) logo abaixo da seleção -->
+    <!-- Área Restrita do Mestre (Token: 82124) -->
     <div id="painel-login-token" class="restrito-box">
         <h3 style="color: #4caf50; margin-top: 0; font-size: 1rem;">Área Restrita do Mestre</h3>
         <p style="font-size: 0.8rem; color: #ccc;">Insira o token para acessar:</p>
@@ -420,10 +440,31 @@
         <button onclick="verificarToken()" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; font-size: 0.85rem;">Entrar</button>
     </div>
 
+    <!-- Conteúdo Secreto com o Mapa Tático de Tóquio (Tachikawa - Ariake) -->
     <div id="conteudo-restrito" class="restrito-box" style="display: none; border-color: #4caf50; text-align: left;">
-        <h3 style="color: #81c784; margin-top: 0; font-size: 1rem; text-align: center;">Painel Secreto</h3>
-        <p style="font-size: 0.8rem;">Bem-vindo à área do Mestre! Notas de campanha e monstros ocultos ficam aqui.</p>
-        <button onclick="sairDaAreaRestrita()" style="background-color: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; width: 100%; margin-top: 5px;">Sair / Bloquear</button>
+        <h3 style="color: #81c784; margin-top: 0; font-size: 1rem; text-align: center;">Painel Secreto: Mapa Operacional Tóquio (Tachikawa ➔ Ariake)</h3>
+        <p style="font-size: 0.8rem; color: #bbb;">Zonas estratégicas, postos de elite e rotas de suprimentos mapeadas.</p>
+        
+        <div class="mapa-container">
+            <div class="setor-card">
+                <h4>Setor Oeste: Tachikawa</h4>
+                <p style="font-size: 0.75rem; color: #ccc;">Ruas desertas e postos avançados de patrulha. Zona de transição militar e armazéns táticos periféricos.</p>
+            </div>
+            <div class="setor-card">
+                <h4>Setor Central: Prédios Comerciais</h4>
+                <p style="font-size: 0.75rem; color: #ccc;">Torres corporativas abandonadas. Risco alto de emboscadas, porém rico em suprimentos tecnológicos e médicos.</p>
+            </div>
+            <div class="setor-card">
+                <h4>Setor Residencial da Elite</h4>
+                <p style="font-size: 0.75rem; color: #ccc;">Complexos fortificados de alto padrão com sistemas de segurança automatizados e geradores próprios.</p>
+            </div>
+            <div class="setor-card">
+                <h4>Setor Leste: Ariake / Baía</h4>
+                <p style="font-size: 0.75rem; color: #ccc;">Área portuária e pontes de acesso restrito. Enclave estratégico com armazéns de suprimentos pesados e rotas de fuga.</p>
+            </div>
+        </div>
+
+        <button onclick="sairDaAreaRestrita()" style="background-color: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; width: 100%; margin-top: 15px;">Sair / Bloquear Área</button>
     </div>
 
     <div class="container" id="painel-monstros">
