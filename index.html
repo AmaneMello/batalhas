@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel inicial</title>
+    <title>Painel de Batalha e Criador de Fichas Avançado</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
     <style>
@@ -104,330 +104,21 @@
             box-sizing: border-box;
             font-size: 0.85rem;
         }
-        .descricao-div {
-            width: 100%;
-            min-height: 60px;
-            padding: 6px;
-            background: #2c2c2c;
-            color: white;
-            border: 1px solid #555;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 0.85rem;
-            outline: none;
-            word-break: break-word;
-            white-space: pre-wrap;
-        }
-        .descricao-div:empty:before {
-            content: attr(data-placeholder);
-            color: #888;
-        }
-        .form-row {
-            display: flex;
-            gap: 8px;
-        }
-        .header-profile {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .avatar-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .avatar-box {
-            width: 70px;
-            height: 70px;
-            border: 2px dashed #555;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background: #2c2c2c;
-            cursor: pointer;
-            position: relative;
-        }
-        .avatar-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .avatar-box span {
-            font-size: 0.65rem;
-            color: #888;
-            text-align: center;
-            padding: 2px;
-        }
-        .avatar-input {
-            display: none;
-        }
-        .section-title {
-            font-size: 0.9rem;
-            color: #ff5252;
-            border-bottom: 1px dashed #555;
-            margin: 10px 0 6px 0;
-            padding-bottom: 2px;
-            font-weight: bold;
-        }
-        .counter-badge {
-            font-size: 0.75rem;
-            color: #ffeb3b;
-            float: right;
-        }
-        .conditions-box {
-            background: #151515;
-            border: 1px solid #444;
-            padding: 8px;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .conditions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4px;
-        }
-        .condition-checkbox {
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            color: #ffab91;
-        }
-        .attributes-grid {
-            display: flex;
-            gap: 6px;
-            justify-content: space-between;
-        }
-        .attr-card {
-            background: #252525;
-            border: 1px solid #444;
-            border-radius: 4px;
-            padding: 5px;
-            text-align: center;
-            flex: 1;
-        }
-        .attr-card label {
-            font-size: 0.75rem;
-            color: #ff8a80;
-            margin-bottom: 2px;
-        }
-        .attr-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-        }
-        .attr-input {
-            width: 32px !important;
-            text-align: center;
-            padding: 2px !important;
-            height: 22px;
-            font-size: 0.75rem !important;
-        }
-        .roll-btn {
-            background: #b71c1c;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            width: 20px;
-            height: 22px;
-            cursor: pointer;
-            font-size: 0.65rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .roll-btn:hover {
-            background: #d32f2f;
-        }
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            max-height: 160px;
-            overflow-y: auto;
-            background: #151515;
-            padding: 6px;
-            border-radius: 4px;
-            border: 1px solid #333;
-        }
-        .skill-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.75rem;
-            background: #222;
-            padding: 3px 6px;
-            border-radius: 3px;
-        }
-        .skill-controls {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-        .skill-item input {
-            width: 35px;
-            text-align: center;
-            padding: 2px;
-            height: 22px;
-            font-size: 0.75rem;
-        }
-        .calculated-box {
-            background: #252525;
-            padding: 6px;
-            text-align: center;
-            border-radius: 4px;
-            border: 1px solid #444;
-            font-weight: bold;
-            color: #81c784;
-            font-size: 0.85rem;
-        }
-        .inventory-container {
-            background: #151515;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #333;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-        .inventory-slot {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 5px;
-            align-items: center;
-        }
-        .inventory-slot input[type="text"] {
-            flex: 3;
-        }
-        .inventory-slot input[type="number"] {
-            flex: 1;
-            text-align: center;
-        }
-        .card-lizard { border-color: #4caf50; }
-        .card-lizard h2 { color: #81c784; border-bottom-color: #4caf50; }
-        .card-bovine { border-color: #795548; }
-        .card-bovine h2 { color: #a1887f; border-bottom-color: #795548; }
-        .card-spider { border-color: #9c27b0; }
-        .card-spider h2 { color: #ba68c8; border-bottom-color: #9c27b0; }
-        .card-wyvern { border-color: #ff9800; }
-        .card-wyvern h2 { color: #ffb74d; border-bottom-color: #ff9800; }
-        .card-ant { border-color: #607d8b; }
-        .card-ant h2 { color: #90a4ae; border-bottom-color: #607d8b; }
-        .card-armored { border-color: #00bcd4; }
-        .card-armored h2 { color: #4dd0e1; border-bottom-color: #00bcd4; }
-        .card-fungal { border-color: #8bc34a; }
-        .card-fungal h2 { color: #aed581; border-bottom-color: #8bc34a; }
-        .card-wolf { border-color: #e91e63; }
-        .card-wolf h2 { color: #f06292; border-bottom-color: #e91e63; }
-        .card-mole { border-color: #8d6e63; }
-        .card-mole h2 { color: #d7ccc8; border-bottom-color: #8d6e63; }
-        .card-plant { border-color: #2e7d32; }
-        .card-plant h2 { color: #81c784; border-bottom-color: #2e7d32; }
-        .card-paraves { border-color: #009688; }
-        .card-paraves h2 { color: #4db6ac; border-bottom-color: #009688; }
-        .card-caudata { border-color: #673ab7; }
-        .card-caudata h2 { color: #9575cd; border-bottom-color: #673ab7; }
-        h2 { 
-            margin-top: 0; 
-            border-bottom: 1px solid; 
-            padding-bottom: 8px; 
-            font-size: 1.1rem;
-        }
-        .card-select {
-            width: 100%;
-            padding: 6px;
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 4px;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin: 8px 0;
-            font-size: 0.85rem;
-        }
-        .stat-box {
-            background: #2c2c2c;
-            padding: 6px;
-            text-align: center;
-            border-radius: 4px;
-        }
-        p { font-size: 0.8rem; margin: 5px 0; }
-        button.action-btn, .save-btn {
-            color: white;
-            border: none;
-            padding: 8px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 8px;
-            width: 100%;
-            font-weight: bold;
-            font-size: 0.85rem;
-            background-color: #b71c1c;
-        }
-        .save-btn { background-color: #2e7d32; }
-        .save-btn:hover { background-color: #388e3c; }
-        .link-btn { background-color: #1976d2; }
-        .link-btn:hover { background-color: #115293; }
-        .result {
-            margin-top: 2px;
-            margin-bottom: 6px;
-            font-style: italic;
-            text-align: center;
-            font-size: 0.75rem;
-        }
 
-        /* Miterioso */
+        /* Estilos do Painel Investigativo (Sem as linhas/barbantes) */
         .mapa-container {
             position: relative;
             background: #181512;
             border: 3px dashed #3e2723;
             border-radius: 6px;
             padding: 20px;
-            min-height: 620px;
+            min-height: 650px;
             margin-top: 10px;
             box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
         }
-        /* Linhas de barbante cruzando o painel */
-        .mapa-container::before {
-            content: '';
-            position: absolute;
-            top: 40%;
-            left: 5%;
-            width: 90%;
-            height: 2px;
-            background-color: #ff1744;
-            box-shadow: 0 0 4px #ff1744;
-            transform: rotate(10deg);
-            z-index: 1;
-            pointer-events: none;
-        }
-        .mapa-container::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 10%;
-            width: 80%;
-            height: 2px;
-            background-color: #ff1744;
-            box-shadow: 0 0 4px #ff1744;
-            transform: rotate(-15deg);
-            z-index: 1;
-            pointer-events: none;
-        }
         .setor-card {
             position: absolute;
-            width: 250px;
+            width: 230px;
             background: #1f1b18;
             border: 2px solid #ff1744;
             border-radius: 4px;
@@ -441,7 +132,9 @@
         .setor-executivo { top: 15px; left: 15px; }
         .setor-comercial { top: 220px; right: 20px; }
         .setor-residencial { top: 240px; left: 20px; }
-        .setor-ariake { bottom: 15px; left: calc(50% - 125px); }
+        .setor-nao-nomeada-1 { top: 450px; left: 20px; border-color: #777; }
+        .setor-nao-nomeada-2 { top: 450px; right: 20px; border-color: #777; }
+        .setor-ariake { bottom: 15px; left: calc(50% - 115px); }
 
         .setor-card h4 {
             color: #ff8a80;
@@ -450,9 +143,13 @@
             border-bottom: 1px dashed #ff1744;
             padding-bottom: 3px;
         }
+        .setor-nao-nomeada-1 h4, .setor-nao-nomeada-2 h4 {
+            color: #aaa;
+            border-bottom-color: #555;
+        }
         .mapa-img {
             width: 100%;
-            max-height: 90px;
+            max-height: 70px;
             object-fit: cover;
             border-radius: 2px;
             border: 1px solid #555;
@@ -481,45 +178,59 @@
         <button onclick="verificarToken()" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; font-size: 0.85rem;">Entrar</button>
     </div>
 
-    <!-- Conteúdo Secreto com o Painel de Mistério Expandido -->
+    <!-- Conteúdo Secreto com o Painel de Mistério Atualizado -->
     <div id="conteudo-restrito" class="restrito-box" style="display: none; border-color: #ff1744; text-align: left;">
         <h3 style="color: #ff8a80; margin-top: 0; font-size: 1rem; text-align: center;">Painel Investigativo: Setores Urbanos de Tóquio</h3>
-        <p style="font-size: 0.8rem; color: #bbb; text-align: center;">Mapeamento tático contendo bases, distritos residenciais, comerciais e executivos.</p>
+        <p style="font-size: 0.8rem; color: #bbb; text-align: center;">Mapeamento tático contendo bases, distritos e zonas desconhecidas.</p>
         
         <div class="mapa-container">
             <!-- Base Oeste: Tachikawa -->
             <div class="setor-card setor-tachikawa">
                 <h4>Base Oeste: Tachikawa</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:70px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Posto Tático</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Zona militar periférica e armazéns de suprimentos avançados.</p>
+                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Posto Tático</div>
+                <p style="font-size: 0.7rem; color: #ccc;">Zona militar periférica e armazéns.</p>
             </div>
 
             <!-- Área de Prédios Executivos -->
             <div class="setor-card setor-executivo">
                 <h4>Setor Executivo (Corporativo)</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:70px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Aranha-céus</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Torres corporativas de alta segurança, escritórios e helipontos.</p>
+                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Aranha-céus</div>
+                <p style="font-size: 0.7rem; color: #ccc;">Torres de alta segurança e helipontos.</p>
             </div>
 
             <!-- Área Comercial -->
             <div class="setor-card setor-comercial">
                 <h4>Área Comercial (Mercados)</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:70px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Galerias e Lojas</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Ruas movimentadas, lojas de eletrônicos e passagens subterrâneas.</p>
+                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Galerias e Lojas</div>
+                <p style="font-size: 0.7rem; color: #ccc;">Ruas movimentadas e passagens.</p>
             </div>
 
             <!-- Área Residencial -->
             <div class="setor-card setor-residencial">
                 <h4>Área Residencial (Bairro)</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:70px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Casas e Prédios</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Blocos de apartamentos compactos, becos estreitos e garagens.</p>
+                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Casas e Prédios</div>
+                <p style="font-size: 0.7rem; color: #ccc;">Blocos compactos e becos.</p>
+            </div>
+
+            <!-- Área Não Nomeada 1 -->
+            <div class="setor-card setor-nao-nomeada-1">
+                <h4>[ Área Desconhecida ]</h4>
+                <div class="mapa-img" style="background:#222; height:60px; display:flex; align-items:center; justify-content:center; color:#666; font-size:0.7rem;">Sem Registro</div>
+                <p style="font-size: 0.7rem; color: #999;">Zona inexplorada ou sem informações oficiais.</p>
+            </div>
+
+            <!-- Área Não Nomeada 2 -->
+            <div class="setor-card setor-nao-nomeada-2">
+                <h4>[ Setor Oculto ]</h4>
+                <div class="mapa-img" style="background:#222; height:60px; display:flex; align-items:center; justify-content:center; color:#666; font-size:0.7rem;">Sem Registro</div>
+                <p style="font-size: 0.7rem; color: #999;">Perímetro sob investigação sigilosa.</p>
             </div>
             
             <!-- Base Leste: Ariake -->
             <div class="setor-card setor-ariake">
                 <h4>Base Leste: Ariake / Baía</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:70px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Enclave Portuário</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Área portuária, docas e rotas de fuga fluviais pesadas.</p>
+                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Enclave Portuário</div>
+                <p style="font-size: 0.7rem; color: #ccc;">Área portuária e docas.</p>
             </div>
         </div>
 
@@ -534,7 +245,6 @@
                 <label>Nome do Player:</label>
                 <input type="text" id="sheet-player" placeholder="Ex: Amane" oninput="salvarProgressoLocalmente()">
             </div>
-            <!-- Restante da ficha permanece funcional -->
         </div>
     </div>
 
