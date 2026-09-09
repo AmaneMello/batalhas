@@ -6,38 +6,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
     <style>
-        // Defina o token secreto aqui
-const TOKEN_MESTRE = "82124"; 
-
-function verificarToken() {
-    let digitado = document.getElementById('input-token-secreto').value;
-    
-    if (digitado === TOKEN_MESTRE) {
-        localStorage.setItem('token_autorizado', 'true');
-        liberarAcessoRestrito();
-    } else {
-        alert("Token incorreto! Tente novamente.");
-    }
-}
-
-function liberarAcessoRestrito() {
-    document.getElementById('painel-login-token').style.display = 'none';
-    document.getElementById('conteudo-restrito').style.display = 'block';
-}
-
-function sairDaAreaRestrita() {
-    localStorage.removeItem('token_autorizado');
-    document.getElementById('input-token-secreto').value = '';
-    document.getElementById('conteudo-restrito').style.display = 'none';
-    document.getElementById('painel-login-token').style.display = 'block';
-}
-
-// Verifica automaticamente ao carregar a página se já estava logado
-window.addEventListener('load', function() {
-    if (localStorage.getItem('token_autorizado') === 'true') {
-        liberarAcessoRestrito();
-    }
-});
 
         body {
             background-color: #121212;
