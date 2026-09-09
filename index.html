@@ -6,7 +6,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
     <style>
-
         body {
             background-color: #121212;
             color: #e0e0e0;
@@ -28,7 +27,7 @@
             width: 100%;
             max-width: 600px;
         }
-        .selector-box {
+        .selector-box, .restrito-box {
             background-color: #1e1e1e;
             border: 2px solid #ff5252;
             border-radius: 8px;
@@ -39,13 +38,16 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             text-align: center;
         }
+        .restrito-box {
+            border-color: #4caf50;
+        }
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
             font-size: 0.95rem;
         }
-        select {
+        select, input[type="password"] {
             width: 100%;
             padding: 8px;
             background: #2c2c2c;
@@ -54,6 +56,7 @@
             border-radius: 4px;
             margin-bottom: 5px;
             font-size: 0.95rem;
+            box-sizing: border-box;
         }
         .container {
             display: flex;
@@ -400,12 +403,27 @@
 
     <h1>Painel de Batalha</h1>
 
+    <!-- Seletor Global de Fichas -->
     <div class="selector-box">
         <label for="seletor-global">Escolha uma opção:</label>
         <select id="seletor-global" onchange="mostrarSelecao()">
             <option value="">-- Selecione na lista --</option>
             <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha</option>
         </select>
+    </div>
+
+    <!-- Área Restrita do Mestre (Token: 82124) logo abaixo da seleção -->
+    <div id="painel-login-token" class="restrito-box">
+        <h3 style="color: #4caf50; margin-top: 0; font-size: 1rem;">Área Restrita do Mestre</h3>
+        <p style="font-size: 0.8rem; color: #ccc;">Insira o token para acessar:</p>
+        <input type="password" id="input-token-secreto" placeholder="Digite o token...">
+        <button onclick="verificarToken()" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; font-size: 0.85rem;">Entrar</button>
+    </div>
+
+    <div id="conteudo-restrito" class="restrito-box" style="display: none; border-color: #4caf50; text-align: left;">
+        <h3 style="color: #81c784; margin-top: 0; font-size: 1rem; text-align: center;">Painel Secreto</h3>
+        <p style="font-size: 0.8rem;">Bem-vindo à área do Mestre! Notas de campanha e monstros ocultos ficam aqui.</p>
+        <button onclick="sairDaAreaRestrita()" style="background-color: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; width: 100%; margin-top: 5px;">Sair / Bloquear</button>
     </div>
 
     <div class="container" id="painel-monstros">
@@ -415,7 +433,7 @@
             
             <div class="form-group">
                 <label>Nome do Player:</label>
-                <input type="text" id="sheet-player" placeholder="Ex: Amane gostosão" oninput="salvarProgressoLocalmente()">
+                <input type="text" id="sheet-player" placeholder="Ex: Amane" oninput="salvarProgressoLocalmente()">
             </div>
 
             <div class="header-profile">
@@ -429,7 +447,7 @@
                 <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
                     <div class="form-group" style="margin-bottom: 0;">
                         <label>Nome do Personagem:</label>
-                        <input type="text" id="sheet-nome" placeholder="Ex: Hoshina delícia" oninput="salvarProgressoLocalmente()">
+                        <input type="text" id="sheet-nome" placeholder="Ex: Hoshina" oninput="salvarProgressoLocalmente()">
                     </div>
                     <div class="form-row">
                         <div class="form-group" style="margin-bottom: 0; flex: 1;">
@@ -597,6 +615,36 @@
     </div>
 
     <script>
+        const TOKEN_MESTRE = "82124";
+
+        function verificarToken() {
+            let digitado = document.getElementById('input-token-secreto').value;
+            if (digitado === TOKEN_MESTRE) {
+                localStorage.setItem('token_autorizado', 'true');
+                liberarAcessoRestrito();
+            } else {
+                alert("Token incorreto! Tente novamente.");
+            }
+        }
+
+        function liberarAcessoRestrito() {
+            document.getElementById('painel-login-token').style.display = 'none';
+            document.getElementById('conteudo-restrito').style.display = 'block';
+        }
+
+        function sairDaAreaRestrita() {
+            localStorage.removeItem('token_autorizado');
+            document.getElementById('input-token-secreto').value = '';
+            document.getElementById('conteudo-restrito').style.display = 'none';
+            document.getElementById('painel-login-token').style.display = 'block';
+        }
+
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('token_autorizado') === 'true') {
+                liberarAcessoRestrito();
+            }
+        });
+
         const listaNomesPericias = [
             "Acrobacia", "Adestramento", "Artes", "Atletismo", "Atualidades", 
             "Ciências", "Crime", "Diplomacia", "Enganação", "Fortitude", 
@@ -1009,34 +1057,19 @@
             }
         }
 
-        async function copiarLinkFicha() {
-    let dados = extrairDadosFicha();
-    let jsonString = JSON.stringify(dados);
-    
-    // Compacta os dados localmente
-    let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
-    let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
-    
-    try {
-        // Usa uma API pública gratuita para encurtar o link gerado
-        let resposta = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(urlCompleta)}`);
-        let linkCurto = await resposta.text();
-        
-        if (linkCurto.startsWith('http')) {
-            navigator.clipboard.writeText(linkCurto).then(() => {
-                alert("Link curto gerado e copiado com sucesso! (" + linkCurto + ")");
+        function copiarLinkFicha() {
+            let dados = extrairDadosFicha();
+            let jsonString = JSON.stringify(dados);
+            
+            let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
+            let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
+            
+            navigator.clipboard.writeText(urlCompleta).then(() => {
+                alert("Link gerado e copiado com sucesso!");
+            }).catch(err => {
+                prompt("Copie o link:", urlCompleta);
             });
-        } else {
-            throw new Error("Erro ao encurtar");
         }
-    } catch (err) {
-        // Fallback caso a API falhe: copia o link compactado normal
-        navigator.clipboard.writeText(urlCompleta).then(() => {
-            alert("Link gerado e copiado (formato longo devido à rede).");
-        });
-    }
-}
-
 
         function reiniciarFicha() {
             if (confirm("Tem certeza que deseja zerar a ficha para criar um novo personagem?")) {
