@@ -40,7 +40,6 @@
         }
         .restrito-box {
             border-color: #4caf50;
-            max-width: 850px;
         }
         label {
             display: block;
@@ -104,56 +103,299 @@
             box-sizing: border-box;
             font-size: 0.85rem;
         }
-
-        /* Estilos do Painel Investigativo (Sem as linhas/barbantes) */
-        .mapa-container {
-            position: relative;
-            background: #181512;
-            border: 3px dashed #3e2723;
-            border-radius: 6px;
-            padding: 20px;
-            min-height: 650px;
-            margin-top: 10px;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
-        }
-        .setor-card {
-            position: absolute;
-            width: 230px;
-            background: #1f1b18;
-            border: 2px solid #ff1744;
-            border-radius: 4px;
-            padding: 8px;
-            text-align: left;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.7);
-            z-index: 2;
-        }
-        /* Posicionamento dos setores no mapa tático */
-        .setor-tachikawa { top: 15px; right: 15px; }
-        .setor-executivo { top: 15px; left: 15px; }
-        .setor-comercial { top: 220px; right: 20px; }
-        .setor-residencial { top: 240px; left: 20px; }
-        .setor-nao-nomeada-1 { top: 450px; left: 20px; border-color: #777; }
-        .setor-nao-nomeada-2 { top: 450px; right: 20px; border-color: #777; }
-        .setor-ariake { bottom: 15px; left: calc(50% - 115px); }
-
-        .setor-card h4 {
-            color: #ff8a80;
-            margin: 0 0 6px 0;
-            font-size: 0.85rem;
-            border-bottom: 1px dashed #ff1744;
-            padding-bottom: 3px;
-        }
-        .setor-nao-nomeada-1 h4, .setor-nao-nomeada-2 h4 {
-            color: #aaa;
-            border-bottom-color: #555;
-        }
-        .mapa-img {
+        .descricao-div {
             width: 100%;
-            max-height: 70px;
-            object-fit: cover;
-            border-radius: 2px;
+            min-height: 60px;
+            padding: 6px;
+            background: #2c2c2c;
+            color: white;
             border: 1px solid #555;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 0.85rem;
+            outline: none;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+        .descricao-div:empty:before {
+            content: attr(data-placeholder);
+            color: #888;
+        }
+        .form-row {
+            display: flex;
+            gap: 8px;
+        }
+        .header-profile {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .avatar-box {
+            width: 70px;
+            height: 70px;
+            border: 2px dashed #555;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #2c2c2c;
+            cursor: pointer;
+            position: relative;
+        }
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .avatar-box span {
+            font-size: 0.65rem;
+            color: #888;
+            text-align: center;
+            padding: 2px;
+        }
+        .avatar-input {
+            display: none;
+        }
+        .section-title {
+            font-size: 0.9rem;
+            color: #ff5252;
+            border-bottom: 1px dashed #555;
+            margin: 10px 0 6px 0;
+            padding-bottom: 2px;
+            font-weight: bold;
+        }
+        .counter-badge {
+            font-size: 0.75rem;
+            color: #ffeb3b;
+            float: right;
+        }
+        .conditions-box {
+            background: #151515;
+            border: 1px solid #444;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .conditions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+        .condition-checkbox {
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            color: #ffab91;
+        }
+        .attributes-grid {
+            display: flex;
+            gap: 6px;
+            justify-content: space-between;
+        }
+        .attr-card {
+            background: #252525;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 5px;
+            text-align: center;
+            flex: 1;
+        }
+        .attr-card label {
+            font-size: 0.75rem;
+            color: #ff8a80;
+            margin-bottom: 2px;
+        }
+        .attr-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+        .attr-input {
+            width: 32px !important;
+            text-align: center;
+            padding: 2px !important;
+            height: 22px;
+            font-size: 0.75rem !important;
+        }
+        .roll-btn {
+            background: #b71c1c;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            width: 20px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .roll-btn:hover {
+            background: #d32f2f;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            max-height: 160px;
+            overflow-y: auto;
+            background: #151515;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            background: #222;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }
+        .skill-controls {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .skill-item input {
+            width: 35px;
+            text-align: center;
+            padding: 2px;
+            height: 22px;
+            font-size: 0.75rem;
+        }
+        .calculated-box {
+            background: #252525;
+            padding: 6px;
+            text-align: center;
+            border-radius: 4px;
+            border: 1px solid #444;
+            font-weight: bold;
+            color: #81c784;
+            font-size: 0.85rem;
+        }
+        .inventory-container {
+            background: #151515;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #333;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .inventory-slot {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+            align-items: center;
+        }
+        .inventory-slot input[type="text"] {
+            flex: 3;
+        }
+        .inventory-slot input[type="number"] {
+            flex: 1;
+            text-align: center;
+        }
+        .card-lizard { border-color: #4caf50; }
+        .card-lizard h2 { color: #81c784; border-bottom-color: #4caf50; }
+        .card-lizard select, .card-lizard button { background-color: #388e3c; }
+        .card-bovine { border-color: #795548; }
+        .card-bovine h2 { color: #a1887f; border-bottom-color: #795548; }
+        .card-bovine select, .card-bovine button { background-color: #5d4037; }
+        .card-spider { border-color: #9c27b0; }
+        .card-spider h2 { color: #ba68c8; border-bottom-color: #9c27b0; }
+        .card-spider select, .card-spider button { background-color: #7b1fa2; }
+        .card-wyvern { border-color: #ff9800; }
+        .card-wyvern h2 { color: #ffb74d; border-bottom-color: #ff9800; }
+        .card-wyvern select, .card-wyvern button { background-color: #f57c00; }
+        .card-ant { border-color: #607d8b; }
+        .card-ant h2 { color: #90a4ae; border-bottom-color: #607d8b; }
+        .card-ant select, .card-ant button { background-color: #455a64; }
+        .card-armored { border-color: #00bcd4; }
+        .card-armored h2 { color: #4dd0e1; border-bottom-color: #00bcd4; }
+        .card-armored select, .card-armored button { background-color: #0097a7; }
+        .card-fungal { border-color: #8bc34a; }
+        .card-fungal h2 { color: #aed581; border-bottom-color: #8bc34a; }
+        .card-fungal select, .card-fungal button { background-color: #689f38; }
+        .card-wolf { border-color: #e91e63; }
+        .card-wolf h2 { color: #f06292; border-bottom-color: #e91e63; }
+        .card-wolf select, .card-wolf button { background-color: #c2185b; }
+        .card-mole { border-color: #8d6e63; }
+        .card-mole h2 { color: #d7ccc8; border-bottom-color: #8d6e63; }
+        .card-mole select, .card-mole button { background-color: #4e342e; }
+        .card-plant { border-color: #2e7d32; }
+        .card-plant h2 { color: #81c784; border-bottom-color: #2e7d32; }
+        .card-plant select, .card-plant button { background-color: #1b5e20; }
+        .card-paraves { border-color: #009688; }
+        .card-paraves h2 { color: #4db6ac; border-bottom-color: #009688; }
+        .card-paraves select, .card-paraves button { background-color: #00796b; }
+        .card-caudata { border-color: #673ab7; }
+        .card-caudata h2 { color: #9575cd; border-bottom-color: #673ab7; }
+        .card-caudata select, .card-caudata button { background-color: #512da8; }
+        h2 { 
+            margin-top: 0; 
+            border-bottom: 1px solid; 
+            padding-bottom: 8px; 
+            font-size: 1.1rem;
+        }
+        .card-select {
+            width: 100%;
+            padding: 6px;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 8px 0;
+            font-size: 0.85rem;
+        }
+        .stat-box {
+            background: #2c2c2c;
+            padding: 6px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        p { font-size: 0.8rem; margin: 5px 0; }
+        button.action-btn, .save-btn {
+            color: white;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+            width: 100%;
+            font-weight: bold;
+            font-size: 0.85rem;
+            background-color: #b71c1c;
+        }
+        .save-btn { background-color: #2e7d32; }
+        .save-btn:hover { background-color: #388e3c; }
+        .link-btn { background-color: #1976d2; }
+        .link-btn:hover { background-color: #115293; }
+        .result {
+            margin-top: 2px;
             margin-bottom: 6px;
+            font-style: italic;
+            text-align: center;
+            font-size: 0.75rem;
         }
     </style>
 </head>
@@ -170,7 +412,7 @@
         </select>
     </div>
 
-    <!-- Área Restrita do Mestre (Token: 82124) -->
+    <!-- Área Restrita do Mestre (Token: 82124) logo abaixo da seleção -->
     <div id="painel-login-token" class="restrito-box">
         <h3 style="color: #4caf50; margin-top: 0; font-size: 1rem;">Área Restrita do Mestre</h3>
         <p style="font-size: 0.8rem; color: #ccc;">Insira o token para acessar:</p>
@@ -178,74 +420,198 @@
         <button onclick="verificarToken()" style="background-color: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; font-size: 0.85rem;">Entrar</button>
     </div>
 
-    <!-- Conteúdo Secreto com o Painel de Mistério Atualizado -->
-    <div id="conteudo-restrito" class="restrito-box" style="display: none; border-color: #ff1744; text-align: left;">
-        <h3 style="color: #ff8a80; margin-top: 0; font-size: 1rem; text-align: center;">Painel Investigativo: Setores Urbanos de Tóquio</h3>
-        <p style="font-size: 0.8rem; color: #bbb; text-align: center;">Mapeamento tático contendo bases, distritos e zonas desconhecidas.</p>
-        
-        <div class="mapa-container">
-            <!-- Base Oeste: Tachikawa -->
-            <div class="setor-card setor-tachikawa">
-                <h4>Base Oeste: Tachikawa</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Posto Tático</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Zona militar periférica e armazéns.</p>
-            </div>
-
-            <!-- Área de Prédios Executivos -->
-            <div class="setor-card setor-executivo">
-                <h4>Setor Executivo (Corporativo)</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Aranha-céus</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Torres de alta segurança e helipontos.</p>
-            </div>
-
-            <!-- Área Comercial -->
-            <div class="setor-card setor-comercial">
-                <h4>Área Comercial (Mercados)</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Galerias e Lojas</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Ruas movimentadas e passagens.</p>
-            </div>
-
-            <!-- Área Residencial -->
-            <div class="setor-card setor-residencial">
-                <h4>Área Residencial (Bairro)</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Casas e Prédios</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Blocos compactos e becos.</p>
-            </div>
-
-            <!-- Área Não Nomeada 1 -->
-            <div class="setor-card setor-nao-nomeada-1">
-                <h4>[ Área Desconhecida ]</h4>
-                <div class="mapa-img" style="background:#222; height:60px; display:flex; align-items:center; justify-content:center; color:#666; font-size:0.7rem;">Sem Registro</div>
-                <p style="font-size: 0.7rem; color: #999;">Zona inexplorada ou sem informações oficiais.</p>
-            </div>
-
-            <!-- Área Não Nomeada 2 -->
-            <div class="setor-card setor-nao-nomeada-2">
-                <h4>[ Setor Oculto ]</h4>
-                <div class="mapa-img" style="background:#222; height:60px; display:flex; align-items:center; justify-content:center; color:#666; font-size:0.7rem;">Sem Registro</div>
-                <p style="font-size: 0.7rem; color: #999;">Perímetro sob investigação sigilosa.</p>
-            </div>
-            
-            <!-- Base Leste: Ariake -->
-            <div class="setor-card setor-ariake">
-                <h4>Base Leste: Ariake / Baía</h4>
-                <div class="mapa-img" style="background:#2c2c2c; height:60px; display:flex; align-items:center; justify-content:center; color:#888; font-size:0.7rem;">Enclave Portuário</div>
-                <p style="font-size: 0.7rem; color: #ccc;">Área portuária e docas.</p>
-            </div>
-        </div>
-
-        <button onclick="sairDaAreaRestrita()" style="background-color: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; width: 100%; margin-top: 15px;">Sair / Bloquear Área</button>
+    <div id="conteudo-restrito" class="restrito-box" style="display: none; border-color: #4caf50; text-align: left;">
+        <h3 style="color: #81c784; margin-top: 0; font-size: 1rem; text-align: center;">Painel Secreto</h3>
+        <p style="font-size: 0.8rem;">Bem-vindo à área do Mestre! Notas de campanha e monstros ocultos ficam aqui.</p>
+        <button onclick="sairDaAreaRestrita()" style="background-color: #d32f2f; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; width: 100%; margin-top: 5px;">Sair / Bloquear</button>
     </div>
 
     <div class="container" id="painel-monstros">
-        <!-- Ficha de Personagem padrão -->
+        
         <div class="custom-sheet" id="card-criar_ficha">
             <h2>Ficha de Personagem (Ordem)</h2>
+            
             <div class="form-group">
                 <label>Nome do Player:</label>
                 <input type="text" id="sheet-player" placeholder="Ex: Amane" oninput="salvarProgressoLocalmente()">
             </div>
+
+            <div class="header-profile">
+                <div class="avatar-container">
+                    <div class="avatar-box" onclick="document.getElementById('sheet-foto-input').click()" title="Clique para enviar foto">
+                        <img id="avatar-preview" src="" style="display:none;" alt="Foto">
+                        <span id="avatar-text">Enviar Foto</span>
+                    </div>
+                    <input type="file" id="sheet-foto-input" class="avatar-input" accept="image/*" onchange="carregarFoto(event)">
+                </div>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Nome do Personagem:</label>
+                        <input type="text" id="sheet-nome" placeholder="Ex: Hoshina" oninput="salvarProgressoLocalmente()">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <label>Classe:</label>
+                            <select id="sheet-classe" onchange="atualizarTrilhas(); atualizarDerivados(); salvarProgressoLocalmente();">
+                                <option value="combatente">Combatente</option>
+                                <option value="especialista">Especialista</option>
+                                <option value="ocultista">Ocultista</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <label>Trilha:</label>
+                            <select id="sheet-trilha" onchange="salvarProgressoLocalmente()">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 4px;">
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <label>Origem:</label>
+                            <select id="sheet-origem" onchange="verificarOrigemAmnesico(); salvarProgressoLocalmente();">
+                                <option value="nenhuma">Selecione...</option>
+                                <option value="amnesico">Amnésico</option>
+                                <option value="academico">Acadêmico</option>
+                                <option value="agente_saude">Agente de Saúde</option>
+                                <option value="artista">Artista</option>
+                                <option value="atleta">Atleta</option>
+                                <option value="chef">Chef</option>
+                                <option value="cientista">Cientista</option>
+                                <option value="criminoso">Criminoso</option>
+                                <option value="cultista_arrependido">Cultista Arrependido</option>
+                                <option value="curioso">Curioso</option>
+                                <option value="desgarrado">Desgarrado</option>
+                                <option value="engenheiro">Engenheiro</option>
+                                <option value="executivo">Executivo</option>
+                                <option value="investigador">Investigador</option>
+                                <option value="lutador">Lutador</option>
+                                <option value="magico">Mágico</option>
+                                <option value="mercenario">Mercenário</option>
+                                <option value="militar">Militar</option>
+                                <option value="operario">Operário</option>
+                                <option value="policial">Policial</option>
+                                <option value="religioso">Religioso</option>
+                                <option value="servidor_publico">Servidor Público</option>
+                                <option value="teorico_conspiracao">Teórico da Conspiração</option>
+                                <option value="ti">TI</option>
+                                <option value="trabalhador_rural">Trabalhador Rural</option>
+                                <option value="vigarista">Vigarista</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <label>Rolagem:</label>
+                            <select id="sheet-modo-rolagem" onchange="salvarProgressoLocalmente()">
+                                <option value="normal">Normal (1d20)</option>
+                                <option value="vantagem">Vantagem</option>
+                                <option value="desvantagem">Desvantagem</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Descrição / Histórico:</label>
+                <div id="sheet-descricao" class="descricao-div" contenteditable="true" data-placeholder="Escreva a história..." oninput="salvarProgressoLocalmente()"></div>
+            </div>
+
+            <div class="conditions-box">
+                <label style="margin: 0; font-size: 0.8rem; color: #ff5252;">Condições Ativas:</label>
+                <div class="conditions-grid">
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="exausto" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Exausto (-2)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="machucado" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Machucado (-2 Fís)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="atordoado" data-penalidade="5" onchange="salvarProgressoLocalmente()"> Atordoado (-5)</label>
+                    <label class="condition-checkbox"><input type="checkbox" class="cond-check" value="amedrontado" data-penalidade="2" onchange="salvarProgressoLocalmente()"> Amedrontado (-2)</label>
+                </div>
+            </div>
+
+            <div class="section-title">
+                Atributos 
+                <span class="counter-badge">Restantes: <span id="atrib-restantes">10</span>/10</span>
+            </div>
+            <div class="attributes-grid">
+                <div class="attr-card">
+                    <label>AGI</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-agi" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('AGI', 'attr-agi', ['fisico', 'agi'])">🎲</button>
+                    </div>
+                </div>
+                <div class="attr-card">
+                    <label>FOR</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-for" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('FOR', 'attr-for', ['fisico', 'for'])">🎲</button>
+                    </div>
+                </div>
+                <div class="attr-card">
+                    <label>INT</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-int" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('INT', 'attr-int', [])">🎲</button>
+                    </div>
+                </div>
+                <div class="attr-card">
+                    <label>PRE</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-pre" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('PRE', 'attr-pre', [])">🎲</button>
+                    </div>
+                </div>
+                <div class="attr-card">
+                    <label>VIG</label>
+                    <div class="attr-controls">
+                        <input type="number" class="attr-input" id="attr-vig" value="1" min="0" max="5" onchange="verificarAtributos(); salvarProgressoLocalmente();">
+                        <button type="button" class="roll-btn" onclick="rolarAtributo('VIG', 'attr-vig', ['fisico'])">🎲</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">Estatísticas Calculadas</div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label>PV:</label>
+                    <div class="calculated-box" id="calc-pv">20</div>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>SAN:</label>
+                    <div class="calculated-box" id="calc-san">12</div>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>PE:</label>
+                    <div class="calculated-box" id="calc-pe">2</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label>Defesa (CA):</label>
+                    <div class="calculated-box" id="calc-def">10</div>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Esquiva:</label>
+                    <div class="calculated-box" id="calc-esq">10</div>
+                </div>
+            </div>
+
+            <div class="section-title">
+                Inventário 
+                <span class="counter-badge">Peso: <span id="peso-atual">0</span> / <span id="inv-capacidade">5</span></span>
+            </div>
+            <div class="inventory-container" id="inventory-slots-box">
+            </div>
+
+            <div class="section-title" style="margin-top: 10px;">
+                Perícias 
+                <span class="counter-badge">Restantes: <span id="pericia-restantes">20</span>/20</span>
+            </div>
+            <div class="skills-grid" id="skills-container">
+            </div>
+            <div id="res-pericia-global" class="result" style="color: #ff8a80; margin-top: 5px;"></div>
+
+            <button class="action-btn link-btn" onclick="copiarLinkFicha()">Copiar Link da Ficha</button>
+            <button class="action-btn" style="background-color: #d32f2f;" onclick="reiniciarFicha()">Criar Novo Personagem (Zerar)</button>
+            <button class="save-btn" onclick="baixarFichaImagem()">Baixar Imagem</button>
         </div>
+
     </div>
 
     <script>
@@ -257,7 +623,7 @@
                 localStorage.setItem('token_autorizado', 'true');
                 liberarAcessoRestrito();
             } else {
-                alert("Token incorreto!");
+                alert("Token incorreto! Tente novamente.");
             }
         }
 
@@ -279,17 +645,503 @@
             }
         });
 
+        const listaNomesPericias = [
+            "Acrobacia", "Adestramento", "Artes", "Atletismo", "Atualidades", 
+            "Ciências", "Crime", "Diplomacia", "Enganação", "Fortitude", 
+            "Furtividade", "Iniciativa", "Intimidação", "Intuição", "Investigação", 
+            "Luta", "Medicina", "Ocultismo", "Percepção", "Pilotagem", 
+            "Pontaria", "Profissão", "Reflexos", "Religião", "Sobrevivência", 
+            "Tática", "Vontade"
+        ];
+
+        const monstrosLista = [
+            { id: "lizard_a", nome: "Lizard (Tipo A)", base: "lizard", hp: 30, caVal: 6, visaoVal: 12, dif: "A para B: +5hp / 2d12 visão" },
+            { id: "lizard_b", nome: "Lizard (Tipo B)", base: "lizard", hp: 35, caVal: 6, visaoVal: "2d12", dif: "A para B: +5hp / 2d12 visão" },
+            { id: "bovine_a", nome: "Bovine (Tipo A)", base: "bovine", hp: 22, caVal: 12, visaoVal: 20, dif: "A para B: -3hp / -2 ca" },
+            { id: "bovine_b", nome: "Bovine (Tipo B)", base: "bovine", hp: 19, caVal: 10, visaoVal: 20, dif: "A para B: -3hp / -2 ca" },
+            { id: "spider_a", nome: "Spider (Tipo A)", base: "spider", hp: 35, caVal: 10, visaoVal: 6, dif: "A para B: -5hp / +3 ca" },
+            { id: "spider_b", nome: "Spider (Tipo B)", base: "spider", hp: 30, caVal: 13, visaoVal: 6, dif: "A para B: -5hp / +3 ca" },
+            { id: "wyvern_a", nome: "Wyvern (Tipo A)", base: "wyvern", hp: 15, caVal: 12, visaoVal: 20, dif: "A para B: -2hp / +2 ca" },
+            { id: "wyvern_b", nome: "Wyvern (Tipo B)", base: "wyvern", hp: 13, caVal: 14, visaoVal: 20, dif: "A para B: -2hp / +2 ca" },
+            { id: "ant_a", nome: "Ant (Tipo A)", base: "ant", hp: 22, caVal: 6, visaoVal: 6, dif: "A para B: -1hp / 2d6 visão" },
+            { id: "ant_b", nome: "Ant (Tipo B)", base: "ant", hp: 21, caVal: 6, visaoVal: "2d6", dif: "A para B: -1hp / 2d6 visão" },
+            { id: "armored_a", nome: "Armored (Tipo A)", base: "armored", hp: 40, caVal: 10, visaoVal: 20, dif: "n tem B" },
+            { id: "fungal_a", nome: "Fungal (Tipo A)", base: "fungal", hp: 30, caVal: 6, visaoVal: 10, dif: "A para B: +2hp / 3d10 visão" },
+            { id: "fungal_b", nome: "Fungal (Tipo B)", base: "fungal", hp: 32, caVal: 6, visaoVal: "3d10", dif: "A para B: +2hp / 3d10 visão" },
+            { id: "wolf_a", nome: "Wolf (Tipo A)", base: "wolf", hp: 25, caVal: 6, visaoVal: 6, dif: "n tem B" },
+            { id: "mole_a", nome: "Mole (Tipo A)", base: "mole", hp: 22, caVal: 12, visaoVal: 20, dif: "n tem B" },
+            { id: "plant_a", nome: "Plant (Tipo A)", base: "plant", hp: 15, caVal: 10, visaoVal: 10, dif: "n tem B" },
+            { id: "paraves_a", nome: "Paraves (Tipo A)", base: "paraves", hp: 18, caVal: 12, visaoVal: 12, dif: "n tem B" },
+            { id: "caudata_a", nome: "Caudata (Tipo A)", base: "caudata", hp: 40, caVal: 10, visaoVal: 6, dif: "A para B: -3hp / +5 ca" },
+            { id: "caudata_b", nome: "Caudata (Tipo B)", base: "caudata", hp: 37, caVal: 15, visaoVal: 6, dif: "A para B: -3hp / +5 ca" }
+        ];
+
+        function montarPagina() {
+            let seletorGlobal = document.getElementById('seletor-global');
+            let container = document.getElementById('painel-monstros');
+            let optionsHtml = `
+                <option value="">-- Selecione na lista --</option>
+                <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
+            `;
+            let cardsHtml = document.getElementById('card-criar_ficha').outerHTML;
+
+            monstrosLista.forEach(m => {
+                optionsHtml += `<option value="${m.id}">${m.nome}</option>`;
+                cardsHtml += criarCardHtml(m);
+            });
+
+            seletorGlobal.innerHTML = optionsHtml;
+            container.innerHTML = cardsHtml;
+            
+            atualizarTrilhas();
+            inicializarPericias();
+            atualizarDerivados();
+            
+            if (!carregarDadosDaUrl()) {
+                carregarProgressoLocalmente();
+            }
+        }
+
+        function atualizarTrilhas() {
+            let classe = document.getElementById('sheet-classe').value;
+            let selectTrilha = document.getElementById('sheet-trilha');
+            let trilhasMap = {
+                combatente: ['Aniquilador', 'Assassino', 'Comando', 'Guerreiro', 'Tropa de Choque'],
+                especialista: ['Atirador de Elite', 'Infiltrador', 'Médico de Campo', 'Negociador', 'Technomancer'],
+                ocultista: ['Conduíte', 'Flagelador', 'Graduado', 'Lâmina Paranormal', 'Intuitivo']
+            };
+            let lista = trilhasMap[classe] || [];
+            let html = '';
+            lista.forEach(t => {
+                html += `<option value="${t.toLowerCase()}">${t}</option>`;
+            });
+            selectTrilha.innerHTML = html;
+        }
+
+        function carregarFoto(event) {
+            let arquivo = event.target.files[0];
+            if (arquivo) {
+                let leitor = new FileReader();
+                leitor.onload = function(e) {
+                    let img = document.getElementById('avatar-preview');
+                    let txt = document.getElementById('avatar-text');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    txt.style.display = 'none';
+                    salvarProgressoLocalmente();
+                }
+                leitor.readAsDataURL(arquivo);
+            }
+        }
+
+        function inicializarPericias() {
+            let grid = document.getElementById('skills-container');
+            let html = "";
+            listaNomesPericias.forEach(nome => {
+                html += `
+                    <div class="skill-item" data-skill="${nome}">
+                        <span>${nome}</span>
+                        <div class="skill-controls">
+                            <input type="number" class="skill-input" value="0" min="0" max="15" onchange="verificarPericias(); salvarProgressoLocalmente();">
+                            <button type="button" class="roll-btn" onclick="rolarPericia(this, '${nome}')">🎲</button>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
+        function criarCardHtml(m) {
+            return `
+                <div class="monster-card card-${m.base}" id="card-${m.id}" style="display:none;">
+                    <h2>${m.nome}</h2>
+                    <select class="card-select" id="var-${m.id}" onchange="atualizarCard('${m.id}')">
+                        <option value="yoju">Yoju (Pequeno)</option>
+                        <option value="honju">Honju (Grande)</option>
+                    </select>
+                    <div class="stats">
+                        <div class="stat-box">HP: <span id="hp-${m.id}">--</span></div>
+                        <div class="stat-box">CA: <span id="ca-${m.id}">--</span></div>
+                    </div>
+                    <p><strong>Ataque:</strong> <span id="info-ataque-${m.id}">1d20 + 3</span></p>
+                    <p><strong>Visão:</strong> <span id="info-visao-${m.id}">--</span></p>
+                    <p style="font-size:0.75rem; color:#888;">${m.dif}</p>
+                    <button class="action-btn" onclick="rolar('${m.id}', 'ataque')">Rolar Ataque</button>
+                    <div id="res-${m.id}-ataque" class="result"></div>
+                    <button class="action-btn" onclick="rolar('${m.id}', 'dano')">Rolar Dano</button>
+                    <div id="res-${m.id}-dano" class="result"></div>
+                    <button class="action-btn" onclick="rolar('${m.id}', 'visao')">Rolar Visão</button>
+                    <div id="res-${m.id}-visao" class="result"></div>
+                </div>
+            `;
+        }
+
         function mostrarSelecao() {
             let escolhido = document.getElementById('seletor-global').value;
             let elements = document.querySelectorAll('.monster-card, .custom-sheet');
             elements.forEach(el => el.style.display = 'none');
             if (escolhido) {
                 let alvo = document.getElementById(`card-${escolhido}`);
-                if (alvo) alvo.style.display = 'block';
+                if (alvo) {
+                    alvo.style.display = 'block';
+                    if (escolhido !== 'criar_ficha') atualizarCard(escolhido);
+                }
             }
         }
 
-        function salvarProgressoLocalmente() {}
+        function verificarAtributos() {
+            let inputs = document.querySelectorAll('.attr-input');
+            let soma = 0;
+            inputs.forEach(inp => soma += parseInt(inp.value) || 0);
+            let restantes = 10 - soma;
+            document.getElementById('atrib-restantes').innerText = restantes;
+            if (restantes < 0) {
+                alert("Passou do limite de 10 pontos!");
+                event.target.value = parseInt(event.target.value) + restantes;
+                verificarAtributos();
+                return;
+            }
+            atualizarDerivados();
+        }
+
+        function verificarOrigemAmnesico() {
+            let origem = document.getElementById('sheet-origem').value;
+            if (origem === 'amnesico') {
+                let atributosIds = ['attr-agi', 'attr-for', 'attr-int', 'attr-pre', 'attr-vig'];
+                atributosIds.forEach(id => document.getElementById(id).value = 1);
+                let pontosRestantes = 5; 
+                while (pontosRestantes > 0) {
+                    let sorteio = atributosIds[Math.floor(Math.random() * atributosIds.length)];
+                    let inputAtual = document.getElementById(sorteio);
+                    let valorAtual = parseInt(inputAtual.value);
+                    if (valorAtual < 5) {
+                        inputAtual.value = valorAtual + 1;
+                        pontosRestantes--;
+                    }
+                }
+                verificarAtributos();
+                document.getElementById('sheet-nome').value = "Desconhecido #404";
+                document.getElementById('sheet-descricao').innerText = "Você acordou sem lembranças...";
+                salvarProgressoLocalmente();
+            }
+        }
+
+        function calcularModificadores(tags = []) {
+            let checkboxes = document.querySelectorAll('.cond-check:checked');
+            let penalidadeTotal = 0;
+            checkboxes.forEach(cb => {
+                let valor = parseInt(cb.getAttribute('data-penalidade')) || 0;
+                if (cb.value === 'machucado' && !tags.includes('fisico')) return;
+                penalidadeTotal += valor;
+            });
+            let pesoAtual = parseFloat(document.getElementById('peso-atual').innerText) || 0;
+            let forcaVal = parseInt(document.getElementById('attr-for').value) || 0;
+            let capacidadeMax = 5 + (forcaVal * 3);
+            let sobrecarregado = pesoAtual >= capacidadeMax;
+            let modoRolagem = document.getElementById('sheet-modo-rolagem').value;
+
+            if (sobrecarregado && (tags.includes('agi') || tags.includes('for'))) {
+                if (modoRolagem === 'normal') modoRolagem = 'desvantagem';
+            }
+            let d1 = Math.floor(Math.random() * 20) + 1;
+            let d2 = Math.floor(Math.random() * 20) + 1;
+            let dadoFinal = d1;
+            let detalhesRolagem = `1d20: ${d1}`;
+            if (modoRolagem === 'vantagem') {
+                dadoFinal = Math.max(d1, d2);
+                detalhesRolagem = `Vantagem [${d1}, ${d2}] -> ${dadoFinal}`;
+            } else if (modoRolagem === 'desvantagem') {
+                dadoFinal = Math.min(d1, d2);
+                detalhesRolagem = `Desvantagem [${d1}, ${d2}] -> ${dadoFinal}`;
+            }
+            return { dadoFinal, detalhesRolagem, penalidadeTotal };
+        }
+
+        function rolarAtributo(nomeAtributo, idInput, tags = []) {
+            let qtdDados = parseInt(document.getElementById(idInput).value) || 0;
+            let displayRes = document.getElementById('res-pericia-global');
+            if (qtdDados <= 0) {
+                displayRes.innerText = `${nomeAtributo}: 0 dados.`;
+                return;
+            }
+            let mod = calcularModificadores(tags);
+            let resultados = [];
+            for (let i = 0; i < qtdDados; i++) resultados.push(Math.floor(Math.random() * 20) + 1);
+            let maiorResultado = Math.max(...resultados);
+            let totalFinal = maiorResultado - mod.penalidadeTotal;
+            displayRes.innerText = `${nomeAtributo}: Total ${totalFinal} (Maior ${maiorResultado} | ${mod.detalhesRolagem})`;
+        }
+
+        function atualizarDerivados() {
+            let agi = parseInt(document.getElementById('attr-agi').value) || 0;
+            let forca = parseInt(document.getElementById('attr-for').value) || 0;
+            let int = parseInt(document.getElementById('attr-int').value) || 0;
+            let pre = parseInt(document.getElementById('attr-pre').value) || 0;
+            let vig = parseInt(document.getElementById('attr-vig').value) || 0;
+            let classe = document.getElementById('sheet-classe').value;
+
+            let basePv = 20, incPv = 4, baseSan = 12, incSan = 3, basePe = 2, incPe = 2;
+            if (classe === 'especialista') { basePv = 16; incPv = 3; baseSan = 16; incSan = 4; basePe = 3; incPe = 3; }
+            else if (classe === 'ocultista') { basePv = 12; incPv = 2; baseSan = 20; incSan = 5; basePe = 4; incPe = 4; }
+
+            document.getElementById('calc-pv').innerText = basePv + (vig * incPv);
+            document.getElementById('calc-san').innerText = baseSan + (pre * incSan);
+            document.getElementById('calc-pe').innerText = basePe + (pre * incPe);
+            document.getElementById('calc-def').innerText = 10 + agi;
+            document.getElementById('calc-esq').innerText = 10 + agi;
+
+            atualizarInventario(forca);
+        }
+
+        function atualizarInventario(forca) {
+            let totalSlots = 5 + (forca * 3);
+            document.getElementById('inv-capacidade').innerText = totalSlots;
+            let box = document.getElementById('inventory-slots-box');
+            
+            let antigosNomes = Array.from(document.querySelectorAll('.inv-nome-input')).map(i => i.value);
+            let antigosPesos = Array.from(document.querySelectorAll('.inv-peso-input')).map(i => i.value);
+
+            let htmlAtual = "";
+            for (let i = 1; i <= totalSlots; i++) {
+                let nVal = antigosNomes[i-1] || "";
+                let pVal = antigosPesos[i-1] || "";
+                htmlAtual += `
+                    <div class="inventory-slot">
+                        <input type="text" class="inv-nome-input" value="${nVal}" placeholder="Item ${i}..." oninput="calcularPesoTotal(); salvarProgressoLocalmente();" />
+                        <input type="number" class="inv-peso-input" value="${pVal}" placeholder="Peso" min="0" max="5" oninput="calcularPesoTotal(); salvarProgressoLocalmente();" />
+                    </div>
+                `;
+            }
+            box.innerHTML = htmlAtual;
+            calcularPesoTotal();
+        }
+
+        function calcularPesoTotal() {
+            let pesoTotal = 0;
+            document.querySelectorAll('.inv-peso-input').forEach(inp => {
+                pesoTotal += parseFloat(inp.value) || 0;
+            });
+            document.getElementById('peso-atual').innerText = pesoTotal;
+        }
+
+        function verificarPericias() {
+            let soma = 0;
+            document.querySelectorAll('.skill-input').forEach(inp => soma += parseInt(inp.value) || 0);
+            let restantes = 20 - soma;
+            document.getElementById('pericia-restantes').innerText = restantes;
+            if (restantes < 0) {
+                alert("Passou do limite de 20 pontos nas perícias!");
+                event.target.value = parseInt(event.target.value) + restantes;
+                verificarPericias();
+                return;
+            }
+            ordenarPericias();
+        }
+
+        function ordenarPericias() {
+            let grid = document.getElementById('skills-container');
+            let itens = Array.from(grid.querySelectorAll('.skill-item'));
+            itens.sort((a, b) => {
+                let vA = parseInt(a.querySelector('.skill-input').value) || 0;
+                let vB = parseInt(b.querySelector('.skill-input').value) || 0;
+                if (vA !== vB) return vB - vA;
+                return a.getAttribute('data-skill').localeCompare(b.getAttribute('data-skill'));
+            });
+            itens.forEach(item => grid.appendChild(item));
+        }
+
+        function rolarPericia(botaoElemento, nomePericia) {
+            let skillItem = botaoElemento.closest('.skill-item');
+            let pontosTreino = parseInt(skillItem.querySelector('.skill-input').value) || 0;
+            let pFisicas = ["Acrobacia", "Atletismo", "Fortitude", "Furtividade", "Iniciativa", "Luta", "Pontaria", "Reflexos", "Sobrevivência"];
+            let tags = pFisicas.includes(nomePericia) ? ['fisico'] : [];
+            let mod = calcularModificadores(tags);
+            let total = mod.dadoFinal + pontosTreino - mod.penalidadeTotal;
+            document.getElementById('res-pericia-global').innerText = `${nomePericia}: Total ${total} (${mod.dadoFinal} + ${pontosTreino} treino | ${mod.detalhesRolagem})`;
+        }
+
+        function extrairDadosFicha() {
+            let inventarioSlots = [];
+            let nomesSlots = document.querySelectorAll('.inv-nome-input');
+            let pesosSlots = document.querySelectorAll('.inv-peso-input');
+            for(let i=0; i<nomesSlots.length; i++) {
+                inventarioSlots.push({ nome: nomesSlots[i].value, peso: pesosSlots[i].value });
+            }
+            let periciasObj = {};
+            document.querySelectorAll('.skill-item').forEach(item => {
+                periciasObj[item.getAttribute('data-skill')] = item.querySelector('.skill-input').value;
+            });
+            let conds = [];
+            document.querySelectorAll('.cond-check').forEach(cb => { if (cb.checked) conds.push(cb.value); });
+
+            return {
+                player: document.getElementById('sheet-player').value,
+                nome: document.getElementById('sheet-nome').value,
+                classe: document.getElementById('sheet-classe').value,
+                trilha: document.getElementById('sheet-trilha').value,
+                origem: document.getElementById('sheet-origem').value,
+                modoRolagem: document.getElementById('sheet-modo-rolagem').value,
+                descricao: document.getElementById('sheet-descricao').innerText,
+                condicoes: conds,
+                atributos: {
+                    agi: document.getElementById('attr-agi').value,
+                    for: document.getElementById('attr-for').value,
+                    int: document.getElementById('attr-int').value,
+                    pre: document.getElementById('attr-pre').value,
+                    vig: document.getElementById('attr-vig').value
+                },
+                inventario: inventarioSlots,
+                pericias: periciasObj
+            };
+        }
+
+        function preencherFichaComDados(dados) {
+            if (!dados) return;
+            if (dados.player !== undefined) document.getElementById('sheet-player').value = dados.player;
+            if (dados.nome !== undefined) document.getElementById('sheet-nome').value = dados.nome;
+            if (dados.classe !== undefined) {
+                document.getElementById('sheet-classe').value = dados.classe;
+                atualizarTrilhas();
+            }
+            if (dados.trilha !== undefined) document.getElementById('sheet-trilha').value = dados.trilha;
+            if (dados.origem !== undefined) document.getElementById('sheet-origem').value = dados.origem;
+            if (dados.modoRolagem !== undefined) document.getElementById('sheet-modo-rolagem').value = dados.modoRolagem;
+            if (dados.descricao !== undefined) document.getElementById('sheet-descricao').innerText = dados.descricao;
+            
+            if (dados.condicoes) {
+                document.querySelectorAll('.cond-check').forEach(cb => {
+                    cb.checked = dados.condicoes.includes(cb.value);
+                });
+            }
+
+            if (dados.atributos) {
+                if (dados.atributos.agi !== undefined) document.getElementById('attr-agi').value = dados.atributos.agi;
+                if (dados.atributos.for !== undefined) document.getElementById('attr-for').value = dados.atributos.for;
+                if (dados.atributos.int !== undefined) document.getElementById('attr-int').value = dados.atributos.int;
+                if (dados.atributos.pre !== undefined) document.getElementById('attr-pre').value = dados.atributos.pre;
+                if (dados.atributos.vig !== undefined) document.getElementById('attr-vig').value = dados.atributos.vig;
+            }
+
+            atualizarDerivados();
+
+            if (dados.inventario) {
+                let nomesSlots = document.querySelectorAll('.inv-nome-input');
+                let pesosSlots = document.querySelectorAll('.inv-peso-input');
+                for (let i = 0; i < dados.inventario.length && i < nomesSlots.length; i++) {
+                    nomesSlots[i].value = dados.inventario[i].nome || "";
+                    pesosSlots[i].value = dados.inventario[i].peso || "";
+                }
+                calcularPesoTotal();
+            }
+
+            if (dados.pericias) {
+                document.querySelectorAll('.skill-item').forEach(item => {
+                    let nome = item.getAttribute('data-skill');
+                    if (dados.pericias[nome] !== undefined) {
+                        item.querySelector('.skill-input').value = dados.pericias[nome];
+                    }
+                });
+                ordenarPericias();
+            }
+        }
+
+        function salvarProgressoLocalmente() {
+            let dados = extrairDadosFicha();
+            localStorage.setItem('ficha_rpg_salva', JSON.stringify(dados));
+        }
+
+        function carregarProgressoLocalmente() {
+            let salvo = localStorage.getItem('ficha_rpg_salva');
+            if (salvo) {
+                try { preencherFichaComDados(JSON.parse(salvo)); } catch(e) {}
+            }
+        }
+
+        function copiarLinkFicha() {
+            let dados = extrairDadosFicha();
+            let jsonString = JSON.stringify(dados);
+            
+            let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
+            let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
+            
+            navigator.clipboard.writeText(urlCompleta).then(() => {
+                alert("Link gerado e copiado com sucesso!");
+            }).catch(err => {
+                prompt("Copie o link:", urlCompleta);
+            });
+        }
+
+        function reiniciarFicha() {
+            if (confirm("Tem certeza que deseja zerar a ficha para criar um novo personagem?")) {
+                localStorage.removeItem('ficha_rpg_salva');
+                window.location.hash = '';
+                window.location.reload();
+            }
+        }
+
+        function carregarDadosDaUrl() {
+            let hash = window.location.hash;
+            if (hash && hash.length > 1) {
+                try {
+                    let dadosComprimidos = hash.substring(1);
+                    let jsonString = LZString.decompressFromEncodedURIComponent(dadosComprimidos);
+                    
+                    if (!jsonString) {
+                        jsonString = decodeURIComponent(atob(dadosComprimidos));
+                    }
+                    
+                    let dados = JSON.parse(jsonString);
+                    preencherFichaComDados(dados);
+                    document.getElementById('seletor-global').value = 'criar_ficha';
+                    mostrarSelecao();
+                    return true;
+                } catch(e) {
+                    console.error("Erro ao carregar dados da URL", e);
+                }
+            }
+            return false;
+        }
+
+        function obterStats(chave) {
+            let m = monstrosLista.find(item => item.id === chave);
+            let variante = document.getElementById('var-' + chave)?.value || 'yoju';
+            let hp = m.hp, ca = m.caVal;
+            if (variante === 'honju') { hp = Math.floor(hp * 1.8); ca += 2; }
+            return { hp, ca, tipoVisaoDesc: typeof m.visaoVal === 'number' ? `1d${m.visaoVal}` : m.visaoVal };
+        }
+
+        function atualizarCard(chave) {
+            let s = obterStats(chave);
+            document.getElementById('hp-' + chave).innerText = s.hp;
+            document.getElementById('ca-' + chave).innerText = s.ca;
+            document.getElementById('info-visao-' + chave).innerText = s.tipoVisaoDesc;
+        }
+
+        function rolar(chave, tipoAcao) {
+            if (tipoAcao === 'ataque') {
+                let d = Math.floor(Math.random() * 20) + 1;
+                document.getElementById(`res-${chave}-ataque`).innerText = `Total: ${d + 4} (1d20: ${d} + 4)`;
+            } else if (tipoAcao === 'dano') {
+                let d = Math.floor(Math.random() * 6) + 1;
+                document.getElementById(`res-${chave}-dano`).innerText = `Total: ${d + 2} (1d6: ${d} + 2)`;
+            }
+        }
+
+        function baixarFichaImagem() {
+            let cardFicha = document.getElementById('card-criar_ficha');
+            let botoes = cardFicha.querySelectorAll('button');
+            botoes.forEach(b => b.style.display = 'none');
+            html2canvas(cardFicha, { backgroundColor: '#1e1e1e', scale: 2 }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'ficha.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                botoes.forEach(b => b.style.display = 'block');
+            }).catch(() => botoes.forEach(b => b.style.display = 'block'));
+        }
+
+        window.onload = function() { montarPagina(); };
     </script>
 </body>
 </html>
+
