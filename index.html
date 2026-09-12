@@ -41,16 +41,13 @@
         .compatibilidade-box {
             border-color: #2196f3;
         }
-        .restrito-box {
-            border-color: #4caf50;
-        }
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
             font-size: 0.95rem;
         }
-        select, input[type="text"], input[type="number"], input[type="password"] {
+        select, input[type="text"], input[type="number"] {
             width: 100%;
             padding: 8px;
             background: #2c2c2c;
@@ -317,40 +314,28 @@
         }
         .card-lizard { border-color: #4caf50; }
         .card-lizard h2 { color: #81c784; border-bottom-color: #4caf50; }
-        .card-lizard select, .card-lizard button { background-color: #388e3c; }
         .card-bovine { border-color: #795548; }
         .card-bovine h2 { color: #a1887f; border-bottom-color: #795548; }
-        .card-bovine select, .card-bovine button { background-color: #5d4037; }
         .card-spider { border-color: #9c27b0; }
         .card-spider h2 { color: #ba68c8; border-bottom-color: #9c27b0; }
-        .card-spider select, .card-spider button { background-color: #7b1fa2; }
         .card-wyvern { border-color: #ff9800; }
         .card-wyvern h2 { color: #ffb74d; border-bottom-color: #ff9800; }
-        .card-wyvern select, .card-wyvern button { background-color: #f57c00; }
         .card-ant { border-color: #607d8b; }
         .card-ant h2 { color: #90a4ae; border-bottom-color: #607d8b; }
-        .card-ant select, .card-ant button { background-color: #455a64; }
         .card-armored { border-color: #00bcd4; }
         .card-armored h2 { color: #4dd0e1; border-bottom-color: #00bcd4; }
-        .card-armored select, .card-armored button { background-color: #0097a7; }
         .card-fungal { border-color: #8bc34a; }
         .card-fungal h2 { color: #aed581; border-bottom-color: #8bc34a; }
-        .card-fungal select, .card-fungal button { background-color: #689f38; }
         .card-wolf { border-color: #e91e63; }
         .card-wolf h2 { color: #f06292; border-bottom-color: #e91e63; }
-        .card-wolf select, .card-wolf button { background-color: #c2185b; }
         .card-mole { border-color: #8d6e63; }
         .card-mole h2 { color: #d7ccc8; border-bottom-color: #8d6e63; }
-        .card-mole select, .card-mole button { background-color: #4e342e; }
         .card-plant { border-color: #2e7d32; }
         .card-plant h2 { color: #81c784; border-bottom-color: #2e7d32; }
-        .card-plant select, .card-plant button { background-color: #1b5e20; }
         .card-paraves { border-color: #009688; }
         .card-paraves h2 { color: #4db6ac; border-bottom-color: #009688; }
-        .card-paraves select, .card-paraves button { background-color: #00796b; }
         .card-caudata { border-color: #673ab7; }
         .card-caudata h2 { color: #9575cd; border-bottom-color: #673ab7; }
-        .card-caudata select, .card-caudata button { background-color: #512da8; }
         h2 { 
             margin-top: 0; 
             border-bottom: 1px solid; 
@@ -425,7 +410,7 @@
             <option value="">-- Escolha o Tipo de Teste --</option>
             <option value="nucleo">Compatibilidade de Núcleo</option>
             <option value="celulas">Compatibilidade de Células</option>
-            <option value="metal">Sincronia Mental</option>
+            <option value="metal">Sincronia Metal</option>
         </select>
 
         <div id="campos-compatibilidade" style="display: none; margin-top: 10px; text-align: left;">
@@ -440,10 +425,30 @@
                 <select id="comp-origem">
                     <option value="amnesico">Amnésico</option>
                     <option value="academico">Acadêmico</option>
+                    <option value="agente_saude">Agente de Saúde</option>
+                    <option value="artista">Artista</option>
+                    <option value="atleta">Atleta</option>
+                    <option value="chef">Chef</option>
                     <option value="cientista">Cientista</option>
-                    <option value="militar">Militar</option>
+                    <option value="criminoso">Criminoso</option>
+                    <option value="cultista_arrependido">Cultista Arrependido</option>
+                    <option value="curioso">Curioso</option>
+                    <option value="desgarrado">Desgarrado</option>
                     <option value="engenheiro">Engenheiro</option>
-                    <option value="outro">Outro / Padrão</option>
+                    <option value="executivo">Executivo</option>
+                    <option value="investigador">Investigador</option>
+                    <option value="lutador">Lutador</option>
+                    <option value="magico">Mágico</option>
+                    <option value="mercenario">Mercenário</option>
+                    <option value="militar">Militar</option>
+                    <option value="operario">Operário</option>
+                    <option value="policial">Policial</option>
+                    <option value="religioso">Religioso</option>
+                    <option value="servidor_publico">Servidor Público</option>
+                    <option value="teorico_conspiracao">Teórico da Conspiração</option>
+                    <option value="ti">TI</option>
+                    <option value="trabalhador_rural">Trabalhador Rural</option>
+                    <option value="vigarista">Vigarista</option>
                 </select>
             </div>
             <div class="form-row">
@@ -665,6 +670,29 @@
             "Tática", "Vontade"
         ];
 
+        // Matriz de exclusividade de bônus por Kaiju (exigindo exatamente 3 componentes: 2 classes/1 origem ou 1 classe/2 origens)
+        const matrizBonusKaiju = {
+            "lizard_a": { classes: ["combatente", "especialista"], origens: ["militar"] },
+            "lizard_b": { classes: ["combatente"], origens: ["militar", "cientista"] },
+            "bovine_a": { classes: ["combatente"], origens: ["atleta", "operario"] },
+            "bovine_b": { classes: ["combatente", "especialista"], origens: ["atleta"] },
+            "spider_a": { classes: ["especialista"], origens: ["criminoso", "engenheiro"] },
+            "spider_b": { classes: ["especialista", "ocultista"], origens: ["criminoso"] },
+            "wyvern_a": { classes: ["combatente"], origens: ["mercenario", "atleta"] },
+            "wyvern_b": { classes: ["combatente", "especialista"], origens: ["mercenario"] },
+            "ant_a": { classes: ["especialista"], origens: ["trabalhador_rural", "operario"] },
+            "ant_b": { classes: ["especialista"], origens: ["operario", "cientista"] },
+            "armored_a": { classes: ["combatente"], origens: ["militar", "engenheiro"] },
+            "fungal_a": { classes: ["ocultista"], origens: ["cientista", "agente_saude"] },
+            "fungal_b": { classes: ["ocultista", "especialista"], origens: ["cientista"] },
+            "wolf_a": { classes: ["combatente"], origens: ["atleta", "desgarrado"] },
+            "mole_a": { classes: ["especialista"], origens: ["operario", "engenheiro"] },
+            "plant_a": { classes: ["ocultista"], origens: ["trabalhador_rural", "cientista"] },
+            "paraves_a": { classes: ["especialista"], origens: ["artista", "atleta"] },
+            "caudata_a": { classes: ["ocultista"], origens: ["cientista", "academico"] },
+            "caudata_b": { classes: ["ocultista", "combatente"], origens: ["academico"] }
+        };
+
         const monstrosLista = [
             { id: "lizard_a", nome: "Lizard (Tipo A)", base: "lizard", hp: 30, caVal: 6, visaoVal: 12, dif: "A para B: +5hp / 2d12 visão" },
             { id: "lizard_b", nome: "Lizard (Tipo B)", base: "lizard", hp: 35, caVal: 6, visaoVal: "2d12", dif: "A para B: +5hp / 2d12 visão" },
@@ -745,21 +773,33 @@
             let classe = document.getElementById('comp-classe').value;
             let valorAtrib = parseInt(document.getElementById('comp-atributo-valor').value) || 0;
 
-            // Rola um d100
             let rolagemD100 = Math.floor(Math.random() * 100) + 1;
 
-            // Bônus/Penalidades simulados com base nas escolhas
             let bonusOrigem = (origem === 'cientista' || origem === 'engenheiro' || origem === 'militar') ? 10 : 0;
             let bonusClasse = (classe === 'combatente' && tipoTeste === 'metal') ? 10 : (classe === 'ocultista' && tipoTeste === 'nucleo') ? 10 : 5;
             let bonusAtributo = valorAtrib * 5;
 
-            // Variável base do Honju (se for Tipo B, ajusta a dificuldade/afinidade)
+            // Verificação da Matriz de Bônus de 5% Exclusivo para o Kaiju escolhido
+            let regraKaiju = matrizBonusKaiju[honjuId];
+            let bonusMatrizExclusiva = 0;
+            let textoBonusExtra = "";
+
+            if (regraKaiju) {
+                let classeCompativel = regraKaiju.classes.includes(classe);
+                let origemCompativel = regraKaiju.origens.includes(origem);
+                
+                // Se preencher a regra exata (ex: 2 classes e 1 origem, ou 1 classe e 2 origens correspondentes)
+                if (classeCompativel && origemCompativel) {
+                    bonusMatrizExclusiva = 5;
+                    textoBonusExtra = " <span style='color: #81c784;'>(+5% Bônus de Sinergia Exclusiva!)</span>";
+                }
+            }
+
             let honjuObj = monstrosLista.find(m => m.id === honjuId);
             let fatorHonju = honjuObj.id.includes('_b') ? 5 : 0;
 
-            let compatibilidadeFinal = rolagemD100 + bonusOrigem + bonusClasse + bonusAtributo - fatorHonju;
+            let compatibilidadeFinal = rolagemD100 + bonusOrigem + bonusClasse + bonusAtributo + bonusMatrizExclusiva - fatorHonju;
             
-            // Limitar entre 0% e 100%
             if (compatibilidadeFinal > 100) compatibilidadeFinal = 100;
             if (compatibilidadeFinal < 0) compatibilidadeFinal = 0;
 
@@ -767,7 +807,7 @@
 
             document.getElementById('resultado-compatibilidade').innerHTML = 
                 `Teste de ${descTipo} (${honjuObj.nome})<br>` +
-                `🎲 Dado d100: <strong>${rolagemD100}</strong> | Bônus: +${bonusOrigem + bonusClasse + bonusAtributo}<br>` +
+                `🎲 Dado d100: <strong>${rolagemD100}</strong> | Bônus Base: +${bonusOrigem + bonusClasse + bonusAtributo}${textoBonusExtra}<br>` +
                 `Resultado Final de Compatibilidade: <span style="color: #ffeb3b; font-size: 1rem;">${compatibilidadeFinal}%</span>`;
         }
 
