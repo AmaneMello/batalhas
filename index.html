@@ -27,7 +27,7 @@
             width: 100%;
             max-width: 600px;
         }
-        .selector-box, .restrito-box {
+        .selector-box, .compatibilidade-box, .restrito-box {
             background-color: #1e1e1e;
             border: 2px solid #ff5252;
             border-radius: 8px;
@@ -38,6 +38,9 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             text-align: center;
         }
+        .compatibilidade-box {
+            border-color: #2196f3;
+        }
         .restrito-box {
             border-color: #4caf50;
         }
@@ -47,7 +50,7 @@
             font-weight: bold;
             font-size: 0.95rem;
         }
-        select, input[type="password"] {
+        select, input[type="text"], input[type="number"], input[type="password"] {
             width: 100%;
             padding: 8px;
             background: #2c2c2c;
@@ -57,6 +60,9 @@
             margin-bottom: 5px;
             font-size: 0.95rem;
             box-sizing: border-box;
+        }
+        .compatibilidade-box select, .compatibilidade-box input {
+            border-color: #2196f3;
         }
         .container {
             display: flex;
@@ -408,8 +414,55 @@
         <label for="seletor-global">Escolha uma opção:</label>
         <select id="seletor-global" onchange="mostrarSelecao()">
             <option value="">-- Selecione na lista --</option>
-            <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha</option>
+            <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
         </select>
+    </div>
+
+    <!-- Área de Teste de Compatibilidade -->
+    <div class="compatibilidade-box">
+        <label for="tipo-compatibilidade" style="color: #64b5f6;">⚡ Teste de Compatibilidade</label>
+        <select id="tipo-compatibilidade" onchange="alternarCamposCompatibilidade()">
+            <option value="">-- Escolha o Tipo de Teste --</option>
+            <option value="nucleo">Compatibilidade de Núcleo</option>
+            <option value="celulas">Compatibilidade de Células</option>
+            <option value="metal">Sincronia Metal</option>
+        </select>
+
+        <div id="campos-compatibilidade" style="display: none; margin-top: 10px; text-align: left;">
+            <div class="form-group">
+                <label>Honju Alvo:</label>
+                <select id="comp-honju-select">
+                    <!-- Preenchido via script -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Origem:</label>
+                <select id="comp-origem">
+                    <option value="amnesico">Amnésico</option>
+                    <option value="academico">Acadêmico</option>
+                    <option value="cientista">Cientista</option>
+                    <option value="militar">Militar</option>
+                    <option value="engenheiro">Engenheiro</option>
+                    <option value="outro">Outro / Padrão</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 1;">
+                    <label>Classe:</label>
+                    <select id="comp-classe">
+                        <option value="combatente">Combatente</option>
+                        <option value="especialista">Especialista</option>
+                        <option value="ocultista">Ocultista</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1;" id="div-atributo-base">
+                    <label id="label-atrib-compat">Atributo VIG:</label>
+                    <input type="number" id="comp-atributo-valor" value="2" min="0" max="5">
+                </div>
+            </div>
+            <button class="action-btn" style="background-color: #1976d2; margin-top: 10px;" onclick="calcularCompatibilidade()">🎲 Rolar e Calcular Compatibilidade</button>
+            <div id="resultado-compatibilidade" class="result" style="color: #90caf9; margin-top: 8px; font-size: 0.85rem; font-weight: bold;"></div>
+        </div>
     </div>
 
     <div class="container" id="painel-monstros">
@@ -603,34 +656,6 @@
     <script>
         const TOKEN_MESTRE = "82124";
 
-        function verificarToken() {
-            let digitado = document.getElementById('input-token-secreto').value;
-            if (digitado === TOKEN_MESTRE) {
-                localStorage.setItem('token_autorizado', 'true');
-                liberarAcessoRestrito();
-            } else {
-                alert("Token incorreto! Tente novamente.");
-            }
-        }
-
-        function liberarAcessoRestrito() {
-            document.getElementById('painel-login-token').style.display = 'none';
-            document.getElementById('conteudo-restrito').style.display = 'block';
-        }
-
-        function sairDaAreaRestrita() {
-            localStorage.removeItem('token_autorizado');
-            document.getElementById('input-token-secreto').value = '';
-            document.getElementById('conteudo-restrito').style.display = 'none';
-            document.getElementById('painel-login-token').style.display = 'block';
-        }
-
-        window.addEventListener('load', function() {
-            if (localStorage.getItem('token_autorizado') === 'true') {
-                liberarAcessoRestrito();
-            }
-        });
-
         const listaNomesPericias = [
             "Acrobacia", "Adestramento", "Artes", "Atletismo", "Atualidades", 
             "Ciências", "Crime", "Diplomacia", "Enganação", "Fortitude", 
@@ -665,19 +690,24 @@
         function montarPagina() {
             let seletorGlobal = document.getElementById('seletor-global');
             let container = document.getElementById('painel-monstros');
+            let selectCompatibilidade = document.getElementById('comp-honju-select');
+            
             let optionsHtml = `
                 <option value="">-- Selecione na lista --</option>
                 <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
             `;
             let cardsHtml = document.getElementById('card-criar_ficha').outerHTML;
+            let compHonjuHtml = "";
 
             monstrosLista.forEach(m => {
                 optionsHtml += `<option value="${m.id}">${m.nome}</option>`;
                 cardsHtml += criarCardHtml(m);
+                compHonjuHtml += `<option value="${m.id}">${m.nome}</option>`;
             });
 
             seletorGlobal.innerHTML = optionsHtml;
             container.innerHTML = cardsHtml;
+            selectCompatibilidade.innerHTML = compHonjuHtml;
             
             atualizarTrilhas();
             inicializarPericias();
@@ -686,6 +716,59 @@
             if (!carregarDadosDaUrl()) {
                 carregarProgressoLocalmente();
             }
+        }
+
+        function alternarCamposCompatibilidade() {
+            let tipo = document.getElementById('tipo-compatibilidade').value;
+            let painel = document.getElementById('campos-compatibilidade');
+            let labelAtrib = document.getElementById('label-atrib-compat');
+
+            if (!tipo) {
+                painel.style.display = 'none';
+                return;
+            }
+
+            painel.style.display = 'block';
+            if (tipo === 'nucleo') {
+                labelAtrib.innerText = "Atributo VIG (Vigor):";
+            } else if (tipo === 'celulas') {
+                labelAtrib.innerText = "Atributo INT (Intelecto):";
+            } else if (tipo === 'metal') {
+                labelAtrib.innerText = "Atributo FOR / AGI:";
+            }
+        }
+
+        function calcularCompatibilidade() {
+            let tipoTeste = document.getElementById('tipo-compatibilidade').value;
+            let honjuId = document.getElementById('comp-honju-select').value;
+            let origem = document.getElementById('comp-origem').value;
+            let classe = document.getElementById('comp-classe').value;
+            let valorAtrib = parseInt(document.getElementById('comp-atributo-valor').value) || 0;
+
+            // Rola um d100
+            let rolagemD100 = Math.floor(Math.random() * 100) + 1;
+
+            // Bônus/Penalidades simulados com base nas escolhas
+            let bonusOrigem = (origem === 'cientista' || origem === 'engenheiro' || origem === 'militar') ? 10 : 0;
+            let bonusClasse = (classe === 'combatente' && tipoTeste === 'metal') ? 10 : (classe === 'ocultista' && tipoTeste === 'nucleo') ? 10 : 5;
+            let bonusAtributo = valorAtrib * 5;
+
+            // Variável base do Honju (se for Tipo B, ajusta a dificuldade/afinidade)
+            let honjuObj = monstrosLista.find(m => m.id === honjuId);
+            let fatorHonju = honjuObj.id.includes('_b') ? 5 : 0;
+
+            let compatibilidadeFinal = rolagemD100 + bonusOrigem + bonusClasse + bonusAtributo - fatorHonju;
+            
+            // Limitar entre 0% e 100%
+            if (compatibilidadeFinal > 100) compatibilidadeFinal = 100;
+            if (compatibilidadeFinal < 0) compatibilidadeFinal = 0;
+
+            let descTipo = tipoTeste === 'nucleo' ? 'Núcleo' : tipoTeste === 'celulas' ? 'Células' : 'Sincronia Metal';
+
+            document.getElementById('resultado-compatibilidade').innerHTML = 
+                `Teste de ${descTipo} (${honjuObj.nome})<br>` +
+                `🎲 Dado d100: <strong>${rolagemD100}</strong> | Bônus: +${bonusOrigem + bonusClasse + bonusAtributo}<br>` +
+                `Resultado Final de Compatibilidade: <span style="color: #ffeb3b; font-size: 1rem;">${compatibilidadeFinal}%</span>`;
         }
 
         function atualizarTrilhas() {
@@ -1130,4 +1213,3 @@
     </script>
 </body>
 </html>
-
