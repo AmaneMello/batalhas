@@ -880,19 +880,41 @@
             let kaijusDerrotados = parseInt(document.getElementById('loot-andar-kaijus').value) || 0;
             let resultadoDiv = document.getElementById('resultado-looting-andar');
             
-            let manual = "Sem manual", nivelEnchimento = "Lv1", nivelKaijumita = "Lv1";
+            let manualSorteado = "Sem manual", nivelEnchimentoSorteado = "Lv1", nivelKaijumitaSorteado = "Lv1";
             let minQtd = 1, maxQtd = 3;
 
+            function sortearNivelFaixa(opcoes) {
+                return opcoes[Math.floor(Math.random() * opcoes.length)];
+            }
+
+            let tiposEnchimento = ["Ataque", "Suporte", "Defesa"];
+            let tipoEnchimentoSorteado = tiposEnchimento[Math.floor(Math.random() * tiposEnchimento.length)];
+
             if (faixa === "20-15") {
-                manual = "Sem manual"; nivelEnchimento = "Lv1"; nivelKaijumita = "Lv1"; minQtd = 1; maxQtd = 3;
+                manualSorteado = "Sem manual";
+                nivelEnchimentoSorteado = "Lv1";
+                nivelKaijumitaSorteado = "Lv1";
+                minQtd = 1; maxQtd = 3;
             } else if (faixa === "15-10") {
-                manual = "Lv1"; nivelEnchimento = "Lv1~2"; nivelKaijumita = "Lv1"; minQtd = 1; maxQtd = 4;
+                manualSorteado = sortearNivelFaixa(["Sem manual", "Lv1"]);
+                nivelEnchimentoSorteado = sortearNivelFaixa(["Lv1", "Lv2"]);
+                nivelKaijumitaSorteado = "Lv1";
+                minQtd = 1; maxQtd = 4;
             } else if (faixa === "10-5") {
-                manual = "Lv2"; nivelEnchimento = "Lv2"; nivelKaijumita = "Lv2"; minQtd = 1; maxQtd = 3;
+                manualSorteado = "Lv2";
+                nivelEnchimentoSorteado = "Lv2";
+                nivelKaijumitaSorteado = "Lv2";
+                minQtd = 1; maxQtd = 3;
             } else if (faixa === "5-terreo") {
-                manual = "Lv2~3"; nivelEnchimento = "Lv2~3"; nivelKaijumita = "Lv2~3"; minQtd = 1; maxQtd = 4;
+                manualSorteado = sortearNivelFaixa(["Lv2", "Lv3"]);
+                nivelEnchimentoSorteado = sortearNivelFaixa(["Lv2", "Lv3"]);
+                nivelKaijumitaSorteado = sortearNivelFaixa(["Lv2", "Lv3"]);
+                minQtd = 1; maxQtd = 4;
             } else if (faixa === "terreo-subsolo") {
-                manual = "Lv3"; nivelEnchimento = "Lv3"; nivelKaijumita = "Lv3"; minQtd = 3; maxQtd = 5;
+                manualSorteado = "Lv3";
+                nivelEnchimentoSorteado = "Lv3";
+                nivelKaijumitaSorteado = "Lv3";
+                minQtd = 3; maxQtd = 5;
             }
 
             let quantidadeSorteada = Math.floor(Math.random() * (maxQtd - minQtd + 1)) + minQtd;
@@ -909,9 +931,9 @@
 
             resultadoDiv.innerHTML = 
                 `<strong>Looting de Andar Revelado (${faixa}):</strong><br>` +
-                `- Manual: ${manual}<br>` +
-                `- Enchimento (Atk/Suport/Def): ${nivelEnchimento} (Qtd: <strong>${quantidadeSorteada}</strong>)<br>` +
-                `- Kaijumita: ${nivelKaijumita} (Qtd: <strong>${qtdKaijumitaSorteada}</strong>)<br>` +
+                `- Manual: <strong>${manualSorteado}</strong><br>` +
+                `- Enchimento (${tipoEnchimentoSorteado}): <strong>${nivelEnchimentoSorteado}</strong> (Qtd: <strong>${quantidadeSorteada}</strong>)<br>` +
+                `- Kaijumita: <strong>${nivelKaijumitaSorteado}</strong> (Qtd: <strong>${qtdKaijumitaSorteada}</strong>)<br>` +
                 (extrasExtras > 0 ? `<span style="color:#81c784;">🔥 Bônus por Kaijus (Acima de 5): +${extrasExtras} item(ns) extra(s)!</span>` : '');
         }
 
