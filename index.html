@@ -27,7 +27,7 @@
             width: 100%;
             max-width: 600px;
         }
-        .selector-box, .compatibilidade-box, .restrito-box {
+        .selector-box, .compatibilidade-box, .looting-box, .restrito-box {
             background-color: #1e1e1e;
             border: 2px solid #ff5252;
             border-radius: 8px;
@@ -37,9 +37,13 @@
             margin-bottom: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             text-align: center;
+            box-sizing: border-box;
         }
         .compatibilidade-box {
             border-color: #2196f3;
+        }
+        .looting-box {
+            border-color: #ff9800;
         }
         label {
             display: block;
@@ -61,6 +65,9 @@
         .compatibilidade-box select, .compatibilidade-box input {
             border-color: #2196f3;
         }
+        .looting-box select, .looting-box input {
+            border-color: #ff9800;
+        }
         .container {
             display: flex;
             justify-content: center;
@@ -74,6 +81,7 @@
             padding: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             display: none;
+            box-sizing: border-box;
         }
         .custom-sheet {
             border-color: #d32f2f;
@@ -403,6 +411,49 @@
         </select>
     </div>
 
+    <!-- Área de Giro de Looting -->
+    <div class="looting-box">
+        <label style="color: #ffb74d;">🎒 Giro de Looting (Andar ou Kaiju)</label>
+        <div class="form-group" style="text-align: left;">
+            <label>Tipo de Looting:</label>
+            <select id="looting-tipo" onchange="alternarCamposLooting()">
+                <option value="honju">Honju (Unimaterial)</option>
+                <option value="andar">Andar (Exploração)</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="div-looting-alvo" style="text-align: left;">
+            <label id="label-looting-alvo">Selecione o Honju:</label>
+            <select id="looting-honju-select">
+                <!-- Preenchido via script -->
+            </select>
+        </div>
+
+        <div class="form-group" id="div-looting-rounds" style="text-align: left;">
+            <label>Rounds da Batalha (1 a 10):</label>
+            <input type="number" id="looting-rounds" value="5" min="1" max="10">
+        </div>
+
+        <div class="form-group" id="div-looting-andar" style="text-align: left; display: none;">
+            <label>Andar Atual / Local:</label>
+            <select id="looting-andar-select">
+                <option value="20_15">20 ~ 15 (Sem Manual / Lv1)</option>
+                <option value="15_10">15 ~ 10 (Manual Lv1 / Kaijumita Lv1~2)</option>
+                <option value="10_5">10 ~ 5 (Manual Lv2 / Kaijumita Lv2)</option>
+                <option value="5_terreo">5 ~ Térreo (Manual Lv2~3 / Kaijumita Lv2~3)</option>
+                <option value="subsolo">Térreo ~ Subsolo (Manual Lv3 / Kaijumita Lv3, 3-5)</option>
+            </select>
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+            <label>Kaijus Derrotados (a partir de 5, +20% cada):</label>
+            <input type="number" id="looting-kaijus-derrotados" value="0" min="0" max="20">
+        </div>
+
+        <button class="action-btn" style="background-color: #ff9800; margin-top: 10px;" onclick="girarLooting()">🎲 Girar Looting</button>
+        <div id="resultado-looting" class="result" style="color: #ffe0b2; margin-top: 8px; font-size: 0.85rem; text-align: left; white-space: pre-wrap;"></div>
+    </div>
+
     <!-- Área de Teste de Compatibilidade -->
     <div class="compatibilidade-box">
         <label for="tipo-compatibilidade" style="color: #64b5f6;">⚡ Teste de Compatibilidade</label>
@@ -670,7 +721,29 @@
             "Tática", "Vontade"
         ];
 
-        // Matriz de exclusividade de bônus por Kaiju (exigindo exatamente 3 componentes: 2 classes/1 origem ou 1 classe/2 origens)
+        // Mapeamento de Looting dos Honjus (Unimateriais e Atributos 1 e 2)
+        const lootingHonjuMap = {
+            "lizard_a": { nome: "Lizard", item: "Scales", attr1: "Edge", attr2: "Flame" },
+            "lizard_b": { nome: "Lizard", item: "Scales", attr1: "Edge", attr2: "Flame" },
+            "bovine_a": { nome: "Bovine", item: "Horns", attr1: "Fist", attr2: "Frozen" },
+            "bovine_b": { nome: "Bovine", item: "Horns", attr1: "Fist", attr2: "Frozen" },
+            "spider_a": { nome: "Spider", item: "Spikes", attr1: "Cannon", attr2: "Shear" },
+            "spider_b": { nome: "Spider", item: "Spikes", attr1: "Cannon", attr2: "Shear" },
+            "wyvern_a": { nome: "Wyvern", item: "Wings", attr1: "Edge", attr2: "Charged" },
+            "wyvern_b": { nome: "Wyvern", item: "Wings", attr1: "Edge", attr2: "Charged" },
+            "ant_a": { nome: "Ant", item: "Jaws", attr1: "Cannon", attr2: "Charged" },
+            "ant_b": { nome: "Ant", item: "Jaws", attr1: "Cannon", attr2: "Charged" },
+            "armored_a": { nome: "Armored", item: "Carapaces", attr1: "Fist", attr2: "Shear" },
+            "fungal_a": { nome: "Fungal", item: "Caps", attr1: "Cannon", attr2: "Frozen" },
+            "fungal_b": { nome: "Fungal", item: "Caps", attr1: "Cannon", attr2: "Frozen" },
+            "wolf_a": { nome: "Wolf", item: "Claws", attr1: "Edge", attr2: "Flame" },
+            "mole_a": { nome: "Mole", item: "Feet", attr1: "Fist", attr2: "Charged" },
+            "plant_a": { nome: "Plant", item: "Flowers", attr1: "Cannon", attr2: "Droplet" },
+            "paraves_a": { nome: "Paraves", item: "Casques", attr1: "Edge", attr2: "Charged" },
+            "caudata_a": { nome: "Caudata", item: "Caudata Drop", attr1: "Edge", attr2: "Frozen" },
+            "caudata_b": { nome: "Caudata", item: "Caudata Drop", attr1: "Edge", attr2: "Frozen" }
+        };
+
         const matrizBonusKaiju = {
             "lizard_a": { classes: ["combatente", "especialista"], origens: ["militar"] },
             "lizard_b": { classes: ["combatente"], origens: ["militar", "cientista"] },
@@ -719,6 +792,7 @@
             let seletorGlobal = document.getElementById('seletor-global');
             let container = document.getElementById('painel-monstros');
             let selectCompatibilidade = document.getElementById('comp-honju-select');
+            let selectLootingHonju = document.getElementById('looting-honju-select');
             
             let optionsHtml = `
                 <option value="">-- Selecione na lista --</option>
@@ -726,16 +800,19 @@
             `;
             let cardsHtml = document.getElementById('card-criar_ficha').outerHTML;
             let compHonjuHtml = "";
+            let lootingHonjuHtml = "";
 
             monstrosLista.forEach(m => {
                 optionsHtml += `<option value="${m.id}">${m.nome}</option>`;
                 cardsHtml += criarCardHtml(m);
                 compHonjuHtml += `<option value="${m.id}">${m.nome}</option>`;
+                lootingHonjuHtml += `<option value="${m.id}">${m.nome}</option>`;
             });
 
             seletorGlobal.innerHTML = optionsHtml;
             container.innerHTML = cardsHtml;
             selectCompatibilidade.innerHTML = compHonjuHtml;
+            selectLootingHonju.innerHTML = lootingHonjuHtml;
             
             atualizarTrilhas();
             inicializarPericias();
@@ -744,6 +821,114 @@
             if (!carregarDadosDaUrl()) {
                 carregarProgressoLocalmente();
             }
+        }
+
+        function alternarCamposLooting() {
+            let tipo = document.getElementById('looting-tipo').value;
+            let divAlvo = document.getElementById('div-looting-alvo');
+            let divRounds = document.getElementById('div-looting-rounds');
+            let divAndar = document.getElementById('div-looting-andar');
+
+            if (tipo === 'honju') {
+                divAlvo.style.display = 'block';
+                divRounds.style.display = 'block';
+                divAndar.style.display = 'none';
+            } else {
+                divAlvo.style.display = 'none';
+                divRounds.style.display = 'none';
+                divAndar.style.display = 'block';
+            }
+        }
+
+        function girarLooting() {
+            let tipo = document.getElementById('looting-tipo').value;
+            let kaijusDerrotados = parseInt(document.getElementById('looting-kaijus-derrotados').value) || 0;
+            let resDiv = document.getElementById('resultado-looting');
+            let textoResultado = "";
+
+            // Chance extra por Kaijus derrotados a partir de 5 (cada 1 dá 20%)
+            let excedenteKaijus = Math.max(0, kaijusDerrotados - 5);
+            let chanceExtraKaiju = excedenteKaijus * 20;
+            let extraConseguidoKaiju = false;
+            if (chanceExtraKaiju > 0) {
+                let rolagemExtra = Math.floor(Math.random() * 100) + 1;
+                if (rolagemExtra <= chanceExtraKaiju) extraConseguidoKaiju = true;
+            }
+
+            if (tipo === 'honju') {
+                let honjuId = document.getElementById('looting-honju-select').value;
+                let rounds = parseInt(document.getElementById('looting-rounds').value) || 10;
+                let hInfo = lootingHonjuMap[honjuId] || { nome: "Item", item: "Material", attr1: "Edge", attr2: "Flame" };
+
+                // Regra de rounds: 10 rounds = 0%, cada 1 a menos = +10% de chance de 1-2 extras
+                let roundsAbaixo = Math.max(0, 10 - rounds);
+                let chanceExtraRound = roundsAbaixo * 10;
+                let extraConseguidoRound = false;
+                if (chanceExtraRound > 0) {
+                    let rolagemRound = Math.floor(Math.random() * 100) + 1;
+                    if (rolagemRound <= chanceExtraRound) extraConseguidoRound = true;
+                }
+
+                // Quantidade base de unimaterial: de 3 a 5
+                let qtdBase = Math.floor(Math.random() * 3) + 3;
+                let extrasAdicionados = 0;
+                let detalhesExtras = [];
+
+                if (extraConseguidoRound) {
+                    let qtdExtraR = Math.floor(Math.random() * 2) + 1; // 1 a 2 extras
+                    extrasAdicionados += qtdExtraR;
+                    detalhesExtras.push(`+${qtdExtraR} por Eficiência de Rounds (${chanceExtraRound}% de chance)`);
+                }
+                if (extraConseguidoKaiju) {
+                    let qtdExtraK = Math.floor(Math.random() * 2) + 1;
+                    extrasAdicionados += qtdExtraK;
+                    detalhesExtras.push(`+${qtdExtraK} por Acúmulo de Kaijus (${chanceExtraKaiju}% de chance)`);
+                }
+
+                let totalFinal = qtdBase + extrasAdicionados;
+                // Garantir limites dos atributos (mín 2 de cada, máx 6 no total se somados, ou distribuição proporcional)
+                let qtdAttr1 = Math.max(2, Math.floor(totalFinal / 2));
+                let qtdAttr2 = totalFinal - qtdAttr1;
+                if (qtdAttr2 < 2) { qtdAttr2 = 2; qtdAttr1 = Math.max(2, totalFinal - 2); }
+
+                textoResultado = `📦 <strong>Looting Honju (${hInfo.nome}):</strong><br>` +
+                    `• Base Unimaterial: ${qtdBase} (de 3 a 5)<br>` +
+                    `• Distribuição Atributos: ${qtdAttr1}x ${hInfo.attr1} e ${qtdAttr2}x ${hInfo.attr2}<br>` +
+                    (detalhesExtras.length > 0 ? `✨ <strong>Bônus Extras:</strong><br>- ${detalhesExtras.join('<br>- ')}<br>` : `ℹ️ Sem bônus extra obtido.<br>`) +
+                    `📦 <strong>Total Geral: ${totalFinal} Unimateriais</strong>`;
+
+            } else {
+                let andarVal = document.getElementById('looting-andar-select').value;
+                let manual = "Sem Manual", kaijumita = "Lv1", qtdKaijumitaMin = 1, qtdKaijumitaMax = 3;
+
+                if (andarVal === "20_15") {
+                    manual = "Sem Manual"; kaijumita = "Lv1"; qtdKaijumitaMin = 1; qtdKaijumitaMax = 3;
+                } else if (andarVal === "15_10") {
+                    manual = "Lv1"; kaijumita = "Lv1~2"; qtdKaijumitaMin = 1; qtdKaijumitaMax = 4;
+                } else if (andarVal === "10_5") {
+                    manual = "Lv2"; kaijumita = "Lv2"; qtdKaijumitaMin = 1; qtdKaijumitaMax = 3;
+                } else if (andarVal === "5_terreo") {
+                    manual = "Lv2~3"; kaijumita = "Lv2~3"; qtdKaijumitaMin = 1; qtdKaijumitaMax = 4;
+                } else if (andarVal === "subsolo") {
+                    manual = "Lv3"; kaijumita = "Lv3"; qtdKaijumitaMin = 3; qtdKaijumitaMax = 5;
+                }
+
+                let qtdKaijumitasSorteada = Math.floor(Math.random() * (qtdKaijumitaMax - qtdKaijumitaMin + 1)) + qtdKaijumitaMin;
+                let tipoEnchant = ["Ataque", "Suporte", "Defesa"][Math.floor(Math.random() * 3)];
+
+                let textoExtraKaiju = "";
+                if (extraConseguidoKaiju) {
+                    qtdKaijumitasSorteada += 1;
+                    textoExtraKaiju = `<br>✨ <strong>Bônus de Kaijus Derrotados:</strong> +1 Kaijumita extra (${chanceExtraKaiju}% chance)!`;
+                }
+
+                textoResultado = `🏰 <strong>Looting de Andar:</strong><br>` +
+                    `• Manual Enchimento: <strong>${manual}</strong> (${tipoEnchant})<br>` +
+                    `• Nível Kaijumita: <strong>${kaijumita}</strong><br>` +
+                    `• Quantidade Kaijumitas: <strong>${qtdKaijumitasSorteada}</strong>` + textoExtraKaiju;
+            }
+
+            resDiv.innerHTML = textoResultado;
         }
 
         function alternarCamposCompatibilidade() {
@@ -779,7 +964,6 @@
             let bonusClasse = (classe === 'combatente' && tipoTeste === 'metal') ? 10 : (classe === 'ocultista' && tipoTeste === 'nucleo') ? 10 : 5;
             let bonusAtributo = valorAtrib * 5;
 
-            // Verificação da Matriz de Bônus de 5% Exclusivo para o Kaiju escolhido
             let regraKaiju = matrizBonusKaiju[honjuId];
             let bonusMatrizExclusiva = 0;
             let textoBonusExtra = "";
@@ -788,7 +972,6 @@
                 let classeCompativel = regraKaiju.classes.includes(classe);
                 let origemCompativel = regraKaiju.origens.includes(origem);
                 
-                // Se preencher a regra exata (ex: 2 classes e 1 origem, ou 1 classe e 2 origens correspondentes)
                 if (classeCompativel && origemCompativel) {
                     bonusMatrizExclusiva = 5;
                     textoBonusExtra = " <span style='color: #81c784;'>(+5% Bônus de Sinergia Exclusiva!)</span>";
