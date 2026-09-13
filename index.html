@@ -411,6 +411,56 @@
         </select>
     </div>
 
+    <!-- Área de Seleção -->
+<div class="selection-area">
+  <label for="looting-type">Selecione o tipo de looting:</label>
+  <select id="looting-type" onchange="toggleLootingCard()">
+    <option value="">-- Escolha uma opção --</option>
+    <option value="standard">Padrão</option>
+    <option value="rare">Raro / Especial</option>
+  </select>
+</div>
+
+<!-- Card de Rolagem de Looting (Inicialmente Oculto) -->
+<div id="looting-card" class="looting-card" style="display: none;">
+  <h3>Card de Rolagem de Looting</h3>
+  <p>Conteúdo da rolagem carregado com sucesso!</p>
+</div>
+
+<style>
+  .selection-area {
+    margin-bottom: 20px;
+    font-family: sans-serif;
+  }
+  .selection-area select {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-left: 8px;
+  }
+  .looting-card {
+    padding: 16px;
+    border: 1px solid #4CAF50;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    font-family: sans-serif;
+  }
+</style>
+
+<script>
+  function toggleLootingCard() {
+    const selectElement = document.getElementById('looting-type');
+    const cardElement = document.getElementById('looting-card');
+    
+    if (selectElement.value !== "") {
+      cardElement.style.display = 'block';
+    } else {
+      cardElement.style.display = 'none';
+    }
+  }
+</script>
+
     <!-- Área de Giro de Looting -->
     <div class="looting-box">
         <label style="color: #ffb74d;">🎒 Giro de Looting (Andar ou Kaiju)</label>
