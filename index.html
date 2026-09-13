@@ -837,13 +837,17 @@
             let kaijusDerrotados = parseInt(document.getElementById('loot-kaijus-derrotados').value) || 0;
             let resultadoDiv = document.getElementById('resultado-looting-honju');
             let infoHonju = dadosHonjuMateriais[honjuKey];
-            let extrasExtras = 0;
+            let itensExtrasLista = [];
 
+            // CORREÇÃO: A partir de 6 Kaijus, cada unidade extra gera uma chance de 20% de dropar um item extra
             if (kaijusDerrotados >= 6) {
                 let excesso = kaijusDerrotados - 6 + 1;
                 for (let i = 0; i < excesso; i++) {
                     let rollExtra = Math.random() * 100;
-                    if (rollExtra < 20) extrasExtras++;
+                    if (rollExtra < 20) {
+                        let tipoExtraSorteado = ["Unimaterial Extra", "Atributo Bônus Extra"][Math.floor(Math.random() * 2)];
+                        itensExtrasLista.push(tipoExtraSorteado);
+                    }
                 }
             }
 
@@ -866,13 +870,15 @@
                 }
             }
 
+            let textoExtras = itensExtrasLista.length > 0 ? `<br><span style="color:#81c784;">🔥 Bônus por ${kaijusDerrotados} Kaijus: +${itensExtrasLista.length} item(ns) extra(s) (${itensExtrasLista.join(', ')})!</span>` : '';
+
             resultadoDiv.innerHTML = 
                 `<strong>Looting Honju Revelado (${infoHonju.nome}):</strong><br>` +
                 `- Unimaterial (${infoHonju.item}): Obtido <strong>${infoHonju.mat1}</strong> e <strong>${infoHonju.mat2}</strong><br>` +
                 `- Atributo 1: ${a1}<br>` +
                 `- Atributo 2: ${a2}<br>` +
                 (unimateriaisExtras > 0 ? `<span style="color:#81c784;">🎁 Bônus de Rounds: +${unimateriaisExtras} unimaterial(is) extra(s)!</span><br>` : '') +
-                (extrasExtras > 0 ? `<span style="color:#81c784;">🔥 Bônus por Kaijus (Acima de 5): +${extrasExtras} item(ns) extra(s)!</span>` : '');
+                textoExtras;
         }
 
         function executarGiroLootingAndar() {
@@ -920,21 +926,28 @@
             let quantidadeSorteada = Math.floor(Math.random() * (maxQtd - minQtd + 1)) + minQtd;
             let qtdKaijumitaSorteada = Math.floor(Math.random() * 2) + 1; 
 
-            let extrasExtras = 0;
+            // CORREÇÃO: Sorteia explicitamente quais tipos de itens extras vieram nos 20% de chance a partir de 6+ kaijus
+            let itensExtrasLista = [];
             if (kaijusDerrotados >= 6) {
                 let excesso = kaijusDerrotados - 6 + 1;
+                let opcoesPossiveisExtras = ["Manual Extra", "Enchimento Extra", "Kaijumita Extra"];
                 for (let i = 0; i < excesso; i++) {
                     let rollExtra = Math.random() * 100;
-                    if (rollExtra < 20) extrasExtras++;
+                    if (rollExtra < 20) {
+                        let itemSorteado = opcoesPossiveisExtras[Math.floor(Math.random() * opcoesPossiveisExtras.length)];
+                        itensExtrasLista.push(itemSorteado);
+                    }
                 }
             }
+
+            let textoExtras = itensExtrasLista.length > 0 ? `<br><span style="color:#81c784;">🔥 Bônus por ${kaijusDerrotados} Kaijus: +${itensExtrasLista.length} item(ns) extra(s) (${itensExtrasLista.join(', ')})!</span>` : '';
 
             resultadoDiv.innerHTML = 
                 `<strong>Looting de Andar Revelado (${faixa}):</strong><br>` +
                 `- Manual: <strong>${manualSorteado}</strong><br>` +
                 `- Enchimento (${tipoEnchimentoSorteado}): <strong>${nivelEnchimentoSorteado}</strong> (Qtd: <strong>${quantidadeSorteada}</strong>)<br>` +
                 `- Kaijumita: <strong>${nivelKaijumitaSorteado}</strong> (Qtd: <strong>${qtdKaijumitaSorteada}</strong>)<br>` +
-                (extrasExtras > 0 ? `<span style="color:#81c784;">🔥 Bônus por Kaijus (Acima de 5): +${extrasExtras} item(ns) extra(s)!</span>` : '');
+                textoExtras;
         }
 
         function alternarCamposCompatibilidade() {
@@ -1442,3 +1455,4 @@
     </script>
 </body>
 </html>
+
