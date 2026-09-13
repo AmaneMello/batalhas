@@ -730,7 +730,6 @@
             "Tática", "Vontade"
         ];
 
-        // LISTAS DE Nomes e Histórias Engraçadas para Amnésicos
         const nomesAmnesicos = [
             "João Ninguém da Silva", "Desconhecido #404", "Alguém Importante (talvez)", 
             "O Cara da Brisa", "Senhor 'Esqueci'", "John Doe (Sobra do Churrasco)", 
@@ -1152,7 +1151,6 @@
                 }
                 verificarAtributos();
 
-                // SORTEIO DE NOME E HISTÓRIA ENGRAÇADA
                 let nomeSorteado = nomesAmnesicos[Math.floor(Math.random() * nomesAmnesicos.length)];
                 let historiaSorteada = historiasAmnesicas[Math.floor(Math.random() * historiasAmnesicas.length)];
 
@@ -1394,37 +1392,38 @@
             }
         }
 
-        async function encurtarECopiarOrdem(urlOriginalDaFicha) {
-    try {
-        // 1. Faz a requisição para encurtar o link usando a API pública do TinyURL
-        const resposta = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(urlOriginalDaFicha)}`);
-        
-        if (!resposta.ok) {
-            throw new Error('Erro ao encurtar o link.');
+        // FUNÇÃO ATUALIZADA: Encurta o link com o TinyURL e copia para a área de transferência
+        async function copiarLinkFicha() {
+            let dados = extrairDadosFicha();
+            let jsonString = JSON.stringify(dados);
+            
+            let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
+            let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
+            
+            try {
+                // Chama a API pública do TinyURL para encurtar o link grande
+                let resposta = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(urlCompleta)}`);
+                
+                if (!resposta.ok) {
+                    throw new Error("Erro ao encurtar o link.");
+                }
+
+                let linkEncurtado = await resposta.text();
+
+                // Copia o link encurtado para o dispositivo
+                await navigator.clipboard.writeText(linkEncurtado);
+                alert("Link curto gerado e copiado com sucesso!\n\n" + linkEncurtado);
+
+            } catch (err) {
+                console.error("Erro ao encurtar, usando link padrão:", err);
+                // Caso ocorra falha de rede/API, cai para o link longo como plano B
+                navigator.clipboard.writeText(urlCompleta).then(() => {
+                    alert("Aviso: Falha no encurtador. Link original copiado!");
+                }).catch(() => {
+                    prompt("Copie o link:", urlCompleta);
+                });
+            }
         }
-
-        const linkEncurtado = await resposta.text();
-
-        // 2. Copia o link encurtado para a área de transferência do dispositivo
-        await navigator.clipboard.writeText(linkEncurtado);
-
-        // 3. Feedback de sucesso (pode substituir por um alerta visual na sua interface)
-        console.log('Link encurtado e copiado com sucesso:', linkEncurtado);
-        alert(`Link encurtado copiado para a área de transferência:\n${linkEncurtado}`);
-
-        return linkEncurtado;
-
-    } catch (erro) {
-        console.error('Ocorreu um erro:', erro);
-        alert('Não foi possível processar o link da ordem.');
-    }
-}
-
-// Exemplo de uso ao clicar em um botão:
-// document.getElementById('seu-botao').addEventListener('click', () => {
-//     encurtarECopiarOrdem('https://suaplataforma.com/ficha-de-ordem/12345');
-// });
-
 
         function reiniciarFicha() {
             if (confirm("Tem certeza que deseja zerar a ficha para criar um novo personagem?")) {
