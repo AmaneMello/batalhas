@@ -730,6 +730,28 @@
             "Tática", "Vontade"
         ];
 
+        // LISTAS DE Nomes e Histórias Engraçadas para Amnésicos
+        const nomesAmnesicos = [
+            "João Ninguém da Silva", "Desconhecido #404", "Alguém Importante (talvez)", 
+            "O Cara da Brisa", "Senhor 'Esqueci'", "John Doe (Sobra do Churrasco)", 
+            "Anônimo da Silva Sauro", "Cidadão Genérico", "Error 401: Nome Não Encontrado", 
+            "Pessoa Desmemoriada", "O Maluco do Beco", "Xeroque Rolê", 
+            "Protagonista Sem Roteiro", "Fulado de Tal", "Alguém Vendo Coisas"
+        ];
+
+        const historiasAmnesicas = [
+            "Acordou dentro de uma geladeira industrial de um supermercado abandonado, vestindo apenas um roupão de flamingo e com um pinguim de pelúcia no bolso. Não lembra nem como se chama, mas tem certeza de que odeia segundas-feiras.",
+            "Bateu a cabeça numa quina de mesa tentando pegar a última coxinha da festa. Acordou com amnésia, mas com um gosto residual de catupiry na boca que o guia em momentos de perigo.",
+            "Acordou no meio de uma rodovia movimentada segurando uma placa que dizia 'Free Hugs para Kaijus'. Acha que o trânsito está muito agressivo hoje.",
+            "Tem certeza absoluta de que é um agente secreto internacional super treinado, mas a única evidência disso é que ele sabe abrir fechaduras com um grampo de cabelo e tem uma forte dor nas costas.",
+            "Acordou deitado em cima de um caixote de lixo com uma panela na cabeça servindo de capacete. Acha que a panela fala com ele e dá conselhos táticos excelentes.",
+            "O último recuerdo nítido que tem foi tentar comer detergente líquido achando que era suco de uva. Desde então, sua mente apagou, mas seu estômago digere qualquer substância radioativa.",
+            "Acordou amarrado a uma cadeira de escritório que estava rolando ladeira abaixo na Av. Paulista. Sobreviveu por puro milagre e agora acha que rodas de escritório são veículos de fuga de elite.",
+            "Acordou com um bilhete no bolso escrito: 'Se você leu isso, os pombos venceram. Fuja.' Desde então, ele olha torto para qualquer ave na rua.",
+            "Acredita piamente que veio do futuro para salvar a humanidade, mas esqueceu a parte principal da missão. Tudo o que lembra é que o mundo acaba se ele comer miojo vencido.",
+            "Acordou em cima de um telhado, sem calças, com um bilhete de loteria premiado (que já expirou há 3 anos) colado na testa."
+        ];
+
         const matrizBonusKaiju = {
             "lizard_a": { classes: ["combatente", "especialista"], origens: ["militar"] },
             "lizard_b": { classes: ["combatente"], origens: ["militar", "cientista"] },
@@ -839,7 +861,6 @@
             let infoHonju = dadosHonjuMateriais[honjuKey];
             let itensExtrasLista = [];
 
-            // CORREÇÃO: A partir de 6 Kaijus, cada unidade extra gera uma chance de 20% de dropar um item extra
             if (kaijusDerrotados >= 6) {
                 let excesso = kaijusDerrotados - 6 + 1;
                 for (let i = 0; i < excesso; i++) {
@@ -926,7 +947,6 @@
             let quantidadeSorteada = Math.floor(Math.random() * (maxQtd - minQtd + 1)) + minQtd;
             let qtdKaijumitaSorteada = Math.floor(Math.random() * 2) + 1; 
 
-            // CORREÇÃO: Sorteia explicitamente quais tipos de itens extras vieram nos 20% de chance a partir de 6+ kaijus
             let itensExtrasLista = [];
             if (kaijusDerrotados >= 6) {
                 let excesso = kaijusDerrotados - 6 + 1;
@@ -1131,8 +1151,14 @@
                     }
                 }
                 verificarAtributos();
-                document.getElementById('sheet-nome').value = "Desconhecido #404";
-                document.getElementById('sheet-descricao').innerText = "Você acordou sem lembranças...";
+
+                // SORTEIO DE NOME E HISTÓRIA ENGRAÇADA
+                let nomeSorteado = nomesAmnesicos[Math.floor(Math.random() * nomesAmnesicos.length)];
+                let historiaSorteada = historiasAmnesicas[Math.floor(Math.random() * historiasAmnesicas.length)];
+
+                document.getElementById('sheet-nome').value = nomeSorteado;
+                document.getElementById('sheet-descricao').innerText = historiaSorteada;
+                
                 salvarProgressoLocalmente();
             }
         }
@@ -1368,19 +1394,37 @@
             }
         }
 
-        function copiarLinkFicha() {
-            let dados = extrairDadosFicha();
-            let jsonString = JSON.stringify(dados);
-            
-            let dadosComprimidos = LZString.compressToEncodedURIComponent(jsonString);
-            let urlCompleta = window.location.origin + window.location.pathname + '#' + dadosComprimidos;
-            
-            navigator.clipboard.writeText(urlCompleta).then(() => {
-                alert("Link gerado e copiado com sucesso!");
-            }).catch(err => {
-                prompt("Copie o link:", urlCompleta);
-            });
+        async function encurtarECopiarOrdem(urlOriginalDaFicha) {
+    try {
+        // 1. Faz a requisição para encurtar o link usando a API pública do TinyURL
+        const resposta = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(urlOriginalDaFicha)}`);
+        
+        if (!resposta.ok) {
+            throw new Error('Erro ao encurtar o link.');
         }
+
+        const linkEncurtado = await resposta.text();
+
+        // 2. Copia o link encurtado para a área de transferência do dispositivo
+        await navigator.clipboard.writeText(linkEncurtado);
+
+        // 3. Feedback de sucesso (pode substituir por um alerta visual na sua interface)
+        console.log('Link encurtado e copiado com sucesso:', linkEncurtado);
+        alert(`Link encurtado copiado para a área de transferência:\n${linkEncurtado}`);
+
+        return linkEncurtado;
+
+    } catch (erro) {
+        console.error('Ocorreu um erro:', erro);
+        alert('Não foi possível processar o link da ordem.');
+    }
+}
+
+// Exemplo de uso ao clicar em um botão:
+// document.getElementById('seu-botao').addEventListener('click', () => {
+//     encurtarECopiarOrdem('https://suaplataforma.com/ficha-de-ordem/12345');
+// });
+
 
         function reiniciarFicha() {
             if (confirm("Tem certeza que deseja zerar a ficha para criar um novo personagem?")) {
@@ -1455,4 +1499,3 @@
     </script>
 </body>
 </html>
-
