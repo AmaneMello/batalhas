@@ -510,52 +510,28 @@
         </div>
 
         <!-- CARD DE LOOTING ANDAR -->
-          function executarGiroLootingAndar() {
-            let faixa = document.getElementById('loot-andar-faixa').value;
-            let kaijusDerrotados = parseInt(document.getElementById('loot-andar-kaijus').value) || 0;
-            let resultadoDiv = document.getElementById('resultado-looting-andar');
-            
-            let manual = "Sem manual", nivelEnchimento = "Lv1", nivelKaijumita = "Lv1";
-            let minQtd = 1, maxQtd = 3;
+        <div class="looting-card" id="card-looting_andar">
+            <h2>Giro de Looting (Média de Andar)</h2>
+            <div class="form-group">
+                <label>Faixa de Andar:</label>
+                <select id="loot-andar-faixa">
+                    <option value="20-15">Andar 20 a 15</option>
+                    <option value="15-10">Andar 15 a 10</option>
+                    <option value="10-5">Andar 10 a 5</option>
+                    <option value="5-terreo">Andar 5 ao Térreo</option>
+                    <option value="terreo-subsolo">Térreo ao Subsolo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Número de Rolagens / Kaijus Derrotados:</label>
+                <input type="number" id="loot-andar-kaijus" value="0" min="0">
+            </div>
 
-            // Definindo parâmetros base por faixa de andar
-            if (faixa === "20-15") {
-                manual = "Sem manual"; nivelEnchimento = "Lv1"; nivelKaijumita = "Lv1"; minQtd = 1; maxQtd = 3;
-            } else if (faixa === "15-10") {
-                manual = "Lv1"; nivelEnchimento = "Lv1~2"; nivelKaijumita = "Lv1"; minQtd = 1; maxQtd = 4;
-            } else if (faixa === "10-5") {
-                manual = "Lv2"; nivelEnchimento = "Lv2"; nivelKaijumita = "Lv2"; minQtd = 1; maxQtd = 3;
-            } else if (faixa === "5-terreo") {
-                manual = "Lv2~3"; nivelEnchimento = "Lv2~3"; nivelKaijumita = "Lv2~3"; minQtd = 1; maxQtd = 4;
-            } else if (faixa === "terreo-subsolo") {
-                manual = "Lv3"; nivelEnchimento = "Lv3"; nivelKaijumita = "Lv3"; minQtd = 3; maxQtd = 5;
-            }
+            <button class="action-btn" style="background-color: #ff8c00;" onclick="executarGiroLootingAndar()">🎲 Girar Looting de Andar</button>
+            <div id="resultado-looting-andar" class="result" style="color: #ffcc80; margin-top: 10px; font-size: 0.85rem;"></div>
+        </div>
 
-            // Sorteia a quantidade exata dentro do intervalo da faixa
-            let quantidadeSorteada = Math.floor(Math.random() * (maxQtd - minQtd + 1)) + minQtd;
-            
-            // Sorteia a quantidade específica de Kaijumita obtida na rolagem
-            let qtdKaijumitaSorteada = Math.floor(Math.random() * 2) + 1; 
-
-            let extrasExtras = 0;
-            // Bônus se houver rolagens acima de 5 (estritamente 6 ou mais)
-            if (kaijusDerrotados >= 6) {
-                let excesso = kaijusDerrotados - 6 + 1;
-                for (let i = 0; i < excesso; i++) {
-                    let rollExtra = Math.random() * 100;
-                    if (rollExtra < 20) extrasExtras++;
-                }
-            }
-
-            resultadoDiv.innerHTML = 
-                `<strong>Looting de Andar Revelado (${faixa}):</strong><br>` +
-                `- Manual: ${manual}<br>` +
-                `- Enchimento (Atk/Suport/Def): ${nivelEnchimento} (Qtd: <strong>${quantidadeSorteada}</strong>)<br>` +
-                `- Kaijumita: ${nivelKaijumita} (Qtd: <strong>${qtdKaijumitaSorteada}</strong>)<br>` +
-                (extrasExtras > 0 ? `<span style="color:#81c784;">🔥 Bônus por Kaijus (Acima de 5): +${extrasExtras} item(ns) extra(s)!</span>` : '');
-        }
-
-
+        <!-- CARD DE CRIAR FICHA -->
         <div class="custom-sheet" id="card-criar_ficha">
             <h2>Ficha de Personagem (Ordem)</h2>
             
@@ -863,7 +839,6 @@
             let infoHonju = dadosHonjuMateriais[honjuKey];
             let extrasExtras = 0;
 
-            // Bônus acima de 5 (estritamente 6 ou mais nas rolagens extras baseadas nos kaijus)
             if (kaijusDerrotados >= 6) {
                 let excesso = kaijusDerrotados - 6 + 1;
                 for (let i = 0; i < excesso; i++) {
@@ -872,7 +847,6 @@
                 }
             }
 
-            // Atributos 1 e 2 aleatórios
             let a1 = Math.floor(Math.random() * 3) + 2; 
             let a2 = Math.floor(Math.random() * 3) + 2; 
             let somaTotal = a1 + a2;
@@ -905,17 +879,24 @@
             let faixa = document.getElementById('loot-andar-faixa').value;
             let kaijusDerrotados = parseInt(document.getElementById('loot-andar-kaijus').value) || 0;
             let resultadoDiv = document.getElementById('resultado-looting-andar');
-            let manual = "Sem manual", lvM = "Lv1", lvKaijumita = "Lv1", quantidade = "1~3";
+            
+            let manual = "Sem manual", nivelEnchimento = "Lv1", nivelKaijumita = "Lv1";
+            let minQtd = 1, maxQtd = 3;
 
-            if (faixa === "15-10") {
-                manual = "Lv1"; lvM = "Lv1~2"; lvKaijumita = "Lv1"; quantidade = "1~4";
+            if (faixa === "20-15") {
+                manual = "Sem manual"; nivelEnchimento = "Lv1"; nivelKaijumita = "Lv1"; minQtd = 1; maxQtd = 3;
+            } else if (faixa === "15-10") {
+                manual = "Lv1"; nivelEnchimento = "Lv1~2"; nivelKaijumita = "Lv1"; minQtd = 1; maxQtd = 4;
             } else if (faixa === "10-5") {
-                manual = "Lv2"; lvM = "Lv2"; lvKaijumita = "Lv2"; quantidade = "1~3";
+                manual = "Lv2"; nivelEnchimento = "Lv2"; nivelKaijumita = "Lv2"; minQtd = 1; maxQtd = 3;
             } else if (faixa === "5-terreo") {
-                manual = "Lv2~3"; lvM = "Lv2~3"; lvKaijumita = "Lv2~3"; quantidade = "1~4";
+                manual = "Lv2~3"; nivelEnchimento = "Lv2~3"; nivelKaijumita = "Lv2~3"; minQtd = 1; maxQtd = 4;
             } else if (faixa === "terreo-subsolo") {
-                manual = "Lv3"; lvM = "Lv3"; lvKaijumita = "Lv3"; quantidade = "3~5";
+                manual = "Lv3"; nivelEnchimento = "Lv3"; nivelKaijumita = "Lv3"; minQtd = 3; maxQtd = 5;
             }
+
+            let quantidadeSorteada = Math.floor(Math.random() * (maxQtd - minQtd + 1)) + minQtd;
+            let qtdKaijumitaSorteada = Math.floor(Math.random() * 2) + 1; 
 
             let extrasExtras = 0;
             if (kaijusDerrotados >= 6) {
@@ -929,9 +910,8 @@
             resultadoDiv.innerHTML = 
                 `<strong>Looting de Andar Revelado (${faixa}):</strong><br>` +
                 `- Manual: ${manual}<br>` +
-                `- Enchimento (Atk/Suport/Def): ${lvM}<br>` +
-                `- Kaijumita: ${lvKaijumita}<br>` +
-                `- Quantidade: ${quantidade}<br>` +
+                `- Enchimento (Atk/Suport/Def): ${nivelEnchimento} (Qtd: <strong>${quantidadeSorteada}</strong>)<br>` +
+                `- Kaijumita: ${nivelKaijumita} (Qtd: <strong>${qtdKaijumitaSorteada}</strong>)<br>` +
                 (extrasExtras > 0 ? `<span style="color:#81c784;">🔥 Bônus por Kaijus (Acima de 5): +${extrasExtras} item(ns) extra(s)!</span>` : '');
         }
 
@@ -1440,4 +1420,3 @@
     </script>
 </body>
 </html>
-
