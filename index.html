@@ -27,7 +27,7 @@
             width: 100%;
             max-width: 600px;
         }
-        .selector-box, .compatibilidade-box, .looting-box, .restrito-box {
+        .selector-box, .compatibilidade-box, .looting-selector-box, .restrito-box {
             background-color: #1e1e1e;
             border: 2px solid #ff5252;
             border-radius: 8px;
@@ -37,13 +37,12 @@
             margin-bottom: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             text-align: center;
-            box-sizing: border-box;
         }
         .compatibilidade-box {
             border-color: #2196f3;
         }
-        .looting-box {
-            border-color: #ff9800;
+        .looting-selector-box {
+            border-color: #ffa500;
         }
         label {
             display: block;
@@ -65,15 +64,15 @@
         .compatibilidade-box select, .compatibilidade-box input {
             border-color: #2196f3;
         }
-        .looting-box select, .looting-box input {
-            border-color: #ff9800;
+        .looting-selector-box select, .looting-selector-box input {
+            border-color: #ffa500;
         }
         .container {
             display: flex;
             justify-content: center;
             width: 100%;
         }
-        .monster-card, .custom-sheet {
+        .monster-card, .custom-sheet, .looting-card {
             background-color: #1e1e1e;
             border: 2px solid #b71c1c;
             border-radius: 8px;
@@ -81,19 +80,26 @@
             padding: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             display: none;
-            box-sizing: border-box;
         }
         .custom-sheet {
             border-color: #d32f2f;
             width: 440px;
         }
-        .custom-sheet h2 {
+        .looting-card {
+            border-color: #ffa500;
+            width: 400px;
+        }
+        .custom-sheet h2, .looting-card h2 {
             color: #ff5252;
             border-bottom: 1px solid #d32f2f;
             margin-top: 0;
             padding-bottom: 5px;
             font-size: 1.2rem;
             text-align: center;
+        }
+        .looting-card h2 {
+            color: #ffa500;
+            border-bottom-color: #ffa500;
         }
         .form-group {
             margin-bottom: 8px;
@@ -103,6 +109,9 @@
             font-size: 0.8rem;
             color: #ff8a80;
             margin-bottom: 2px;
+        }
+        .looting-card .form-group label {
+            color: #ffcc80;
         }
         .form-group input, .form-group select {
             width: 100%;
@@ -320,30 +329,6 @@
             flex: 1;
             text-align: center;
         }
-        .card-lizard { border-color: #4caf50; }
-        .card-lizard h2 { color: #81c784; border-bottom-color: #4caf50; }
-        .card-bovine { border-color: #795548; }
-        .card-bovine h2 { color: #a1887f; border-bottom-color: #795548; }
-        .card-spider { border-color: #9c27b0; }
-        .card-spider h2 { color: #ba68c8; border-bottom-color: #9c27b0; }
-        .card-wyvern { border-color: #ff9800; }
-        .card-wyvern h2 { color: #ffb74d; border-bottom-color: #ff9800; }
-        .card-ant { border-color: #607d8b; }
-        .card-ant h2 { color: #90a4ae; border-bottom-color: #607d8b; }
-        .card-armored { border-color: #00bcd4; }
-        .card-armored h2 { color: #4dd0e1; border-bottom-color: #00bcd4; }
-        .card-fungal { border-color: #8bc34a; }
-        .card-fungal h2 { color: #aed581; border-bottom-color: #8bc34a; }
-        .card-wolf { border-color: #e91e63; }
-        .card-wolf h2 { color: #f06292; border-bottom-color: #e91e63; }
-        .card-mole { border-color: #8d6e63; }
-        .card-mole h2 { color: #d7ccc8; border-bottom-color: #8d6e63; }
-        .card-plant { border-color: #2e7d32; }
-        .card-plant h2 { color: #81c784; border-bottom-color: #2e7d32; }
-        .card-paraves { border-color: #009688; }
-        .card-paraves h2 { color: #4db6ac; border-bottom-color: #009688; }
-        .card-caudata { border-color: #673ab7; }
-        .card-caudata h2 { color: #9575cd; border-bottom-color: #673ab7; }
         h2 { 
             margin-top: 0; 
             border-bottom: 1px solid; 
@@ -402,84 +387,14 @@
 
     <h1>Painel de Batalha</h1>
 
-    <!-- Seletor Global de Fichas -->
+    <!-- Seletor Global de Fichas e Looting -->
     <div class="selector-box">
         <label for="seletor-global">Escolha uma opção:</label>
         <select id="seletor-global" onchange="mostrarSelecao()">
             <option value="">-- Selecione na lista --</option>
             <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
+            <option value="looting_card" style="color: #ffa500; font-weight: bold;">🍎 Giro de Looting (Andar ou Kaiju)</option>
         </select>
-    </div>
-<!-- Área de Seleção (Fica sempre visível) -->
-<div style="border: 1px solid rgba(255, 255, 255, 0.2); padding: 12px; margin-bottom: 15px; border-radius: 8px; background-color: #121212; text-align: center;">
-  <label for="looting-type" style="color: #ff5555; display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold;">Selecione o tipo de looting:</label>
-  <select id="looting-type" onchange="toggleLootingCard()" style="width: 100%; padding: 8px; background-color: #1a1a1a; color: #ccc; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; font-size: 14px;">
-    <option value="">-- Escolha uma opção --</option>
-    <option value="ativo">Giro de Looting (Andar ou Kaiju)</option>
-  </select>
-</div>
-
-<!-- Card Completo de Rolagem (TUDO o que deve sumir/aparecer está aqui dentro) -->
-<div id="looting-card" style="display: none; border: 1px solid #ffa500; padding: 15px; border-radius: 8px; background-color: #121212; margin-bottom: 15px;">
-  <h3 style="color: #ffa500; text-align: center; margin-top: 0; font-size: 15px; margin-bottom: 15px;">🍎 Giro de Looting (Andar ou Kaiju)</h3>
-  
-  <div style="margin-bottom: 12px;">
-    <label style="color: #ff5555; display: block; margin-bottom: 5px; font-size: 13px;">Tipo de Looting:</label>
-    <select style="width: 100%; padding: 8px; background-color: #1a1a1a; color: #ccc; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; font-size: 14px;">
-      <option>Honju (Unimaterial)</option>
-    </select>
-  </div>
-
-  <div style="margin-bottom: 12px;">
-    <label style="color: #ff5555; display: block; margin-bottom: 5px; font-size: 13px;">Selecione o Honju:</label>
-    <select style="width: 100%; padding: 8px; background-color: #1a1a1a; color: #ccc; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; font-size: 14px;">
-      <option>Lizard (Tipo A)</option>
-    </select>
-  </div>
-
-  <div style="margin-bottom: 12px;">
-    <label style="color: #ff5555; display: block; margin-bottom: 5px; font-size: 13px;">Rounds da Batalha (1 a 10):</label>
-    <input type="number" value="5" style="width: 100%; padding: 8px; background-color: #1a1a1a; color: #ccc; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; font-size: 14px; box-sizing: border-box;">
-  </div>
-    
-  <div style="margin-bottom: 12px;">
-    <label style="color: #ff5555; display: block; margin-bottom: 5px; font-size: 13px;">Kaijus Derrotados (a partir de 5, +20% cada):</label>
-    <input type="number" value="0" style="width: 100%; padding: 8px; background-color: #1a1a1a; color: #ccc; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; font-size: 14px; box-sizing: border-box;">
-    <button style="width: 100%; padding: 10px; background-color: #ff8c00; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;">🎲 Girar Looting</button>
-</div>
-
-<script>
-  function toggleLootingCard() {
-    const selectElement = document.getElementById('looting-type');
-    const cardElement = document.getElementById('looting-card');
-    
-    if (selectElement.value !== "") {
-      cardElement.style.display = 'block';
-    } else {
-      cardElement.style.display = 'none';
-    }
-  }
-</script>
-
-
-      <div class="form-group" id="div-looting-andar" style="text-align: left; display: none;">
-            <label>Andar Atual / Local:</label>
-            <select id="looting-andar-select">
-                <option value="20_15">20 ~ 15 (Sem Manual / Lv1)</option>
-                <option value="15_10">15 ~ 10 (Manual Lv1 / Kaijumita Lv1~2)</option>
-                <option value="10_5">10 ~ 5 (Manual Lv2 / Kaijumita Lv2)</option>
-                <option value="5_terreo">5 ~ Térreo (Manual Lv2~3 / Kaijumita Lv2~3)</option>
-                <option value="subsolo">Térreo ~ Subsolo (Manual Lv3 / Kaijumita Lv3, 3-5)</option>
-            </select>
-        </div>
-
-        <div class="form-group" style="text-align: left;">
-            <label>Kaijus Derrotados (a partir de 5, +20% cada):</label>
-            <input type="number" id="looting-kaijus-derrotados" value="0" min="0" max="20">
-        </div>
-
-        <button class="action-btn" style="background-color: #ff9800; margin-top: 10px;" onclick="girarLooting()">🎲 Girar Looting</button>
-        <div id="resultado-looting" class="result" style="color: #ffe0b2; margin-top: 8px; font-size: 0.85rem; text-align: left; white-space: pre-wrap;"></div>
     </div>
 
     <!-- Área de Teste de Compatibilidade -->
@@ -551,6 +466,64 @@
 
     <div class="container" id="painel-monstros">
         
+        <!-- CARD DE LOOTING INTEGRADO -->
+        <div class="looting-card" id="card-looting_card">
+            <h2>Giro de Looting</h2>
+            <div class="form-group">
+                <label>Tipo de Looting:</label>
+                <select id="loot-tipo-geral" onchange="alternarOpcoesLooting()">
+                    <option value="honju">Honju (Unimaterial)</option>
+                    <option value="andar">Média de Andar</option>
+                </select>
+            </div>
+
+            <!-- Seção Honju -->
+            <div id="secao-honju">
+                <div class="form-group">
+                    <label>Selecione o Honju:</label>
+                    <select id="loot-honju-escolha">
+                        <option value="lizard">Lizard (Scales: Edge / Flame)</option>
+                        <option value="bovine">Bovine (Horns: Fist / Frozen)</option>
+                        <option value="spider">Spider (Spikes: Cannon / Shear)</option>
+                        <option value="wyvern">Wyvern (Wings: Edge / Charged)</option>
+                        <option value="ant">Ant (Jaws: Cannon / Charged)</option>
+                        <option value="armored">Armored (Carapaces: Fist / Shear)</option>
+                        <option value="fungal">Fungal (Caps: Cannon / Frozen)</option>
+                        <option value="wolf">Wolf (Claws: Edge / Flame)</option>
+                        <option value="mole">Mole (Feet: Fist / Charged)</option>
+                        <option value="plant">Plant (Flowers: Cannon / Droplet)</option>
+                        <option value="paraves">Paraves (Casques: Edge / Charged)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Rounds da Batalha (1 a 10):</label>
+                    <input type="number" id="loot-rounds" value="10" min="1" max="10">
+                </div>
+            </div>
+
+            <!-- Seção Andar -->
+            <div id="secao-andar" style="display:none;">
+                <div class="form-group">
+                    <label>Selecione o Intervalo de Andar:</label>
+                    <select id="loot-andar-faixa">
+                        <option value="20-15">20 ~ 15 (Sem manual | Lv1 | Lv1 | 1~3)</option>
+                        <option value="15-10">15 ~ 10 (Lv1 | Lv1~2 | Lv1 | 1~4)</option>
+                        <option value="10-5">10 ~ 5 (Lv2 | Lv2 | Lv2 | 1~3)</option>
+                        <option value="5-terreo">5 ~ Térreo (Lv2~3 | Lv2~3 | Lv2~3 | 1~4)</option>
+                        <option value="terreo-subsolo">Térreo ~ Subsolo (Lv3 | Lv3 | Lv3 | 3~5)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Kaijus Derrotados (Total Yoju/Honju):</label>
+                <input type="number" id="loot-kaijus-derrotados" value="0" min="0">
+            </div>
+
+            <button class="action-btn" style="background-color: #ff8c00;" onclick="executarGiroLooting()">🎲 Girar Looting</button>
+            <div id="resultado-looting" class="result" style="color: #ffcc80; margin-top: 10px; font-size: 0.85rem;"></div>
+        </div>
+
         <div class="custom-sheet" id="card-criar_ficha">
             <h2>Ficha de Personagem (Ordem)</h2>
             
@@ -749,29 +722,6 @@
             "Tática", "Vontade"
         ];
 
-        // Mapeamento de Looting dos Honjus (Unimateriais e Atributos 1 e 2)
-        const lootingHonjuMap = {
-            "lizard_a": { nome: "Lizard", item: "Scales", attr1: "Edge", attr2: "Flame" },
-            "lizard_b": { nome: "Lizard", item: "Scales", attr1: "Edge", attr2: "Flame" },
-            "bovine_a": { nome: "Bovine", item: "Horns", attr1: "Fist", attr2: "Frozen" },
-            "bovine_b": { nome: "Bovine", item: "Horns", attr1: "Fist", attr2: "Frozen" },
-            "spider_a": { nome: "Spider", item: "Spikes", attr1: "Cannon", attr2: "Shear" },
-            "spider_b": { nome: "Spider", item: "Spikes", attr1: "Cannon", attr2: "Shear" },
-            "wyvern_a": { nome: "Wyvern", item: "Wings", attr1: "Edge", attr2: "Charged" },
-            "wyvern_b": { nome: "Wyvern", item: "Wings", attr1: "Edge", attr2: "Charged" },
-            "ant_a": { nome: "Ant", item: "Jaws", attr1: "Cannon", attr2: "Charged" },
-            "ant_b": { nome: "Ant", item: "Jaws", attr1: "Cannon", attr2: "Charged" },
-            "armored_a": { nome: "Armored", item: "Carapaces", attr1: "Fist", attr2: "Shear" },
-            "fungal_a": { nome: "Fungal", item: "Caps", attr1: "Cannon", attr2: "Frozen" },
-            "fungal_b": { nome: "Fungal", item: "Caps", attr1: "Cannon", attr2: "Frozen" },
-            "wolf_a": { nome: "Wolf", item: "Claws", attr1: "Edge", attr2: "Flame" },
-            "mole_a": { nome: "Mole", item: "Feet", attr1: "Fist", attr2: "Charged" },
-            "plant_a": { nome: "Plant", item: "Flowers", attr1: "Cannon", attr2: "Droplet" },
-            "paraves_a": { nome: "Paraves", item: "Casques", attr1: "Edge", attr2: "Charged" },
-            "caudata_a": { nome: "Caudata", item: "Caudata Drop", attr1: "Edge", attr2: "Frozen" },
-            "caudata_b": { nome: "Caudata", item: "Caudata Drop", attr1: "Edge", attr2: "Frozen" }
-        };
-
         const matrizBonusKaiju = {
             "lizard_a": { classes: ["combatente", "especialista"], origens: ["militar"] },
             "lizard_b": { classes: ["combatente"], origens: ["militar", "cientista"] },
@@ -816,31 +766,42 @@
             { id: "caudata_b", nome: "Caudata (Tipo B)", base: "caudata", hp: 37, caVal: 15, visaoVal: 6, dif: "A para B: -3hp / +5 ca" }
         ];
 
+        const dadosHonjuMateriais = {
+            lizard: { nome: "Lizard", item: "Scales", mat1: "Edge", mat2: "Flame" },
+            bovine: { nome: "Bovine", item: "Horns", mat1: "Fist", mat2: "Frozen" },
+            spider: { nome: "Spider", item: "Spikes", mat1: "Cannon", mat2: "Shear" },
+            wyvern: { nome: "Wyvern", item: "Wings", mat1: "Edge", mat2: "Charged" },
+            ant: { nome: "Ant", item: "Jaws", mat1: "Cannon", mat2: "Charged" },
+            armored: { nome: "Armored", item: "Carapaces", mat1: "Fist", mat2: "Shear" },
+            fungal: { nome: "Fungal", item: "Caps", mat1: "Cannon", mat2: "Frozen" },
+            wolf: { nome: "Wolf", item: "Claws", mat1: "Edge", mat2: "Flame" },
+            mole: { nome: "Mole", item: "Feet", mat1: "Fist", mat2: "Charged" },
+            plant: { nome: "Plant", item: "Flowers", mat1: "Cannon", mat2: "Droplet" },
+            paraves: { nome: "Paraves", item: "Casques", mat1: "Edge", mat2: "Charged" }
+        };
+
         function montarPagina() {
             let seletorGlobal = document.getElementById('seletor-global');
             let container = document.getElementById('painel-monstros');
             let selectCompatibilidade = document.getElementById('comp-honju-select');
-            let selectLootingHonju = document.getElementById('looting-honju-select');
             
             let optionsHtml = `
                 <option value="">-- Selecione na lista --</option>
                 <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
+                <option value="looting_card" style="color: #ffa500; font-weight: bold;">🍎 Giro de Looting (Andar ou Kaiju)</option>
             `;
-            let cardsHtml = document.getElementById('card-criar_ficha').outerHTML;
+            let cardsHtml = document.getElementById('card-looting_card').outerHTML + document.getElementById('card-criar_ficha').outerHTML;
             let compHonjuHtml = "";
-            let lootingHonjuHtml = "";
 
             monstrosLista.forEach(m => {
                 optionsHtml += `<option value="${m.id}">${m.nome}</option>`;
                 cardsHtml += criarCardHtml(m);
                 compHonjuHtml += `<option value="${m.id}">${m.nome}</option>`;
-                lootingHonjuHtml += `<option value="${m.id}">${m.nome}</option>`;
             });
 
             seletorGlobal.innerHTML = optionsHtml;
             container.innerHTML = cardsHtml;
             selectCompatibilidade.innerHTML = compHonjuHtml;
-            selectLootingHonju.innerHTML = lootingHonjuHtml;
             
             atualizarTrilhas();
             inicializarPericias();
@@ -851,112 +812,87 @@
             }
         }
 
-        function alternarCamposLooting() {
-            let tipo = document.getElementById('looting-tipo').value;
-            let divAlvo = document.getElementById('div-looting-alvo');
-            let divRounds = document.getElementById('div-looting-rounds');
-            let divAndar = document.getElementById('div-looting-andar');
-
+        function alternarOpcoesLooting() {
+            let tipo = document.getElementById('loot-tipo-geral').value;
             if (tipo === 'honju') {
-                divAlvo.style.display = 'block';
-                divRounds.style.display = 'block';
-                divAndar.style.display = 'none';
+                document.getElementById('secao-honju').style.display = 'block';
+                document.getElementById('secao-andar').style.display = 'none';
             } else {
-                divAlvo.style.display = 'none';
-                divRounds.style.display = 'none';
-                divAndar.style.display = 'block';
+                document.getElementById('secao-honju').style.display = 'none';
+                document.getElementById('secao-andar').style.display = 'block';
             }
         }
 
-        function girarLooting() {
-            let tipo = document.getElementById('looting-tipo').value;
-            let kaijusDerrotados = parseInt(document.getElementById('looting-kaijus-derrotados').value) || 0;
-            let resDiv = document.getElementById('resultado-looting');
-            let textoResultado = "";
+        function executarGiroLooting() {
+            let tipo = document.getElementById('loot-tipo-geral').value;
+            let kaijusDerrotados = parseInt(document.getElementById('loot-kaijus-derrotados').value) || 0;
+            let resultadoDiv = document.getElementById('resultado-looting');
+            let extrasExtras = 0;
 
-            // Chance extra por Kaijus derrotados a partir de 5 (cada 1 dá 20%)
-            let excedenteKaijus = Math.max(0, kaijusDerrotados - 5);
-            let chanceExtraKaiju = excedenteKaijus * 20;
-            let extraConseguidoKaiju = false;
-            if (chanceExtraKaiju > 0) {
-                let rolagemExtra = Math.floor(Math.random() * 100) + 1;
-                if (rolagemExtra <= chanceExtraKaiju) extraConseguidoKaiju = true;
+            // Chance extra por cada kaiju derrotado a partir de 5 (+20% cada)
+            if (kaijusDerrotados >= 5) {
+                let excesso = kaijusDerrotados - 5 + 1;
+                for (let i = 0; i < excesso; i++) {
+                    let rollExtra = Math.random() * 100;
+                    if (rollExtra < 20) extrasExtras++;
+                }
             }
 
             if (tipo === 'honju') {
-                let honjuId = document.getElementById('looting-honju-select').value;
-                let rounds = parseInt(document.getElementById('looting-rounds').value) || 10;
-                let hInfo = lootingHonjuMap[honjuId] || { nome: "Item", item: "Material", attr1: "Edge", attr2: "Flame" };
+                let honjuKey = document.getElementById('loot-honju-escolha').value;
+                let rounds = parseInt(document.getElementById('loot-rounds').value) || 10;
+                let infoHonju = dadosHonjuMateriais[honjuKey];
 
-                // Regra de rounds: 10 rounds = 0%, cada 1 a menos = +10% de chance de 1-2 extras
-                let roundsAbaixo = Math.max(0, 10 - rounds);
-                let chanceExtraRound = roundsAbaixo * 10;
-                let extraConseguidoRound = false;
-                if (chanceExtraRound > 0) {
-                    let rolagemRound = Math.floor(Math.random() * 100) + 1;
-                    if (rolagemRound <= chanceExtraRound) extraConseguidoRound = true;
+                // Atributo 1 e 2 (min 2 de cada, max 6 no total)
+                let a1 = Math.floor(Math.random() * 3) + 2; // entre 2 e 4
+                let a2 = Math.floor(Math.random() * 3) + 2; // entre 2 e 4
+                let somaTotal = a1 + a2;
+                if (somaTotal > 6) {
+                    a2 = 6 - a1;
+                    if (a2 < 2) a2 = 2;
                 }
 
-                // Quantidade base de unimaterial: de 3 a 5
-                let qtdBase = Math.floor(Math.random() * 3) + 3;
-                let extrasAdicionados = 0;
-                let detalhesExtras = [];
-
-                if (extraConseguidoRound) {
-                    let qtdExtraR = Math.floor(Math.random() * 2) + 1; // 1 a 2 extras
-                    extrasAdicionados += qtdExtraR;
-                    detalhesExtras.push(`+${qtdExtraR} por Eficiência de Rounds (${chanceExtraRound}% de chance)`);
-                }
-                if (extraConseguidoKaiju) {
-                    let qtdExtraK = Math.floor(Math.random() * 2) + 1;
-                    extrasAdicionados += qtdExtraK;
-                    detalhesExtras.push(`+${qtdExtraK} por Acúmulo de Kaijus (${chanceExtraKaiju}% de chance)`);
+                // 10 rounds = 0% chance extra, a cada 1 round a menos dá 10% de chance de 1-2 extras
+                let roundsAbaixo = 10 - rounds;
+                let unimateriaisExtras = 0;
+                if (roundsAbaixo > 0) {
+                    for (let r = 0; r < roundsAbaixo; r++) {
+                        let chanceR = Math.random() * 100;
+                        if (chanceR < 10) {
+                            unimateriaisExtras += Math.floor(Math.random() * 2) + 1;
+                        }
+                    }
                 }
 
-                let totalFinal = qtdBase + extrasAdicionados;
-                // Garantir limites dos atributos (mín 2 de cada, máx 6 no total se somados, ou distribuição proporcional)
-                let qtdAttr1 = Math.max(2, Math.floor(totalFinal / 2));
-                let qtdAttr2 = totalFinal - qtdAttr1;
-                if (qtdAttr2 < 2) { qtdAttr2 = 2; qtdAttr1 = Math.max(2, totalFinal - 2); }
-
-                textoResultado = `📦 <strong>Looting Honju (${hInfo.nome}):</strong><br>` +
-                    `• Base Unimaterial: ${qtdBase} (de 3 a 5)<br>` +
-                    `• Distribuição Atributos: ${qtdAttr1}x ${hInfo.attr1} e ${qtdAttr2}x ${hInfo.attr2}<br>` +
-                    (detalhesExtras.length > 0 ? `✨ <strong>Bônus Extras:</strong><br>- ${detalhesExtras.join('<br>- ')}<br>` : `ℹ️ Sem bônus extra obtido.<br>`) +
-                    `📦 <strong>Total Geral: ${totalFinal} Unimateriais</strong>`;
+                resultadoDiv.innerHTML = 
+                    `<strong>Looting Honju (${infoHonju.nome}):</strong><br>` +
+                    `- ${infoHonju.mat1}: ${a1}<br>` +
+                    `- ${infoHonju.mat2}: ${a2}<br>` +
+                    (unimateriaisExtras > 0 ? `<span style="color:#81c784;">🎁 Bônus de Rounds: +${unimateriaisExtras} unimaterial(is) extra(s)!</span><br>` : '') +
+                    (extrasExtras > 0 ? `<span style="color:#81c784;">🔥 Bônus por Kaijus Derrotados: +${extrasExtras} item(ns) extra(s)!</span>` : '');
 
             } else {
-                let andarVal = document.getElementById('looting-andar-select').value;
-                let manual = "Sem Manual", kaijumita = "Lv1", qtdKaijumitaMin = 1, qtdKaijumitaMax = 3;
+                let faixa = document.getElementById('loot-andar-faixa').value;
+                let manual = "Sem manual", lvM = "Lv1", lvKaijumita = "Lv1", quantidade = "1~3";
 
-                if (andarVal === "20_15") {
-                    manual = "Sem Manual"; kaijumita = "Lv1"; qtdKaijumitaMin = 1; qtdKaijumitaMax = 3;
-                } else if (andarVal === "15_10") {
-                    manual = "Lv1"; kaijumita = "Lv1~2"; qtdKaijumitaMin = 1; qtdKaijumitaMax = 4;
-                } else if (andarVal === "10_5") {
-                    manual = "Lv2"; kaijumita = "Lv2"; qtdKaijumitaMin = 1; qtdKaijumitaMax = 3;
-                } else if (andarVal === "5_terreo") {
-                    manual = "Lv2~3"; kaijumita = "Lv2~3"; qtdKaijumitaMin = 1; qtdKaijumitaMax = 4;
-                } else if (andarVal === "subsolo") {
-                    manual = "Lv3"; kaijumita = "Lv3"; qtdKaijumitaMin = 3; qtdKaijumitaMax = 5;
+                if (faixa === "15-10") {
+                    manual = "Lv1"; lvM = "Lv1~2"; lvKaijumita = "Lv1"; quantidade = "1~4";
+                } else if (faixa === "10-5") {
+                    manual = "Lv2"; lvM = "Lv2"; lvKaijumita = "Lv2"; quantidade = "1~3";
+                } else if (faixa === "5-terreo") {
+                    manual = "Lv2~3"; lvM = "Lv2~3"; lvKaijumita = "Lv2~3"; quantidade = "1~4";
+                } else if (faixa === "terreo-subsolo") {
+                    manual = "Lv3"; lvM = "Lv3"; lvKaijumita = "Lv3"; quantidade = "3~5";
                 }
 
-                let qtdKaijumitasSorteada = Math.floor(Math.random() * (qtdKaijumitaMax - qtdKaijumitaMin + 1)) + qtdKaijumitaMin;
-                let tipoEnchant = ["Ataque", "Suporte", "Defesa"][Math.floor(Math.random() * 3)];
-
-                let textoExtraKaiju = "";
-                if (extraConseguidoKaiju) {
-                    qtdKaijumitasSorteada += 1;
-                    textoExtraKaiju = `<br>✨ <strong>Bônus de Kaijus Derrotados:</strong> +1 Kaijumita extra (${chanceExtraKaiju}% chance)!`;
-                }
-
-                textoResultado = `🏰 <strong>Looting de Andar:</strong><br>` +
-                    `• Manual Enchimento: <strong>${manual}</strong> (${tipoEnchant})<br>` +
-                    `• Nível Kaijumita: <strong>${kaijumita}</strong><br>` +
-                    `• Quantidade Kaijumitas: <strong>${qtdKaijumitasSorteada}</strong>` + textoExtraKaiju;
+                resultadoDiv.innerHTML = 
+                    `<strong>Looting de Andar (${faixa}):</strong><br>` +
+                    `- Manual: ${manual}<br>` +
+                    `- Enchimento (Atk/Suport/Def): ${lvM}<br>` +
+                    `- Kaijumita: ${lvKaijumita}<br>` +
+                    `- Quantidade: ${quantidade}<br>` +
+                    (extrasExtras > 0 ? `<span style="color:#81c784;">🔥 Bônus por Kaijus Derrotados: +${extrasExtras} item(ns) extra(s)!</span>` : '');
             }
-
-            resDiv.innerHTML = textoResultado;
         }
 
         function alternarCamposCompatibilidade() {
@@ -1098,13 +1034,13 @@
 
         function mostrarSelecao() {
             let escolhido = document.getElementById('seletor-global').value;
-            let elements = document.querySelectorAll('.monster-card, .custom-sheet');
+            let elements = document.querySelectorAll('.monster-card, .custom-sheet, .looting-card');
             elements.forEach(el => el.style.display = 'none');
             if (escolhido) {
                 let alvo = document.getElementById(`card-${escolhido}`);
                 if (alvo) {
                     alvo.style.display = 'block';
-                    if (escolhido !== 'criar_ficha') atualizarCard(escolhido);
+                    if (escolhido !== 'criar_ficha' && escolhido !== 'looting_card') atualizarCard(escolhido);
                 }
             }
         }
