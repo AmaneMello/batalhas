@@ -410,7 +410,7 @@
             <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
         </select>
     </div>
-<!-- Área de Seleção -->
+<!-- Área de Seleção (Fica sempre visível) -->
 <div style="border: 1px solid rgba(255, 255, 255, 0.2); padding: 12px; margin-bottom: 15px; border-radius: 8px; background-color: #121212; text-align: center;">
   <label for="looting-type" style="color: #ff5555; display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold;">Selecione o tipo de looting:</label>
   <select id="looting-type" onchange="toggleLootingCard()" style="width: 100%; padding: 8px; background-color: #1a1a1a; color: #ccc; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; font-size: 14px;">
@@ -419,7 +419,7 @@
   </select>
 </div>
 
-<!-- Card de Rolagem de Looting (Agora TUDO fica aqui dentro e começa escondido) -->
+<!-- Card Completo de Rolagem (TUDO o que deve sumir/aparecer está aqui dentro) -->
 <div id="looting-card" style="display: none; border: 1px solid #ffa500; padding: 15px; border-radius: 8px; background-color: #121212; margin-bottom: 15px;">
   <h3 style="color: #ffa500; text-align: center; margin-top: 0; font-size: 15px; margin-bottom: 15px;">🍎 Giro de Looting (Andar ou Kaiju)</h3>
   
@@ -462,6 +462,7 @@
     }
   }
 </script>
+
 
       <div class="form-group" id="div-looting-andar" style="text-align: left; display: none;">
             <label>Andar Atual / Local:</label>
