@@ -410,43 +410,45 @@
             <option value="criar_ficha" style="color: #ff5252; font-weight: bold;">+ Criar Nova Ficha (Estilo Ordem)</option>
         </select>
     </div>
-
-    <!-- Área de Seleção -->
-<div class="selection-area">
-  <label for="looting-type">Selecione o tipo de looting:</label>
-  <select id="looting-type" onchange="toggleLootingCard()">
+<!-- Área de Seleção (igual ao card vermelho e azul acima) -->
+<div style="border: 1px solid #ff4444; padding: 15px; margin-bottom: 15px; border-radius: 8px; background-color: #1a1a1a; text-align: center;">
+  <label for="looting-type" style="color: #ff8888; display: block; margin-bottom: 8px; font-weight: bold;">Selecione o tipo de looting:</label>
+  <select id="looting-type" onchange="toggleLootingCard()" style="width: 100%; padding: 8px; background-color: #2a2a2a; color: #fff; border: 1px solid #555; border-radius: 4px;">
     <option value="">-- Escolha uma opção --</option>
-    <option value="standard">Padrão</option>
-    <option value="rare">Raro / Especial</option>
+    <option value="ativo">Giro de Looting (Andar ou Kaiju)</option>
   </select>
 </div>
 
-<!-- Card de Rolagem de Looting (Inicialmente Oculto) -->
-<div id="looting-card" class="looting-card" style="display: none;">
-  <h3>Card de Rolagem de Looting</h3>
-  <p>Conteúdo da rolagem carregado com sucesso!</p>
-</div>
+<!-- Card de Rolagem de Looting (Começa escondido com display: none) -->
+<div id="looting-card" style="display: none; border: 1px solid #ffa500; padding: 15px; border-radius: 8px; background-color: #1a1a1a; margin-bottom: 15px;">
+  <h3 style="color: #ffa500; text-align: center; margin-top: 0;">🍎 Giro de Looting (Andar ou Kaiju)</h3>
+  
+  <div style="margin-bottom: 10px;">
+    <label style="color: #ff8888; display: block; margin-bottom: 5px;">Tipo de Looting:</label>
+    <select style="width: 100%; padding: 8px; background-color: #2a2a2a; color: #fff; border: 1px solid #555; border-radius: 4px;">
+      <option>Honju (Unimaterial)</option>
+    </select>
+  </div>
 
-<style>
-  .selection-area {
-    margin-bottom: 20px;
-    font-family: sans-serif;
-  }
-  .selection-area select {
-    padding: 8px;
-    font-size: 14px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    margin-left: 8px;
-  }
-  .looting-card {
-    padding: 16px;
-    border: 1px solid #4CAF50;
-    background-color: #f9f9f9;
-    border-radius: 6px;
-    font-family: sans-serif;
-  }
-</style>
+  <div style="margin-bottom: 10px;">
+    <label style="color: #ff8888; display: block; margin-bottom: 5px;">Selecione o Honju:</label>
+    <select style="width: 100%; padding: 8px; background-color: #2a2a2a; color: #fff; border: 1px solid #555; border-radius: 4px;">
+      <option>Lizard (Tipo A)</option>
+    </select>
+  </div>
+
+  <div style="margin-bottom: 10px;">
+    <label style="color: #ff8888; display: block; margin-bottom: 5px;">Rounds da Batalha (1 a 10):</label>
+    <input type="number" value="5" style="width: 100%; padding: 8px; background-color: #2a2a2a; color: #fff; border: 1px solid #555; border-radius: 4px; box-sizing: border-box;">
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <label style="color: #ff8888; display: block; margin-bottom: 5px;">Kaijus Derrotados (a partir de 5, +20% cada):</label>
+    <input type="number" value="0" style="width: 100%; padding: 8px; background-color: #2a2a2a; color: #fff; border: 1px solid #555; border-radius: 4px; box-sizing: border-box;">
+  </div>
+
+  <button style="width: 100%; padding: 10px; background-color: #ff8c00; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">🎲 Girar Looting</button>
+</div>
 
 <script>
   function toggleLootingCard() {
@@ -460,29 +462,6 @@
     }
   }
 </script>
-
-    <!-- Área de Giro de Looting -->
-    <div class="looting-box">
-        <label style="color: #ffb74d;">🎒 Giro de Looting (Andar ou Kaiju)</label>
-        <div class="form-group" style="text-align: left;">
-            <label>Tipo de Looting:</label>
-            <select id="looting-tipo" onchange="alternarCamposLooting()">
-                <option value="honju">Honju (Unimaterial)</option>
-                <option value="andar">Andar (Exploração)</option>
-            </select>
-        </div>
-
-        <div class="form-group" id="div-looting-alvo" style="text-align: left;">
-            <label id="label-looting-alvo">Selecione o Honju:</label>
-            <select id="looting-honju-select">
-                <!-- Preenchido via script -->
-            </select>
-        </div>
-
-        <div class="form-group" id="div-looting-rounds" style="text-align: left;">
-            <label>Rounds da Batalha (1 a 10):</label>
-            <input type="number" id="looting-rounds" value="5" min="1" max="10">
-        </div>
 
         <div class="form-group" id="div-looting-andar" style="text-align: left; display: none;">
             <label>Andar Atual / Local:</label>
